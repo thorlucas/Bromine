@@ -1,22 +1,41 @@
 CC := g++
 SRCDIR := src
 BUILDDIR := build
-TARGET := bin/main
+TESTDIR := test
+TARGET := lib/libBromine.a
+
+CLFAGS := -g --std=c++11
 
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
-CLFAGS := -g --std=c++11
 LIB := -L lib -lSDL2
 INC := -I include
 
+TEST_TARGET := bin/test
+TEST_SOURCES := $(shell find $(TESTDIR)/$(SRCDIR) -type f -name *.$(SRCEXT))
+TEST_OBJECTS := $(patsubst $(TESTDIR)/$(SRCDIR)/%, $(TESTDIR)/$(BUILDDIR)/%, $(TEST_SOURCES:.$(SRCEXT)=.o))
+TEST_LIB := -L lib -lBromine
+TEST_INC := -I $(TESTDIR)/include -I include
+
 $(TARGET): $(OBJECTS)
-	@echo " Linking..."
-	@echo " $(CC) $^ -o $(TARGET) $(LIB)"; $(CC) $^ -o $(TARGET) $(LIB)
+	@echo " Archiving..."
+	@echo " ar cru $@ $^"; ar cru $@ $^
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(BUILDDIR)
 	@echo " $(CC) $(CLFAGS) $(INC) -c -o $@ $<"; $(CC) $(CLFAGS) $(INC) -c -o $@ $<
+
+
+$(TEST_TARGET): $(TEST_OBJECTS)
+	@echo " Linking..."
+	@echo " $(CC) $^ -o $(TEST_TARGET) $(TEST_LIB)"; $(CC) $^ -o $(TEST_TARGET) $(TEST_LIB)
+
+$(TESTDIR)/$(BUILDDIR)/%.o: $(TESTDIR)/$(SRCDIR)/%.$(SRCEXT)
+	@mkdir -p $(TESTDIR)/$(BUILDDIR)
+	@echo " $(CC) $(CLFAGS) $(TEST_INC) -c -o $@ $<"; $(CC) $(CLFAGS) $(TEST_INC) -c -o $@ $<
+
+test: $(TEST_TARGET)
 
 .PHONY: clean
 clean:
