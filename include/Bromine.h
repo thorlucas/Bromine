@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_log.h>
 
+#include <Resource.h>
 #include <Scene.h>
 
 namespace BromineEngine {
@@ -13,9 +14,12 @@ private:
 	Bromine();
 
 	bool running;
+
 	SDL_Window* window;
+	SDL_Renderer* renderer;
 
 	Scene* currentScene;
+	ResourceManager* resourceManager;
 public:
 	// Singleton Setup
 	static Bromine& getInstance() {
@@ -26,13 +30,25 @@ public:
 	Bromine(Bromine const&) = delete;
 	void operator=(Bromine const&) = delete;
 
+	~Bromine();
+
 	// Aliases
 	static int Run(Scene* rootScene) {
 		return Bromine::getInstance().run(rootScene);
 	}
+
+	static SDL_Renderer* Renderer() {
+		return Bromine::getInstance().getRenderer();
+	}
+
+	static ResourceManager* Resource() {
+		return Bromine::getInstance().getResourceManager();
+	}
 	
 	// Methods
 	int run(Scene* rootScene);
+	SDL_Renderer* getRenderer();
+	ResourceManager* getResourceManager();
 };
 
 } // namespace BromineEngine

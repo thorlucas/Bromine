@@ -15,7 +15,7 @@ INC := -I include
 TEST_TARGET := bin/test
 TEST_SOURCES := $(shell find $(TESTDIR)/$(SRCDIR) -type f -name *.$(SRCEXT))
 TEST_OBJECTS := $(patsubst $(TESTDIR)/$(SRCDIR)/%, $(TESTDIR)/$(BUILDDIR)/%, $(TEST_SOURCES:.$(SRCEXT)=.o))
-TEST_LIB := -L lib -lBromine -lSDL2
+TEST_LIB := -L lib -lBromine -lSDL2 -lSDL2_image
 TEST_INC := -I $(TESTDIR)/include -I include
 
 $(TARGET): $(OBJECTS)
@@ -27,7 +27,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@echo " $(CC) $(CLFAGS) $(INC) -c -o $@ $<"; $(CC) $(CLFAGS) $(INC) -c -o $@ $<
 
 
-$(TEST_TARGET): $(TEST_OBJECTS)
+$(TEST_TARGET): $(TARGET) $(TEST_OBJECTS)
 	@echo " Linking..."
 	@echo " $(CC) $^ -o $(TEST_TARGET) $(TEST_LIB)"; $(CC) $^ -o $(TEST_TARGET) $(TEST_LIB)
 
@@ -35,9 +35,10 @@ $(TESTDIR)/$(BUILDDIR)/%.o: $(TESTDIR)/$(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(TESTDIR)/$(BUILDDIR)
 	@echo " $(CC) $(CLFAGS) $(TEST_INC) -c -o $@ $<"; $(CC) $(CLFAGS) $(TEST_INC) -c -o $@ $<
 
-test: $(TEST_TARGET)
+test: $(TARGET) $(TEST_TARGET)
 
 .PHONY: clean
 clean:
 	@echo " Cleaning..."
 	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)
+	@echo " $(RM) -r $(BUILDDIR) $(TEST_TARGET)"; $(RM) -r $(BUILDDIR) $(TEST_TARGET)
