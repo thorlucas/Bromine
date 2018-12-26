@@ -1,5 +1,7 @@
 #include <Bromine.h>
 
+namespace BromineEngine {
+
 Bromine::Bromine() {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		printf("SDL initialization failed: %s\n", SDL_GetError());
@@ -14,9 +16,12 @@ Bromine::Bromine() {
 	}
 
 	running = true;
+	currentScene = nullptr;
 }
 
-int Bromine::run() {
+int Bromine::run(Scene* rootScene) {
+	currentScene = rootScene;
+
 	SDL_Event event;
 	while (running) {
 		while (SDL_PollEvent(&event)) {
@@ -28,9 +33,12 @@ int Bromine::run() {
 					break;
 			}
 		}
+
+		currentScene->update();
 	}
 
 	SDL_Quit();
 	return 0;
 }
 
+} // namespace BromineEngine

@@ -1,10 +1,14 @@
 #include <cstdio>
 #include <Bromine.h>
 
+using namespace BromineEngine;
+
 int main(int argc, char const *argv[]) {
 
-	Bromine& br = Bromine::getInstance();
-	br.run();
+	Node* nd = new Node();
+	Scene* sc = new Scene(nd);
+
+	Bromine::Run(sc);
 
 	return 0;
 }
