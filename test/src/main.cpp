@@ -1,4 +1,3 @@
-#include <cstdio>
 #include <Bromine.h>
 
 using namespace BromineEngine;
