@@ -13,9 +13,10 @@ private:
 
 protected:
 	void update();
+	void didPresent();
 
 public:
-	Scene(Node* pRoot);
+	Scene(Node* _root);
 	~Scene();
 	
 };

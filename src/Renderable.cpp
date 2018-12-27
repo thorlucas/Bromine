@@ -14,10 +14,11 @@ Renderable::Renderable(std::string _resourceIdentifier, std::string resourcePath
 }
 
 Renderable::~Renderable() {
-	printf("Renderable destructor\n");
-	printf(" Freeing resource...\n");
 	Bromine::Resource()->freeResource(resourceIdentifier);
-	printf(" Freed resource\n");
+}
+
+void Renderable::didEnterScene() {
+	Bromine::getInstance().addRenderable(this);
 }
 
 SDL_Rect* Renderable::getSrcRect() {
@@ -25,6 +26,7 @@ SDL_Rect* Renderable::getSrcRect() {
 }
 
 SDL_Rect* Renderable::getDstRect() {
+	// TODO: Use scale
 	return &dstRect;
 }
 

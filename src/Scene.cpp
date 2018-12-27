@@ -2,12 +2,16 @@
 
 namespace BromineEngine {
 
-Scene::Scene(Node* pRoot) {
-	root = pRoot;
+Scene::Scene(Node* _root) : root(_root) {
+	// TODO: Make sure not null
 }
 
 Scene::~Scene() {
+	delete root;
+}
 
+void Scene::didPresent() {
+	root->didEnterScene();
 }
 
 void Scene::update() {

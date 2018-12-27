@@ -27,20 +27,17 @@ Bromine::Bromine() {
 }
 
 Bromine::~Bromine() {
-	printf("Bromine destructor\n");
-	printf(" Deleting resource manager...\n");
 	delete resourceManager;
 
-	printf(" Destroying renderer...\n");
 	SDL_DestroyRenderer(renderer);
-	printf(" Destroying window...\n");
 	SDL_DestroyWindow(window);
-	printf(" Quitting SDL...\n");
 	SDL_Quit();
 }
 
 int Bromine::run(Scene* rootScene) {
 	currentScene = rootScene;
+
+	rootScene->didPresent();
 
 	SDL_Event event;
 	while (running) {

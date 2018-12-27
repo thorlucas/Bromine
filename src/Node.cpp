@@ -2,16 +2,10 @@
 
 namespace BromineEngine {
 
-Node::Node() {
+Node::Node() { }
+Node::~Node() { }
 
-}
-
-Node::~Node() {
-
-}
-
-void Node::update() {
-
-}
+void Node::didEnterScene() { }
+void Node::update() { }
 
 } // namespace BromineEngine
