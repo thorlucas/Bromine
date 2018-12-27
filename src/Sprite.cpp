@@ -6,6 +6,7 @@ Sprite::Sprite(std::string resourceIdentifier, std::string filePath) : Renderabl
 Sprite::~Sprite() { }
 
 void Sprite::didEnterScene() {
+	// TODO: Do this setup in another function (_didEnterScene) so that people can inherit without messing it up
 	Node::didEnterScene();
 	Renderable::didEnterScene(); // Adds renderable to the queue
 }

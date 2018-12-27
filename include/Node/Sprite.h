@@ -9,7 +9,7 @@ namespace BromineEngine {
 class Sprite : public Node, public Renderable {
 protected:
 	virtual void didEnterScene();
-	
+
 public:
 	Sprite(std::string resourceIdentifier, std::string filePath);
 	~Sprite();

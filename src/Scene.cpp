@@ -7,15 +7,18 @@ Scene::Scene(Node* _root) : root(_root) {
 }
 
 Scene::~Scene() {
-	delete root;
+	if (root != nullptr)
+		delete root;
 }
 
 void Scene::didPresent() {
-	root->didEnterScene();
+	if (root != nullptr)
+		root->didEnterScene();
 }
 
 void Scene::update() {
-	root->update();
+	if (root != nullptr)
+		root->update();
 }
 
 } // namespace BromineEngine

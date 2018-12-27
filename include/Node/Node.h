@@ -2,6 +2,7 @@
 #define _NODE_H_
 
 #include <cstdio>
+#include <vector>
 
 namespace BromineEngine {
 
@@ -9,12 +10,16 @@ class Node {
 friend class Scene;
 
 protected:
+	std::vector<Node*> children;
+
 	virtual void update();
 	virtual void didEnterScene();
 
 public:
 	Node();
 	~Node();
+
+	void addChild(Node* child);
 };
 
 }
