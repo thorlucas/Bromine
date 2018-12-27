@@ -7,7 +7,7 @@ Renderable::Renderable(std::string _resourceIdentifier, std::string resourcePath
 	texture = Bromine::Resource()->getTexture(resourceIdentifier, resourcePath);
 
 	SDL_QueryTexture(texture, NULL, NULL, &(srcRect.w), &(srcRect.h));
-	dstRect.w = srcRect.w; dstRect.h = srcRect.h;
+	dstRect.size = srcRect.size;
 }
 
 Renderable::~Renderable() {
@@ -18,17 +18,26 @@ void Renderable::_didEnterScene() {
 	Bromine::getInstance().addRenderable(this);
 }
 
-Rect& Renderable::getSrcRect() {
+Recti& Renderable::getSrcRect() {
 	return srcRect;
 }
 
-Rect& Renderable::getDstRect() {
+Recti& Renderable::getDstRect() {
 	// TODO: Use scale
 	return dstRect;
 }
 
 SDL_Texture* Renderable::getTexture() {
 	return texture;
+}
+
+void Renderable::setScale(Vector2f scale) {
+	dstRect.size.w = scale.w * srcRect.size.w;
+	dstRect.size.h = scale.h * srcRect.size.h;
+}
+
+void Renderable::setScale(float scale) {
+	dstRect.size = scale * srcRect.size;
 }
 
 } // namespace BromineEngine

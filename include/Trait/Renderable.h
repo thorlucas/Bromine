@@ -8,26 +8,31 @@
 namespace BromineEngine {
 
 class Renderable {
+friend class Bromine;
+
 private:
 	SDL_Texture* texture;
 	std::string resourceIdentifier;
 
-	Rect srcRect;
-	Rect dstRect;
+	Recti srcRect;
+	Recti dstRect;
 
 protected:
 	void _didEnterScene();
+
+	Recti& getSrcRect();
+	Recti& getDstRect();
+	SDL_Texture* getTexture();
 
 public:
 	Renderable(std::string, std::string);
 	~Renderable();
 
-	Vector2Ref& position = dstRect.position;
-	Vector2Ref& size = dstRect.size;
+	Vector2Refi& position = dstRect.position;
+	Vector2Refi& size = dstRect.size;
 
-	Rect& getSrcRect();
-	Rect& getDstRect();
-	SDL_Texture* getTexture();
+	void setScale(Vector2f scale);
+	void setScale(float scale);
 };
 
 } // namespace BromineEngine
