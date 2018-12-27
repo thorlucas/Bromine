@@ -61,7 +61,7 @@ int Bromine::run(Scene* rootScene) {
 void Bromine::render() {
 	SDL_RenderClear(renderer);
 	for (auto it : renderables) {
-		SDL_RenderCopy(renderer, it->getTexture(), it->getSrcRect(), it->getDstRect());
+		SDL_RenderCopy(renderer, it->getTexture(), &it->getSrcRect(), &it->getDstRect());
 	}
 	SDL_RenderPresent(renderer);
 }

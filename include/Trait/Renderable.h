@@ -12,8 +12,8 @@ private:
 	SDL_Texture* texture;
 	std::string resourceIdentifier;
 
-	SDL_Rect srcRect;
-	SDL_Rect dstRect;
+	Rect srcRect;
+	Rect dstRect;
 
 protected:
 	void _didEnterScene();
@@ -22,11 +22,11 @@ public:
 	Renderable(std::string, std::string);
 	~Renderable();
 
-	Vector2Ref position;
-	Vector2 scale;
+	Vector2Ref& position = dstRect.position;
+	Vector2Ref& size = dstRect.size;
 
-	SDL_Rect* getSrcRect();
-	SDL_Rect* getDstRect();
+	Rect& getSrcRect();
+	Rect& getDstRect();
 	SDL_Texture* getTexture();
 };
 
