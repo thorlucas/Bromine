@@ -4,9 +4,11 @@
 using namespace BromineEngine;
 
 int main(int argc, char const *argv[]) {
-	// Node* root = new Node();
+	Node* root = new Node();
+
 	Sprite* sprite = new Sprite("image", "image.jpg");
-	// root->addChild(sprite);
+	sprite->setScale(0.5);
+	root->addChild(sprite);
 
 	Scene* sc = new Scene(sprite);
 	
