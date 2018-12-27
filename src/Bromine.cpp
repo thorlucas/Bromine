@@ -37,7 +37,7 @@ Bromine::~Bromine() {
 int Bromine::run(Scene* rootScene) {
 	currentScene = rootScene;
 
-	rootScene->didPresent();
+	rootScene->_didPresent();
 
 	SDL_Event event;
 	while (running) {
@@ -51,7 +51,7 @@ int Bromine::run(Scene* rootScene) {
 			}
 		}
 
-		currentScene->update();
+		currentScene->_update();
 		render();
 	}
 

@@ -5,17 +5,21 @@ namespace BromineEngine {
 Node::Node() { }
 Node::~Node() { }
 
-void Node::didEnterScene() {
+void Node::_didEnterScene() {
 	for (auto it: children) {
-		it->didEnterScene();
+		it->_didEnterScene();
 	}
+	didEnterScene();
 }
+void Node::didEnterScene() {}
 
-void Node::update() {
+void Node::_update() {
 	for (auto it : children) {
-		it->update();
+		it->_update();
 	}
+	update();
 }
+void Node::update() {}
 
 void Node::addChild(Node* child) {
 	// TODO: Check if null

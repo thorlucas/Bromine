@@ -17,7 +17,7 @@ Renderable::~Renderable() {
 	Bromine::Resource()->freeResource(resourceIdentifier);
 }
 
-void Renderable::didEnterScene() {
+void Renderable::_didEnterScene() {
 	Bromine::getInstance().addRenderable(this);
 }
 

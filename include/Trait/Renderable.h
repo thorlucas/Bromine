@@ -16,7 +16,7 @@ private:
 	SDL_Rect dstRect;
 
 protected:
-	void didEnterScene();
+	void _didEnterScene();
 
 public:
 	Renderable(std::string, std::string);

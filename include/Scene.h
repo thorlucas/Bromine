@@ -12,7 +12,10 @@ private:
 	Node* root;
 
 protected:
+	void _update();
 	void update();
+	
+	void _didPresent();
 	void didPresent();
 
 public:
