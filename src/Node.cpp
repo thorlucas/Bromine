@@ -3,7 +3,12 @@
 namespace BromineEngine {
 
 Node::Node() { }
-Node::~Node() { }
+Node::~Node() {
+	for (auto it: children) {
+		if (it != nullptr)
+			delete it;
+	}
+}
 
 void Node::_didEnterScene() {
 	for (auto it: children) {

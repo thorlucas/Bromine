@@ -7,11 +7,9 @@ namespace BromineEngine {
 
 class Scene {
 friend class Bromine;
-
-private:
+protected:
 	Node* root;
 
-protected:
 	void _update();
 	void update();
 	
@@ -19,6 +17,7 @@ protected:
 	void didPresent();
 
 public:
+	Scene() : Scene(nullptr) {}
 	Scene(Node* _root);
 	~Scene();
 	
