@@ -13,14 +13,14 @@ Scene::~Scene() {
 
 void Scene::_didPresent() {
 	if (root != nullptr)
-		root->didEnterScene();
+		root->_didEnterScene();
 	didPresent();
 }
 void Scene::didPresent() {}
 
 void Scene::_update() {
 	if (root != nullptr)
-		root->update();
+		root->_update();
 	update();
 }
 void Scene::update() {}
