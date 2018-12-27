@@ -11,6 +11,7 @@ SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
 LIB := -L lib -lSDL2
 INC := -I include
+INCLUDES := $(shell find include -type f -name *.h)
 
 TEST_TARGET := bin/test
 TEST_SOURCES := $(shell find $(TESTDIR)/$(SRCDIR) -type f -name *.$(SRCEXT))
@@ -18,7 +19,7 @@ TEST_OBJECTS := $(patsubst $(TESTDIR)/$(SRCDIR)/%, $(TESTDIR)/$(BUILDDIR)/%, $(T
 TEST_LIB := -L lib -lBromine -lSDL2 -lSDL2_image
 TEST_INC := -I $(TESTDIR)/include -I include
 
-$(TARGET): $(OBJECTS)
+$(TARGET): $(OBJECTS) $(INCLUDES)
 	@echo " Archiving..."
 	@echo " ar cru $@ $^"; ar cru $@ $^
 

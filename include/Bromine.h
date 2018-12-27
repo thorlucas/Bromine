@@ -1,11 +1,15 @@
 #ifndef _BROMINE_H_
 #define _BROMINE_H_
 
+#include <vector>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_log.h>
 
+#include <BrUtil.h>
 #include <Resource.h>
 #include <Scene.h>
+#include <Trait/Renderable.h>
 
 namespace BromineEngine {
 
@@ -20,6 +24,10 @@ private:
 
 	Scene* currentScene;
 	ResourceManager* resourceManager;
+
+	std::vector<Renderable*> renderables;
+
+	void render();
 public:
 	// Singleton Setup
 	static Bromine& getInstance() {
@@ -49,6 +57,8 @@ public:
 	int run(Scene* rootScene);
 	SDL_Renderer* getRenderer();
 	ResourceManager* getResourceManager();
+
+	void addRenderable(Renderable* renderable);
 };
 
 } // namespace BromineEngine

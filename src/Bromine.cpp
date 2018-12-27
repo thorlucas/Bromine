@@ -27,10 +27,15 @@ Bromine::Bromine() {
 }
 
 Bromine::~Bromine() {
+	printf("Bromine destructor\n");
+	printf(" Deleting resource manager...\n");
 	delete resourceManager;
 
+	printf(" Destroying renderer...\n");
 	SDL_DestroyRenderer(renderer);
+	printf(" Destroying window...\n");
 	SDL_DestroyWindow(window);
+	printf(" Quitting SDL...\n");
 	SDL_Quit();
 }
 
@@ -50,10 +55,18 @@ int Bromine::run(Scene* rootScene) {
 		}
 
 		currentScene->update();
+		render();
 	}
 
-	SDL_Quit();
 	return 0;
+}
+
+void Bromine::render() {
+	SDL_RenderClear(renderer);
+	for (auto it : renderables) {
+		SDL_RenderCopy(renderer, it->getTexture(), it->getSrcRect(), it->getDstRect());
+	}
+	SDL_RenderPresent(renderer);
 }
 
 SDL_Renderer* Bromine::getRenderer() {
@@ -62,6 +75,10 @@ SDL_Renderer* Bromine::getRenderer() {
 
 ResourceManager* Bromine::getResourceManager() {
 	return resourceManager;
+}
+
+void Bromine::addRenderable(Renderable* renderable) {
+	renderables.push_back(renderable);
 }
 
 } // namespace BromineEngine
