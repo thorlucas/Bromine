@@ -24,7 +24,7 @@ $(TARGET): $(OBJECTS) $(INCLUDES)
 	@echo " ar cru $@ $^"; ar cru $@ $^
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
-	@mkdir -p $(BUILDDIR)
+	@mkdir -p $(BUILDDIR) $(BUILDDIR)/Trait $(BUILDDIR)/Node
 	@echo " $(CC) $(CLFAGS) $(INC) -c -o $@ $<"; $(CC) $(CLFAGS) $(INC) -c -o $@ $<
 
 

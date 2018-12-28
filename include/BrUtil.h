@@ -13,6 +13,13 @@ namespace BromineEngine {
 // VECTOR 2D
 /////////////////////////////////////////////////////////////////
 
+/**
+ * This class is used for 2D vectors.
+ * The vector can be of any arithmetic type.
+ * Vector addition and subtraction, dot products, and
+ * scalar multiplication are currently defined.
+ * Members are accessible as either x or w, and y or h.
+ */
 template <typename T, T_IS_ARITHMETIC>
 struct Vector2 {
 	union {
@@ -88,7 +95,11 @@ typedef Vector2<float> Vector2f;
 // VECTOR 2D REFERENCE TYPE
 /////////////////////////////////////////////////////////////////
 
-
+/**
+ * This is a vector similar to Vector2<T>, but it
+ * has reference types. This is useful for "binding"
+ * the vector to something like an SDL_Rect.
+ */
 template <typename T, T_IS_ARITHMETIC>
 struct Vector2Ref {
 	union {
@@ -198,6 +209,18 @@ typedef Vector2Ref<float> Vector2Reff;
 // RECTANGLES
 /////////////////////////////////////////////////////////////////
 
+/**
+ * This represents a rectangle, like SDL_Rect.
+ * The struct has more features than SDL_Rect at
+ * a cost of higher memory usage.
+ * You may access the size as a Vector2Ref<int> 
+ * called size, and the position similarly.
+ * You may also just access them as x, y, w, and h.
+ * Because these are refs, you can manipulate them and 
+ * the rect will reflect the changes.
+ * @todo make these not just integer types, but downcast
+ * to integer for SDL_Rect purposes.
+ */
 struct Recti : public SDL_Rect {
 	Vector2Refi size;
 	Vector2Refi position;
