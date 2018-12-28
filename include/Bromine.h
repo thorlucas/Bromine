@@ -7,6 +7,7 @@
 #include <SDL2/SDL_log.h>
 
 #include <BrUtil.h>
+#include <Event.h>
 #include <Resource.h>
 #include <Scene.h>
 #include <Trait/Renderable.h>

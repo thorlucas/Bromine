@@ -11,18 +11,27 @@ Scene::~Scene() {
 		delete root;
 }
 
-void Scene::_didPresent() {
+void Scene::preDidPresent() {
 	if (root != nullptr)
-		root->_didEnterScene();
+		root->preDidEnterScene();
 	didPresent();
 }
 void Scene::didPresent() {}
 
-void Scene::_update() {
+void Scene::preUpdate() {
 	if (root != nullptr)
-		root->_update();
+		root->preUpdate();
 	update();
 }
 void Scene::update() {}
+
+void Scene::preInput(InputEvent& event) {
+	input(event);
+	if (!event.handled) {
+		root->preInput(event);
+	}
+}
+
+void Scene::input(InputEvent& event) {}
 
 } // namespace BromineEngine

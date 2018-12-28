@@ -37,21 +37,26 @@ Bromine::~Bromine() {
 int Bromine::run(Scene* rootScene) {
 	currentScene = rootScene;
 
-	rootScene->_didPresent();
+	rootScene->preDidPresent();
 
-	SDL_Event event;
+	SDL_Event sdlEvent;
+	InputEvent event;
 	while (running) {
-		while (SDL_PollEvent(&event)) {
-			switch (event.type) {
+		while (SDL_PollEvent(&sdlEvent)) {
+			switch (sdlEvent.type) {
 				case SDL_QUIT:
 					running = false;
 					break;
 				default:
+					if (sdlEvent.type == SDL_KEYDOWN || sdlEvent.type == SDL_KEYUP) {
+						event = sdlEvent;
+						currentScene->preInput(event);
+					}
 					break;
 			}
 		}
 
-		currentScene->_update();
+		currentScene->preUpdate();
 		render();
 	}
 

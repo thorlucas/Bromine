@@ -3,6 +3,7 @@
 
 #include <cstdio>
 #include <vector>
+#include <Event.h>
 
 namespace BromineEngine {
 
@@ -15,20 +16,23 @@ friend class Scene;
 protected:
 	std::vector<Node*> children; /**< A list of the child nodes. */
 
-	virtual void _update(); /**< Base update function. Do NOT overload. */
+	virtual void preUpdate(); /**< Base update function. Do NOT overload. */
 	/**
 	 * This function is called every main loop.
 	 * This is the most common function to overload.
 	 */
 	virtual void update();
 
-	virtual void _didEnterScene(); /**< Base enter scene function. Do NOT overload. */
+	virtual void preDidEnterScene(); /**< Base enter scene function. Do NOT overload. */
 	/**
 	 * This function is called when the scene is
 	 * first presented to the screen. Overload this
 	 * to prepare node for presentation.
 	 */
 	virtual void didEnterScene();
+
+	virtual void preInput(InputEvent& event);
+	virtual void input(InputEvent& event);
 
 public:
 	Node();

@@ -12,7 +12,7 @@ namespace BromineEngine {
  */
 class Sprite : public Node, public Renderable {
 protected:
-	virtual void _didEnterScene(); /**< Do NOT overload. */
+	virtual void preDidEnterScene(); /**< Do NOT overload. */
 
 public:
 	/**

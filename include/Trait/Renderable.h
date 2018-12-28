@@ -27,7 +27,7 @@ private:
 	Recti dstRect; /**< A rectangle representing the destination area of the screen to be rendered to. */
 
 protected:
-	void _didEnterScene(); /**< Base did enter scene. Do NOT overload. */
+	void preDidEnterScene(); /**< Base did enter scene. Do NOT overload. */
 
 	Recti& getSrcRect(); /**< Used by Bromine to get the source rectangle for rendering. */
 	Recti& getDstRect(); /**< Used by Bromine to get the desination rectangle for rendering. */

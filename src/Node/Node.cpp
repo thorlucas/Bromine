@@ -10,17 +10,17 @@ Node::~Node() {
 	}
 }
 
-void Node::_didEnterScene() {
+void Node::preDidEnterScene() {
 	for (auto it: children) {
-		it->_didEnterScene();
+		it->preDidEnterScene();
 	}
 	didEnterScene();
 }
 void Node::didEnterScene() {}
 
-void Node::_update() {
+void Node::preUpdate() {
 	for (auto it : children) {
-		it->_update();
+		it->preUpdate();
 	}
 	update();
 }
@@ -30,5 +30,16 @@ void Node::addChild(Node* child) {
 	// TODO: Check if null
 	children.push_back(child);
 }
+
+void Node::preInput(InputEvent& event) {
+	input(event);
+	if (!event.handled) {
+		for (auto it : children) {
+			it->preInput(event);
+		}
+	}
+}
+
+void Node::input(InputEvent& event) {}
 
 } // namespace BromineEngine

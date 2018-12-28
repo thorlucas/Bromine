@@ -3,6 +3,11 @@
 using namespace BromineEngine;
 
 HelloWorldScene::HelloWorldScene() {
-	Sprite* spriteNode = new Sprite("image", "image.jpg");
+	MySprite* spriteNode = new MySprite();
 	root = spriteNode;
+}
+
+void HelloWorldScene::input(InputEvent& event) {
+	printf("Hello world intercepted input: %i\n", event.key.keycode);
+	event.handled = true;
 }
