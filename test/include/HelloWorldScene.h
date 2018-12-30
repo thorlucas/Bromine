@@ -7,8 +7,6 @@
 using namespace BromineEngine;
 
 class HelloWorldScene : public Scene {
-protected:
-	virtual void input(InputEvent& event);
 public:
 	HelloWorldScene();
 };

@@ -7,11 +7,12 @@
 using namespace BromineEngine;
 
 class MySprite : public Sprite {
+private:
+	bool right; bool left;
+	bool up; bool down;
 protected:
-	virtual void input(InputEvent& event) {
-		printf("My sprite got keystroke: %i\n", event.key.keycode);
-		event.handled = true;
-	}
+	virtual void input(InputEvent& event);
+	virtual void update();
 public:
 	MySprite() : Sprite("image", "image.jpg") {}
 };
