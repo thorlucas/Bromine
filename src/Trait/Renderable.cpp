@@ -4,18 +4,18 @@
 namespace BromineEngine {
 
 Renderable::Renderable(std::string _resourceIdentifier, std::string resourcePath) : resourceIdentifier(_resourceIdentifier) {
-	texture = Bromine::Resource()->getTexture(resourceIdentifier, resourcePath);
+	texture = Bromine::resourceManager().getTexture(resourceIdentifier, resourcePath);
 
 	SDL_QueryTexture(texture, NULL, NULL, &(srcRect.w), &(srcRect.h));
 	dstRect.size = srcRect.size;
 }
 
 Renderable::~Renderable() {
-	Bromine::Resource()->freeResource(resourceIdentifier);
+	Bromine::resourceManager().freeResource(resourceIdentifier);
 }
 
 void Renderable::preDidEnterScene() {
-	Bromine::getInstance().addRenderable(this);
+	Bromine::instance().addRenderable(this);
 }
 
 Recti& Renderable::getSrcRect() {

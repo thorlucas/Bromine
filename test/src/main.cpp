@@ -4,7 +4,7 @@ using namespace BromineEngine;
 
 int main(int argc, char const *argv[]) {
 	HelloWorldScene* scene = new HelloWorldScene();
-	Bromine::Run(scene);
+	Bromine::run(scene);
 
 	return 0;
 }

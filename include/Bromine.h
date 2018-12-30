@@ -9,6 +9,7 @@
 #include <BrUtil.h>
 #include <Event.h>
 #include <Resource.h>
+#include <Log.h>
 #include <Scene.h>
 #include <Trait/Renderable.h>
 
@@ -32,7 +33,9 @@ private:
 	 * When added to Bromine, the scene did enter is called.
 	 */
 	Scene* currentScene;
-	ResourceManager* resourceManager; /**< Manages texture and audio files. */
+
+	ResourceManager _resourceManager; /**< Manages texture and audio files. */
+	LogManager _logManager; /**< Manages logging. */
 
 	/**
 	 * A list of Nodes with the Renderable trait.
@@ -46,7 +49,7 @@ public:
 	/**
 	 * Returns an instance of the Bromine engine singleton.
 	 */
-	static Bromine& getInstance() {
+	static Bromine& instance() {
 		static Bromine instance;
 		return instance;
 	}
@@ -60,22 +63,19 @@ public:
 	/**
 	 * An alias to run(Scene*).
 	 */
-	static int Run(Scene* rootScene) {
-		return Bromine::getInstance().run(rootScene);
-	}
-
-	/**
-	 * An alias to getRenderer().
-	 */
-	static SDL_Renderer* Renderer() {
-		return Bromine::getInstance().getRenderer();
+	inline static int run(Scene* rootScene) {
+		return Bromine::instance().runWithScene(rootScene);
 	}
 
 	/**
 	 * An alias to getResourceManager().
 	 */
-	static ResourceManager* Resource() {
-		return Bromine::getInstance().getResourceManager();
+	inline static ResourceManager& resourceManager() {
+		return Bromine::instance().getResourceManager();
+	}
+
+	inline static LogManager& logManager() {
+		return Bromine::instance().getLogManager();
 	}
 	
 	// Methods
@@ -86,18 +86,16 @@ public:
 	 *
 	 * @param rootScene is the root scene.
 	 */
-	int run(Scene* rootScene);
+	int runWithScene(Scene* rootScene);
 
-	/**
-	 * @todo Dont expose this!
-	 * @returns the main SDL_Renderer*.
-	 */
 	SDL_Renderer* getRenderer();
 
 	/**
 	 * @returns the main ResourceManager.
 	 */
-	ResourceManager* getResourceManager();
+	ResourceManager& getResourceManager();
+
+	LogManager& getLogManager();
 
 	/**
 	 * Adds a Node with the trait Renderable to the

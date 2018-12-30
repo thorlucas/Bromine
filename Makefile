@@ -4,7 +4,7 @@ BUILDDIR := build
 TESTDIR := test
 TARGET := lib/libBromine.a
 
-CLFAGS := -g --std=c++11
+CLFAGS := -g --std=c++11 -D _DEBUG
 
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
@@ -23,6 +23,7 @@ $(TARGET): $(OBJECTS) $(INCLUDES)
 	@echo " Archiving..."
 	@echo " ar cru $@ $^"; ar cru $@ $^
 
+# TODO: Rewrite this so it's not defined explicitly
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(BUILDDIR) $(BUILDDIR)/Trait $(BUILDDIR)/Node
 	@echo " $(CC) $(CLFAGS) $(INC) -c -o $@ $<"; $(CC) $(CLFAGS) $(INC) -c -o $@ $<

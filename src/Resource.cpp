@@ -48,7 +48,7 @@ Texture* ResourceManager::getTexture(std::string identifier, std::string filePat
 		return nullptr;
 	}
 
-	Texture* texture = SDL_CreateTextureFromSurface(Bromine::Renderer(), image);
+	Texture* texture = SDL_CreateTextureFromSurface(Bromine::instance().getRenderer(), image);
 	SDL_FreeSurface(image);
 
 	Resource* resource = new Resource();
