@@ -42,5 +42,5 @@ test: $(TARGET) $(TEST_TARGET)
 .PHONY: clean
 clean:
 	@echo " Cleaning..."
-	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)
-	@echo " $(RM) -r $(BUILDDIR) $(TEST_TARGET)"; $(RM) -r $(BUILDDIR) $(TEST_TARGET)
+	@echo " $(RM) -r $(BUILDDIR) $(OBJECTS)"; $(RM) -r $(BUILDDIR) $(OBJECTS)
+	@echo " $(RM) -r $(BUILDDIR) $(TEST_OBJECTS)"; $(RM) -r $(BUILDDIR) $(TEST_OBJECTS)

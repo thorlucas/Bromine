@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <vector>
 #include <Event.h>
+#include <BrAllocator.h>
 
 namespace BromineEngine {
 

@@ -12,6 +12,7 @@ Node::~Node() {
 
 void Node::preDidEnterScene() {
 	for (auto it: children) {
+		printf("  Children entering scene...\n");
 		it->preDidEnterScene();
 	}
 	didEnterScene();

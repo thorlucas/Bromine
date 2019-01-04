@@ -4,16 +4,22 @@
 
 namespace BromineEngine {
 
-ResourceManager::ResourceManager(std::string _resourcePath) : resourcePath(_resourcePath) {
+ResourceManager::ResourceManager() {}
+
+int ResourceManager::init(std::string _resourcePath) {
+	resourcePath = _resourcePath;
+	
 	int initFlags = IMG_INIT_PNG | IMG_INIT_JPG;
 	if (IMG_Init(initFlags) != initFlags) {
 		printf("Failed to initialize image: %s\n", IMG_GetError());
-		return;
+		return 1;
 	}
 
 	if (resourcePath.back() != '/') {
 		resourcePath += "/";
 	}
+
+	return 0;
 }
 
 ResourceManager::~ResourceManager() {

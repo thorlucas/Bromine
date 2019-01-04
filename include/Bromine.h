@@ -11,6 +11,7 @@
 #include <Resource.h>
 #include <Log.h>
 #include <Scene.h>
+#include <BrAllocator.h>
 #include <Trait/Renderable.h>
 
 namespace BromineEngine {
@@ -36,6 +37,7 @@ private:
 
 	ResourceManager _resourceManager; /**< Manages texture and audio files. */
 	LogManager _logManager; /**< Manages logging. */
+	BromineAllocator _allocator;
 
 	/**
 	 * A list of Nodes with the Renderable trait.
@@ -77,6 +79,11 @@ public:
 	inline static LogManager& logManager() {
 		return Bromine::instance().getLogManager();
 	}
+
+	template <class T>
+	inline static void* alloc() {
+		return Bromine::instance().getAllocator().alloc(sizeof(T));
+	}
 	
 	// Methods
 	/**
@@ -97,6 +104,8 @@ public:
 
 	LogManager& getLogManager();
 
+	BromineAllocator& getAllocator();
+
 	/**
 	 * Adds a Node with the trait Renderable to the
 	 * rendering queue. They will be rendered in order
@@ -107,6 +116,6 @@ public:
 	void addRenderable(Renderable* renderable);
 };
 
-} // namespace BromineEngine
+}
 
 #endif // _BROMINE_H_

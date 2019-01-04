@@ -13,6 +13,7 @@ Scene::~Scene() {
 
 void Scene::preDidPresent() {
 	if (root != nullptr)
+		printf(" Root entering scene...\n");
 		root->preDidEnterScene();
 	didPresent();
 }

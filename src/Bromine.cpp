@@ -2,7 +2,9 @@
 
 namespace BromineEngine {
 
-Bromine::Bromine() : _resourceManager("resources") {
+// TODO: Make resource manager have no constructor parameters,
+// initialize everything later
+Bromine::Bromine() {
 	_logManager.log("Initializing Bromine...\n");
 	_logManager.log(" Initializing SDL\n");
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -23,6 +25,12 @@ Bromine::Bromine() : _resourceManager("resources") {
 		_logManager.error("SDL could not create renderer: %s\n", SDL_GetError());
 		return;
 	}
+
+	_logManager.log(" Initializing resource manager...\n");
+	_resourceManager.init("resources");
+
+	_logManager.log(" Allocating memory...\n");
+	_allocator.init(0x100000);
 
 	running = true;
 	currentScene = nullptr;
@@ -45,6 +53,7 @@ int Bromine::runWithScene(Scene* rootScene) {
 	_logManager.log(" Presenting root scene\n");
 	rootScene->preDidPresent();
 
+	_logManager.log(" Making event types\n");
 	SDL_Event sdlEvent;
 	InputEvent event;
 
@@ -89,6 +98,10 @@ ResourceManager& Bromine::getResourceManager() {
 
 LogManager& Bromine::getLogManager() {
 	return _logManager;
+}
+
+BromineAllocator& Bromine::getAllocator() {
+	return _allocator;
 }
 
 void Bromine::addRenderable(Renderable* renderable) {

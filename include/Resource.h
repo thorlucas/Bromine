@@ -62,8 +62,10 @@ protected:
 	
 public:
 	// TODO: Should be protected?
-	ResourceManager(std::string _resourcePath);
+	ResourceManager();
 	~ResourceManager();
+
+	int init(std::string _resourcePath);
 
 	/**
 	 * Retrieves a texture.
