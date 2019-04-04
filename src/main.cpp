@@ -1,10 +1,7 @@
 #include "Bromine.h"
 
+using namespace BromineEngine;
+
 int main(int argc, char const *argv[]) {
-	/*
-
-	SET UP BROMINE
-
-	*/
-	return 0;
+	return Bromine::instance().run();
 }

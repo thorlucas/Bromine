@@ -1,8 +1,9 @@
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
-#include "Node/Node.h"
 #include <map>
+
+#include "../Node/Node.h"
 
 namespace BromineEngine {
 

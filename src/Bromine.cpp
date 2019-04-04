@@ -4,10 +4,12 @@ namespace BromineEngine {
 
 // TODO: Make resource manager have no constructor parameters,
 // initialize everything later
-Bromine::Bromine() {
+Bromine::Bromine() : serverClosures(autoloadServerClosures) {
 	// if (SDL_Init(RenderServer::SDLInitFlags) < 0) {
 	// 	return;
 	// }
+
+
 
 	// RenderServer::instance().init("resources/");
 
@@ -45,14 +47,20 @@ Bromine::~Bromine() {
 // }
 
 
-void Bromine::runWithScene(Scene* rootScene) {
+bool Bromine::run() {
+	return run(initialScene);
+}
+
+bool Bromine::run(Scene* rootScene) {
 	currentScene = rootScene;
 
 	currentScene->loadScene();
 
 	while (running) {
-		// RenderServer::instance().render();
+		getServer<RenderServer>().update();
 	}
+
+	return 0;
 }
 
 

@@ -23,9 +23,9 @@ Node* Scene::getNode(NodeID id) {
 }
 
 void Scene::loadScene() {
-	for (auto& it : nodeMap) {
+	// for (auto& it : nodeMap) {
 		// it.second->registerTraits();
-	}
+	// }
 }
 
 }

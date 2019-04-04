@@ -1,7 +1,6 @@
 CC := g++
 SRCDIR := src
 BUILDDIR := build
-TESTDIR := test
 TARGET := bin/main
 
 CLFAGS := -g --std=c++11 -D _DEBUG
@@ -15,7 +14,7 @@ INCLUDES := $(shell find include -type f -name *.h)
 
 $(TARGET): $(OBJECTS) $(INCLUDES)
 	@echo " Linking..."
-	@echo " $(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	@echo " $(CC) $(CFLAGS) $(LIB) -o $@ $^"; $(CC) $(CFLAGS) $(LIB) -o $@ $^
 
 # TODO: Rewrite this so it's not defined explicitly
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)

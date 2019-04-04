@@ -12,18 +12,11 @@
 namespace BromineEngine {
 
 class RenderServer : public Server {
+friend class Bromine;
 private:
 	std::map<NodeID, RenderTrait*> nodeMap;
 
 public:
-	// static RenderServer& instance() {
-	// 	static RenderServer instance;
-	// 	return instance;
-	// }
-
-	RenderServer(RenderServer const&) = delete;
-	void operator=(RenderServer const&) = delete;
-
 	RenderServer();
 	~RenderServer();
 

@@ -2,7 +2,7 @@
 #define _FACTORY_H_
 
 #include "../Node/Node.h"
-#include "../Scene.h"
+#include "../Scene/Scene.h"
 
 namespace BromineEngine {
 

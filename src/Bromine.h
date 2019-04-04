@@ -3,16 +3,18 @@
 
 // #include <SDL2/SDL.h>
 #include <unordered_map>
-
+#include <functional>
 #include <typeinfo>
 #include <typeindex>
 
-#include "Scene.h"
+#include "Config/Config.h"
+#include "Config/ServersConfig.h"
+
+#include "Scene/Scene.h"
+#include "Node/Node.h"
 #include "Factory/Factory.h"
 #include "Server/Server.h"
 #include "Trait/Trait.h"
-
-#include <functional>
 
 namespace BromineEngine {
 
@@ -34,7 +36,6 @@ private:
 
 	std::unordered_map<std::type_index, std::function<Server*()>> serverClosures;
 	std::unordered_map<std::type_index, Server&> serverMap; 
-	// std::unordered_map<std::type_index, Factory&> factoryMap;
 
 public:
 	// Singleton Setup
@@ -46,19 +47,6 @@ public:
 		return instance;
 	}
 
-	// template <typename T>
-	// static T& instance() {
-	// 	static T instance;
-	// 	return instance;
-	// }
-
-	// template<typename T, typename F>
-	// bool registerServer(std::function<T&()>)
-
-	// template<typename T>
-	// bool bindServer(std::function<T*()> closure) {
-	// 	return serverMap.insert(std::pair<std::type_index, Server*>(typeid(T), closure())).second;
-	// }
 	Bromine(Bromine const&) = delete;
 	void operator=(Bromine const&) = delete;
 
@@ -82,24 +70,9 @@ public:
 		return server;
 	}
 
-	// template <typename T>
-	// bool registerServer(T& server) {
-	// 	return serverMap.insert( std::pair<std::type_index, Server&>(typeid(T), server) ).second;
-	// }
 
-
-	// template <typename T>
-	// T& getFactory() {
-	// 	return dynamic_cast<T&>( factoryMap.at(typeid(T)) );
-	// }
-
-	// template <typename T>
-	// bool registerFactory(T& factory) {
-	// 	return factoryMap.insert( std::pair<std::type_index, Factory&>(typeid(T), factory) ).second;
-	// }
-
-
-	void runWithScene(Scene* rootScene);
+	bool run(Scene* rootScene);
+	bool run();
 };
 
 }
