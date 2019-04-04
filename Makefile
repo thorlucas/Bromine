@@ -21,11 +21,11 @@ TEST_INC := -I $(TESTDIR)/include -I include
 
 $(TARGET): $(OBJECTS) $(INCLUDES)
 	@echo " Archiving..."
-	@echo " ar cru $@ $^"; ar cru $@ $^
+	@echo " ar rcu $@ $^"; ar rcu $@ $^
 
 # TODO: Rewrite this so it's not defined explicitly
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
-	@mkdir -p $(BUILDDIR) $(BUILDDIR)/Trait $(BUILDDIR)/Node
+	@mkdir -p $(BUILDDIR) $(BUILDDIR)/Trait $(BUILDDIR)/Node $(BUILDDIR)/Server $(BUILDDIR)/Factory
 	@echo " $(CC) $(CLFAGS) $(INC) -c -o $@ $<"; $(CC) $(CLFAGS) $(INC) -c -o $@ $<
 
 

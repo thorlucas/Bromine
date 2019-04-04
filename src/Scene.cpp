@@ -1,38 +1,31 @@
-#include <Scene.h>
+#include "Scene.h"
 
 namespace BromineEngine {
 
-Scene::Scene(Node* _root) : root(_root) {
-	// TODO: Make sure not null
-}
-
+Scene::Scene() : nextAvailableID(0) {}
 Scene::~Scene() {
-	if (root != nullptr)
-		delete root;
-}
-
-void Scene::preDidPresent() {
-	if (root != nullptr)
-		printf(" Root entering scene...\n");
-		root->preDidEnterScene();
-	didPresent();
-}
-void Scene::didPresent() {}
-
-void Scene::preUpdate() {
-	if (root != nullptr)
-		root->preUpdate();
-	update();
-}
-void Scene::update() {}
-
-void Scene::preInput(InputEvent& event) {
-	input(event);
-	if (!event.handled) {
-		root->preInput(event);
+	// perhaps deregister or do it in another?
+	for (auto& it : nodeMap) {
+		delete it.second;
 	}
 }
 
-void Scene::input(InputEvent& event) {}
+NodeID Scene::requestNodeID() {
+	return nextAvailableID++;
+}
 
-} // namespace BromineEngine
+bool Scene::registerNode(Node* node, NodeID id) {
+	return nodeMap.insert(std::pair<NodeID, Node*>(id, node)).second; // returns a true if inserted
+}
+
+Node* Scene::getNode(NodeID id) {
+	return nodeMap.at(id); // throws
+}
+
+void Scene::loadScene() {
+	for (auto& it : nodeMap) {
+		// it.second->registerTraits();
+	}
+}
+
+}

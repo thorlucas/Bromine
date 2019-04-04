@@ -1,21 +1,43 @@
-#include <HelloWorldScene.h>
+#include "../../src/Bromine.h"
+#include "../../src/Server/RenderServer.h"
+#include "../../src/Factory/SpriteFactory.h"
 
 using namespace BromineEngine;
 
-struct Foo {
-	int a;
-	int b;
-	Foo(int _a, int _b) : a(_a), b(_b) {}
-};
-
 int main(int argc, char const *argv[]) {
-	marker m = Bromine::instance().getAllocator().mark();
-	Foo* foo = new (Bromine::alloc<Foo>()) Foo(4, 5);
-	printf("%i %i\n", foo->a, foo->b);
-	Bromine::instance().getAllocator().free(m);
+	// SpriteFactory factory;
 
-	// HelloWorldScene* scene = new HelloWorldScene();	
-	// Bromine::run(scene);
+	// Bromine::instance().registerServer<RenderServer>(RenderServer::instance());
+	// Bromine::instance().registerFactory<SpriteFactory>(factory);
+
+	// printf("Registered\n");
+
+	// Scene* scene = new Scene;
+	// Node* node = Bromine::instance().getFactory<SpriteFactory>()(scene);
+
+	// printf("Got\n");
+
+	printf("About to register\n");
+
+	Bromine::instance().registerServer<RenderServer>([] {
+		return new RenderServer;
+	});
+
+	printf("Registered\nAbout to get\n");
+
+	Bromine::instance().getServer<RenderServer>();
+
+	printf("Got\nGetting again\n");
+
+	Bromine::instance().getServer<RenderServer>();
+		
+	printf("Got\n");
+
+	// Bromine::instance<RenderServer>();
+	// Bromine::instance<SpriteFactory>();
+
+	// Scene* scene = new Scene;
+	// Node* node = Bromine::instance<SpriteFactory>()(scene);
 
 	return 0;
 }

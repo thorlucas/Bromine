@@ -1,46 +1,18 @@
-#include <Node/Node.h>
+#include "Node.h"
+#include "../Scene.h"
 
 namespace BromineEngine {
 
-Node::Node() { }
+Node::Node(Scene* scene, NodeID id) : scene(scene), id(id), parent(NODE_NULL) {
+	scene->registerNode(this, id);
+}
+
+Node::Node(Scene* scene) : Node(scene, scene->requestNodeID()) {}
+
 Node::~Node() {
-	for (auto it: children) {
-		if (it != nullptr)
-			delete it;
-	}
+	// deregister child nodes from scene?
 }
 
-void Node::preDidEnterScene() {
-	for (auto it: children) {
-		printf("  Children entering scene...\n");
-		it->preDidEnterScene();
-	}
-	didEnterScene();
-}
-void Node::didEnterScene() {}
-
-void Node::preUpdate() {
-	for (auto it : children) {
-		it->preUpdate();
-	}
-	update();
-}
-void Node::update() {}
-
-void Node::addChild(Node* child) {
-	// TODO: Check if null
-	children.push_back(child);
-}
-
-void Node::preInput(InputEvent& event) {
-	input(event);
-	if (!event.handled) {
-		for (auto it : children) {
-			it->preInput(event);
-		}
-	}
-}
-
-void Node::input(InputEvent& event) {}
+// void Node::registerTraits() {}
 
 } // namespace BromineEngine
