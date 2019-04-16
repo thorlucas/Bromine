@@ -3,25 +3,31 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <unordered_map>
 #include <map>
 
+#include "../Config/Config.h"
+
 #include "Server.h"
-#include "../Node/Node.h"
-#include "../Trait/RenderTrait.h"
 
 namespace BromineEngine {
 
+class RenderTrait;
+
 class RenderServer : public Server {
 friend class Bromine;
+friend class RenderTrait;
 private:
-	std::map<NodeID, RenderTrait*> nodeMap;
+	std::unordered_map<NodeID, RenderTrait&> nodeMap;
+
+	SDL_Window* window;
+	SDL_Renderer* renderer;
 
 public:
 	RenderServer();
 	~RenderServer();
 
-	bool registerTrait(RenderTrait* trait, NodeID id);
-
+	bool registerTrait(RenderTrait& trait);	
 	void update();
 };
 

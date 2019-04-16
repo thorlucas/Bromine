@@ -9,9 +9,10 @@ namespace BromineEngine {
 class Factory {
 public:
 	Factory() {}
-	~Factory() {}
 
-	virtual Node* operator()(Scene* scene) = 0;
+	~Factory() {}
+	
+	// virtual Node* operator()(Scene* scene) = 0;
 };
 
 }

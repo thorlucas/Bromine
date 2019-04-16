@@ -16,7 +16,6 @@ $(TARGET): $(OBJECTS) $(INCLUDES)
 	@echo " Linking..."
 	@echo " $(CC) $(CFLAGS) $(LIB) -o $@ $^"; $(CC) $(CFLAGS) $(LIB) -o $@ $^
 
-# TODO: Rewrite this so it's not defined explicitly
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@echo " mkdir -p $(dir $@)"
 	@mkdir -p $(dir $@)

@@ -2,7 +2,6 @@
 #define _SERVER_H_
 
 #include "../Node/Node.h"
-#include "../Trait/Trait.h"
 
 namespace BromineEngine {
 
@@ -12,6 +11,10 @@ public:
 	virtual ~Server() {};
 
 	virtual void update() = 0;
+
+	virtual void test() {
+		printf("Testing from base\n");
+	}
 };
 
 }

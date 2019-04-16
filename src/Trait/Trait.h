@@ -1,14 +1,28 @@
 #ifndef _TRAIT_H_
 #define _TRAIT_H_
 
+#include <cstdio>
+
+#include "../Node/Node.h"
+#include "../Bromine.h"
+
 namespace BromineEngine {
 
-typedef unsigned int TraitID;
-
+template <typename T, typename S>
 class Trait {
+private:
+	S& server;
+
 public:
-	Trait();
-	virtual ~Trait() = 0;
+	const NodeID owner;
+
+	Trait(const NodeID& owner) : owner(owner), server(Bromine::instance().getServer<S>()) {
+		server.registerTrait(static_cast<T&>(*this));
+	}
+
+	~Trait() {
+
+	}
 };
 
 }

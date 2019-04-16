@@ -5,8 +5,9 @@
 #include <vector>
 #include <cstdint>
 #include <cstdio>
-
-#include "../Trait/Trait.h"
+#include <typeinfo>
+#include <typeindex>
+#include <algorithm>
 
 namespace BromineEngine {
 
@@ -16,26 +17,40 @@ typedef uint32_t NodeID;
 class Scene;
 
 class Node {
-friend class Scene;
+friend class NodeServer;
 protected:
-	// std::vector<TraitID> traits;
-
 	// Scenes own all nodes that have been registered
 	NodeID parent; /**< Parent node, NODE_NULL if root. */
 	std::vector<NodeID> children; /**< A list of the child nodes. */
 
-	// void registerTraits(); /**< Called by scene load, registers components to server. */
+	// TODO: This will be an issue for inherited traits
+	std::vector<std::type_index> traits; /**< A list of the type of traits this node has. */
+
+	Node(Scene& scene, NodeID id, NodeID parent);
+	Node(Scene& scene, NodeID id);
+
+	void addChild(NodeID child);
 
 public:
-	const Scene* scene;
+	Scene& scene;
 	const NodeID id; /**< A constant ID, which should be requested from the scene. */
-
-	Node(Scene* scene, NodeID id); /**< Assigns an ID. Failable? */
-	Node(Scene* scene); /**< Automatically requests an ID from scene. */
 
 	~Node();
 
-	// bool attachTrait(Trait* trait);
+	template <typename T>
+	bool hasTrait() {
+		return std::find(traits.begin(), traits.end(), typeid(T)) != traits.end();
+	}
+
+	template <typename T>
+	bool attachTrait() {
+		if (hasTrait<T>()) return false;
+		
+		new T(id);
+		traits.push_back(typeid(T));
+
+		return true;
+	}
 };
 
 }

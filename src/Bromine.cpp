@@ -1,51 +1,45 @@
 #include "Bromine.h"
 
+#include "Config/Config.h"
+#include "Config/ServersConfig.h"
+
+#include "Server/NodeServer.h"
+#include "Server/RenderServer.h"
+
 namespace BromineEngine {
 
 // TODO: Make resource manager have no constructor parameters,
 // initialize everything later
-Bromine::Bromine() : serverClosures(autoloadServerClosures) {
-	// if (SDL_Init(RenderServer::SDLInitFlags) < 0) {
-	// 	return;
-	// }
+Bromine::Bromine() :
+	serverClosures(autoloadServerClosures),
+	nodeServer(getServer<NodeServer>()),
+	renderServer(getServer<RenderServer>()) {
 
-
-
-	// RenderServer::instance().init("resources/");
+	for (auto it : autoInitServers) {
+		getServer(it); // ensures servers are constructed
+	}
 
 	running = true;
-	// currentScene = nullptr;
+	currentScene = nullptr;
 }
 
 Bromine::~Bromine() {
-	// SDL_Quit();
+	for (auto& it : serverMap) {
+		delete &(it.second);
+	}
+
+	SDL_Quit();
 }
 
-// int Bromine::runWithScene(Scene* rootScene) {
-// 	currentScene = rootScene;
+Server& Bromine::getServer(std::type_index typeIndex) {
+	auto ret = serverMap.find(typeIndex);
+	if (ret != serverMap.end()) return ret->second;
 
-// 	SDL_Event sdlEvent;
-// 	InputEvent event;
+	Server& server = *serverClosures.at(typeIndex)();
+	serverMap.insert(std::pair<std::type_index, Server&>(typeIndex, server));
 
-// 	while (running) {
-// 		while (SDL_PollEvent(&sdlEvent)) {
-// 			switch (sdlEvent.type) {
-// 				case SDL_QUIT:
-// 					running = false;
-// 					break;
-// 				default:
-// 					// SDLSetEventFilter
-// 					if (sdlEvent.type == SDL_KEYDOWN || sdlEvent.type == SDL_KEYUP) {
-// 						event = sdlEvent;
-// 					}
-// 					break;
-// 			}
-// 		}
-// 	}
-
-// 	return 0;
-// }
-
+	return server;
+}
 
 bool Bromine::run() {
 	return run(initialScene);
@@ -56,8 +50,20 @@ bool Bromine::run(Scene* rootScene) {
 
 	currentScene->loadScene();
 
+	SDL_Event sdlEvent;
+
 	while (running) {
-		getServer<RenderServer>().update();
+		while (SDL_PollEvent(&sdlEvent)) {
+			switch (sdlEvent.type) {
+				case SDL_QUIT:
+					running = false;
+					break;
+				default:
+					break;
+			}
+		}
+
+		renderServer.update();
 	}
 
 	return 0;

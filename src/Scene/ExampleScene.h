@@ -9,6 +9,8 @@ class ExampleScene : public Scene {
 public:
 	ExampleScene();
 	~ExampleScene();
+
+	void loadScene();
 };
 
 }

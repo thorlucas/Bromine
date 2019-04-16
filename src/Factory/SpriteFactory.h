@@ -11,7 +11,7 @@ public:
 	SpriteFactory();
 	~SpriteFactory();
 
-	Node* operator()(Scene* scene);
+	// Node* operator()(Scene* scene);
 };
 
 }

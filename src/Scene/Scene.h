@@ -1,27 +1,21 @@
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
-#include <map>
-
 #include "../Node/Node.h"
 
 namespace BromineEngine {
 
 class Scene {
-private:
-	NodeID nextAvailableID;
-	std::map<NodeID, Node*> nodeMap;
+friend class Bromine;
+protected:
+	NodeID rootNode;
+	std::vector<NodeID> nodes;
 
 public:
 	Scene();
 	~Scene();
 
-	NodeID requestNodeID();
-	bool registerNode(Node* node, NodeID id); /**< Transfers ownership to the Scene. */
-
-	Node* getNode(NodeID id);
-
-	void loadScene();
+	virtual void loadScene();
 };
 
 }

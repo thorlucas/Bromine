@@ -7,16 +7,14 @@
 #include <typeinfo>
 #include <typeindex>
 
-#include "Config/Config.h"
-#include "Config/ServersConfig.h"
-
 #include "Scene/Scene.h"
 #include "Node/Node.h"
-#include "Factory/Factory.h"
 #include "Server/Server.h"
-#include "Trait/Trait.h"
 
 namespace BromineEngine {
+
+class NodeServer;
+class RenderServer;
 
 /**
  * This is the engine singleton.
@@ -52,7 +50,6 @@ public:
 
 	~Bromine();
 
-
 	template<typename T>
 	bool registerServer(std::function<T*()> closure) {
 		return serverClosures.insert(
@@ -60,16 +57,17 @@ public:
 		).second;
 	}
 
+	Server& getServer(std::type_index typeIndex);
+
 	template <typename T>
 	T& getServer() {
-		auto ret = serverMap.find(typeid(T));
-		if (ret != serverMap.end()) return dynamic_cast<T&>(ret->second);
-
-		T& server = *dynamic_cast<T*>(serverClosures.at(typeid(T))());
-		serverMap.insert(std::pair<std::type_index, Server&>(typeid(T), server));
-		return server;
+		return dynamic_cast<T&>(getServer(typeid(T)));
 	}
 
+	// Server caches
+	// Commonly used servers have aliases here for quick access
+	NodeServer& nodeServer;
+	RenderServer& renderServer;
 
 	bool run(Scene* rootScene);
 	bool run();
