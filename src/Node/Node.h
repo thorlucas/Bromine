@@ -42,11 +42,11 @@ public:
 		return std::find(traits.begin(), traits.end(), typeid(T)) != traits.end();
 	}
 
-	template <typename T>
-	bool attachTrait() {
+	template <typename T, typename ...P>
+	bool attachTrait(P&&... ps) {
 		if (hasTrait<T>()) return false;
 		
-		new T(id);
+		new T(id, std::forward<P>(ps)...);
 		traits.push_back(typeid(T));
 
 		return true;
