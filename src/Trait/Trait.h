@@ -10,7 +10,7 @@ namespace BromineEngine {
 
 template <typename T, typename S>
 class Trait {
-private:
+protected:
 	S& server;
 
 public:

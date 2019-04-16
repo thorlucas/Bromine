@@ -27,14 +27,25 @@ RenderServer::~RenderServer() {
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
+RenderTrait& RenderServer::getTrait(NodeID node) {
+	return nodeMap.at(node);
+}
+
 bool RenderServer::registerTrait(RenderTrait& trait) {
 	// TODO: Note, failure to insert can potentially cause memory leaks
 	return nodeMap.insert(std::pair<NodeID, RenderTrait&>(trait.owner, trait)).second;
 }
 
+// Drawing functions
+void RenderServer::drawPoint(const Vec2f& pos) {
+	SDL_RenderDrawPoint(renderer, int(pos[0]), int(pos[1]));
+}
+
 void RenderServer::update() {
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
-	// Note, watch for united window and renderer
+	
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	for (auto& it : nodeMap) {
 		(it.second).render();
 	}

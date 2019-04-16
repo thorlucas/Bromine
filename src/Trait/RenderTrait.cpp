@@ -14,7 +14,7 @@ Vec2f& RenderTrait::position() {
 }
 
 void RenderTrait::render() {
-	printf("%p : (%f, %f)\n", this, _position[0], _position[1]);
+	server.drawPoint(_position);
 }
 
 }

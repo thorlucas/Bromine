@@ -9,6 +9,7 @@
 #include "../Config/Config.h"
 
 #include "Server.h"
+#include "../Vec.h"
 
 namespace BromineEngine {
 
@@ -23,11 +24,15 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 
+protected:
+	void drawPoint(const Vec2f& pos);
+
 public:
 	RenderServer();
 	~RenderServer();
 
-	bool registerTrait(RenderTrait& trait);	
+	RenderTrait& getTrait(NodeID node);
+	bool registerTrait(RenderTrait& trait);
 	void update();
 };
 
