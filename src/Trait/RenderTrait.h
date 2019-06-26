@@ -6,7 +6,7 @@
 #include "Trait.h"
 #include "../Server/RenderServer.h"
 
-#include "../Vec.h"
+#include "../Util/Vec.h"
 
 namespace BromineEngine {
 

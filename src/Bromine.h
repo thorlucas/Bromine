@@ -10,6 +10,7 @@
 #include "Scene/Scene.h"
 #include "Node/Node.h"
 #include "Server/Server.h"
+#include "Util/Logger.h"
 
 namespace BromineEngine {
 
@@ -33,7 +34,7 @@ private:
 	Scene* currentScene;
 
 	std::unordered_map<std::type_index, std::function<Server*()>> serverClosures;
-	std::unordered_map<std::type_index, Server&> serverMap; 
+	std::unordered_map<std::type_index, Server&> serverMap;
 
 public:
 	// Singleton Setup
@@ -62,6 +63,17 @@ public:
 	template <typename T>
 	T& getServer() {
 		return dynamic_cast<T&>(getServer(typeid(T)));
+	}
+
+
+	// Logging stuff
+	Logger logger;
+
+	static void log(Logger::Priority priority, const char* fmt,  ...) __attribute__ (( format(printf, 2, 3) )) {
+		va_list args;
+		va_start(args, fmt);
+		Bromine::instance().logger.vlog(priority, fmt, args);
+		va_end(args);
 	}
 
 	// Server caches

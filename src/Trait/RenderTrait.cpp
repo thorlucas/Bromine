@@ -14,7 +14,8 @@ Vec2f& RenderTrait::position() {
 }
 
 void RenderTrait::render() {
-	server.drawPoint(_position);
+	Bromine::log(Logger::VERBOSE, "Node %d is at (%f, %f)", owner, _position[0], _position[1]);
+	// server.drawPoint(_position);
 }
 
 }

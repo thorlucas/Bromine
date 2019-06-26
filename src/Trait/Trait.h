@@ -14,8 +14,12 @@ protected:
 	S& server;
 
 public:
+	typedef S serverType;
+
 	const NodeID owner;
 
+	// TODO: This should only be called from within a node
+	// or some type of server?
 	Trait(const NodeID& owner) : owner(owner), server(Bromine::instance().getServer<S>()) {
 		server.registerTrait(static_cast<T&>(*this));
 	}

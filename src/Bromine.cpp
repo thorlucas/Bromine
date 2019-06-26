@@ -13,7 +13,8 @@ namespace BromineEngine {
 Bromine::Bromine() :
 	serverClosures(autoloadServerClosures),
 	nodeServer(getServer<NodeServer>()),
-	renderServer(getServer<RenderServer>()) {
+	renderServer(getServer<RenderServer>()),
+	logger(Logger::VERBOSE) {
 
 	for (auto it : autoInitServers) {
 		getServer(it); // ensures servers are constructed
@@ -42,7 +43,7 @@ Server& Bromine::getServer(std::type_index typeIndex) {
 }
 
 bool Bromine::run() {
-	return run(initialScene);
+	return run(makeInitialScene());
 }
 
 bool Bromine::run(Scene* rootScene) {

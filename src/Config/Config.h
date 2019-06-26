@@ -6,10 +6,16 @@
 
 namespace BromineEngine {
 
-static Scene* const initialScene = new ExampleScene;
+// TODO:
+static Scene* makeInitialScene() {
+	return new ExampleScene;
+}
+// static Scene* const initialScene = new ExampleScene;
 
 static const int windowWidth = 1280;
 static const int windowHeight = 720;
+
+static const char* resourcePath = "../resources/";
 
 }
 

@@ -6,6 +6,7 @@
 #include "Server.h"
 #include "../Scene/Scene.h"
 #include "../Node/Node.h"
+#include "../Bromine.h"
 
 namespace BromineEngine {
 
@@ -16,34 +17,24 @@ private:
 	std::map<NodeID, Node&> nodeMap;
 
 protected:
-	NodeID requestNodeID();
-	bool registerNode(Node& node, NodeID id);
 
 public:
 	NodeServer();
 	~NodeServer();
 
-	Node& createNode(Scene& scene);
-	
-	Node& createNodeWithParent(NodeID parentID);
-	Node& createNodeWithParent(Node& parent);
-
 	Node& getNode(NodeID id);
 
-	// template <typename T>
-	// NodeID getNodeParentWithTrait(NodeID child) {
-	// 	NodeID parent = getNode(child).parent;
+	template <typename N>
+	N& createNode() {
+		N& nref = *(new N(nextAvailableID++));
+		nodeMap.insert(std::pair<NodeID, Node&>(nref.id, static_cast<Node&>(nref)));
 
-	// 	while (parent != NODE_NULL) {
-	// 		if (parent.hasTrait<T>()) break;
-
-	// 		parent = getNode(parent).parent;
-	// 	}
-
-	// 	return parent;
-	// }
+		Bromine::log(Logger::VERBOSE, "Created node with ID %d: %p", nref.id, &nref);
+		return nref;
+	}
 
 	void update() {}
+	void activate(NodeID node) {}
 
 };
 

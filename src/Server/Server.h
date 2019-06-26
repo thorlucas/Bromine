@@ -11,10 +11,7 @@ public:
 	virtual ~Server() {};
 
 	virtual void update() = 0;
-
-	virtual void test() {
-		printf("Testing from base\n");
-	}
+	virtual void activate(NodeID node) = 0;
 };
 
 }

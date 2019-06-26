@@ -1,5 +1,5 @@
-#ifndef _SERVERS_CONFIG_H_
-#define _SERVERS_CONFIG_H_
+#ifndef _CONFIG_SERVER_H_
+#define _CONFIG_SERVER_H_
 
 #include <vector>
 #include <unordered_map>
@@ -38,4 +38,4 @@ static const std::vector<std::type_index> autoInitServers = {
 
 }
 
-#endif // _SERVERS_CONFIG_H_
+#endif // _CONFIG_SERVER_H_

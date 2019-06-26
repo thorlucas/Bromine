@@ -1,6 +1,7 @@
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
+#include <set>
 #include "../Node/Node.h"
 
 namespace BromineEngine {
@@ -8,11 +9,12 @@ namespace BromineEngine {
 class Scene {
 friend class Bromine;
 protected:
-	NodeID rootNode;
-	std::vector<NodeID> nodes;
+	std::set<NodeID> nodes;
 
 public:
-	Scene();
+	const NodeID rootNode;
+
+	Scene(NodeID rootNode);
 	~Scene();
 
 	virtual void loadScene();

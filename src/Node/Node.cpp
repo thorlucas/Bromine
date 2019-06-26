@@ -4,18 +4,19 @@
 
 namespace BromineEngine {
 
+Node::Node(NodeID id) : id(id) {}
 
-Node::Node(Scene& scene, NodeID id, NodeID parent) : scene(scene), id(id), parent(parent) {}
-Node::Node(Scene& scene, NodeID id) : Node(scene, id, NODE_NULL) {}
-
-Node::~Node() {
-	// deregister child nodes from scene?
-}
+Node::~Node() {}
 
 void Node::addChild(NodeID child) {
 	children.push_back(child);
 }
 
-// void Node::registerTraits() {}
+void Node::activate() {
+	Bromine::log(Logger::VERBOSE, "Node %d is activating...", id);
+	for (auto it : capabilities) {
+		Bromine::instance().getServer(it).activate(id);
+	}
+}
 
 } // namespace BromineEngine

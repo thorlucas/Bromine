@@ -6,13 +6,17 @@
 
 namespace BromineEngine {
 
-ExampleScene::ExampleScene() {}
+ExampleScene::ExampleScene() : Scene(Bromine::instance().nodeServer.createNode<Node>().id) {
+	Bromine::instance().nodeServer.getNode(rootNode).attachTrait<RenderTrait>(Vec2d(10.0, 10.0));
+
+	Bromine::log(Logger::INFO, "Creating new scene: %p", this);
+}
 
 ExampleScene::~ExampleScene() {}
 
 void ExampleScene::loadScene() {
-	Node& node = Bromine::instance().nodeServer.createNode(*this);
-	node.attachTrait<RenderTrait>(Vec2f(200, 300));
+	Scene::loadScene();
+	// Node& node = Bromine::instance().nodeServer.createNode<Node>();
 }
 
 }
