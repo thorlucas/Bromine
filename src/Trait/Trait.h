@@ -13,6 +13,8 @@ class Trait {
 protected:
 	S& server;
 
+	Trait(const NodeID& owner) : owner(owner), server(Bromine::instance().getServer<serverType>()) {}
+
 public:
 	typedef S serverType;
 
@@ -20,13 +22,8 @@ public:
 
 	// TODO: This should only be called from within a node
 	// or some type of server?
-	Trait(const NodeID& owner) : owner(owner), server(Bromine::instance().getServer<S>()) {
-		server.registerTrait(static_cast<T&>(*this));
-	}
 
-	~Trait() {
-
-	}
+	~Trait() {}
 };
 
 }

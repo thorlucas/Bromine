@@ -4,9 +4,13 @@
 
 namespace BromineEngine {
 
+Scene::Scene() : Scene(Bromine::instance().nodeServer.createNode<Node>().id) {}
+
 Scene::Scene(NodeID rootNode) : rootNode(rootNode) {
 	nodes.insert(rootNode);
 }
+
+Scene::Scene(Node& rootNref) : Scene(rootNref.id) {}
 
 Scene::~Scene() {}
 

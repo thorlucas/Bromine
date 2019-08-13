@@ -3,7 +3,7 @@ SRCDIR := src
 BUILDDIR := build
 TARGET := bin/main
 
-CLFAGS := -g --std=c++11 -D _DEBUG
+CLFAGS := -g --std=c++11 -D _DEBUG -O2
 
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
@@ -22,7 +22,10 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 
 	@echo " $(CC) $(CLFAGS) $(INC) -c -o $@ $<"; $(CC) $(CLFAGS) $(INC) -c -o $@ $<
 
-.PHONY: clean
+.PHONY: clean run
 clean:
 	@echo " Cleaning..."
 	@echo " $(RM) -r $(BUILDDIR) $(OBJECTS)"; $(RM) -r $(BUILDDIR) $(OBJECTS)
+
+run: $(TARGET)
+	$(TARGET)

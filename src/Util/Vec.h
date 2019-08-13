@@ -163,6 +163,7 @@ typedef Vec<3, double> Vec3d;
 typedef Vec<2, int> Vec2i;
 typedef Vec<3, int> Vec3i;
 
+// TODO: Not working?
 typedef Vec<2, float> Vec2f;
 typedef Vec<3, float> Vec3f;
 

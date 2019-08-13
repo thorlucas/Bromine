@@ -13,15 +13,15 @@ namespace BromineEngine {
 class RenderTrait : public Trait<RenderTrait, RenderServer> {
 friend class RenderServer;
 protected:
-	Vec2f _position;
+	Vec2d _position;
 
-public:
 	RenderTrait(const NodeID owner);
-	RenderTrait(const NodeID owner, const Vec2f& position);
+	RenderTrait(const NodeID owner, const Vec2d& position);
+public:
 	
-	~RenderTrait();
+	~RenderTrait(); 
 
-	Vec2f& position();
+	Vec2d& position();
 	virtual void render();
 };
 

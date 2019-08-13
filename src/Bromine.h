@@ -6,6 +6,7 @@
 #include <functional>
 #include <typeinfo>
 #include <typeindex>
+#include <chrono>
 
 #include "Scene/Scene.h"
 #include "Node/Node.h"
@@ -51,7 +52,7 @@ public:
 
 	~Bromine();
 
-	template<typename T>
+	template <typename T>
 	bool registerServer(std::function<T*()> closure) {
 		return serverClosures.insert(
 			std::pair<std::type_index, std::function<Server*()>>(typeid(T), closure)
@@ -64,6 +65,15 @@ public:
 	T& getServer() {
 		return dynamic_cast<T&>(getServer(typeid(T)));
 	}
+
+
+	// Aliases
+	static Node& node(NodeID node);
+
+	template <typename T>
+	static T& server() {
+		return Bromine::instance().getServer<T>();
+	} 
 
 
 	// Logging stuff

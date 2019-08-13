@@ -1,6 +1,7 @@
 #ifndef _SERVER_H_
 #define _SERVER_H_
 
+#include <unordered_map>
 #include "../Node/Node.h"
 
 namespace BromineEngine {
@@ -12,6 +13,9 @@ public:
 
 	virtual void update() = 0;
 	virtual void activate(NodeID node) = 0;
+
+	// template<typename T>
+	// virtual T& createTrait
 };
 
 }

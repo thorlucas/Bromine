@@ -14,7 +14,7 @@ Bromine::Bromine() :
 	serverClosures(autoloadServerClosures),
 	nodeServer(getServer<NodeServer>()),
 	renderServer(getServer<RenderServer>()),
-	logger(Logger::VERBOSE) {
+	logger(Logger::DEBUG) {
 
 	for (auto it : autoInitServers) {
 		getServer(it); // ensures servers are constructed
@@ -68,6 +68,10 @@ bool Bromine::run(Scene* rootScene) {
 	}
 
 	return 0;
+}
+
+Node& Bromine::node(NodeID node) {
+	return Bromine::instance().nodeServer.getNode(node);
 }
 
 

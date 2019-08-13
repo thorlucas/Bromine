@@ -1,7 +1,7 @@
 #ifndef _NODE_H_
 #define _NODE_H_
 
-#include <vector>
+#include <set>
 #include <cstdint>
 #include <cstdio>
 #include <typeinfo>
@@ -17,27 +17,30 @@ class Node {
 friend class NodeServer;
 protected:
 	NodeID parent; /**< Parent node, NODE_NULL if root. */
+	std::set<NodeID> children; /**< A list of the child nodes. */
 
-	// TODO: Replace with set?
-	std::vector<NodeID> children; /**< A list of the child nodes. */
+	Node(NodeID id, const std::set<std::type_index> capabilities);
 
-	// TODO: Replace with set?
-	std::vector<std::type_index> capabilities; /**< A list of the type of servers this node has traits for. */
-
-	Node(NodeID id);
-
-	// TODO: Notify scene on children change
-	void addChild(NodeID child);
+	void setParent(NodeID parent);
 
 public:
+	const std::set<std::type_index> capabilities; /**< A list of the type of servers this node has traits for. */
 	const NodeID id; /**< A constant ID, which should be requested from the scene. */
 
 	~Node();
 
+	bool hasCapability(std::type_index capability) {
+		return capabilities.find(capability) != capabilities.end();
+	}
+
 	template <typename T>
 	bool hasCapability() {
-		return std::find(capabilities.begin(), capabilities.end(), typeid(T)) != capabilities.end();
+		return hasCapability(typeid(T));
 	}
+
+	// TODO: Notify scene on children change
+	void addChild(NodeID child);
+	void addChild(Node& child);
 
 	/**
 	 * Makes the node active.
@@ -45,16 +48,6 @@ public:
 	 * the relevant servers that this node is not activate.
 	 */
 	void activate();
-
-	template <typename T, typename ...P>
-	bool attachTrait(P&&... ps) {
-		if (hasCapability<T>()) return false;
-
-		T* t = new T(id, std::forward<P>(ps)...);
-		capabilities.push_back(typeid(typename T::serverType));
-
-		return true;
-	}
 };
 
 }
