@@ -47,19 +47,6 @@ public:
 		return nref;
 	}
 
-	// TODO: Replace with a builder?
-	template <typename N, typename ...Ts, typename ...Ps>
-	N& createNode(Ps&&... ps) {
-		N& nref = *(new N(requestID(), std::set<std::type_index>({typeid(typename Ts::serverType)...}), std::forward<Ps>(ps)...));
-		nodeMap.insert(std::pair<NodeID, Node&>(nref.id, static_cast<Node&>(nref)));
-
-		// TODO: Is this dummy necessary?
-		void* dummy[sizeof...(Ts)] = { static_cast<void*>(&(Bromine::server<typename Ts::serverType>().template createTrait<Ts>(nref.id)))... };
-
-		Bromine::log(Logger::DEBUG, "Created node with ID %d: %p", nref.id, &nref);
-		return nref;
-	}
-
 	template <typename N>
 	class NodeBuilder {
 	friend class NodeServer;
