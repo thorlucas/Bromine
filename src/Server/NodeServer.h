@@ -10,6 +10,7 @@
 
 namespace BromineEngine {
 
+// TODO: Move non templated definitions to cpp file
 class NodeServer : public Server {
 friend class Bromine;
 friend class Node;
@@ -74,7 +75,6 @@ public:
 
 		template <typename ...Ps>
 		N& create(Ps&&... ps) {
-			// return nodeServer.createNodeFromBuilder<N>(this, std::forward<Ps>(ps)...);
 			return nodeServer.createNodeFromBuilder<N>(this, std::forward<Ps>(ps)...);
 		}
 
@@ -90,6 +90,7 @@ public:
 		return buildNode<Node>();
 	}
 
+	// TODO: I don't think we need another function for this
 	template <typename N>
 	N& createNodeFromBuilder(NodeBuilder<N>* builder) {
 		N& nref = *(new N(builder->nodeID, builder->capabilities));

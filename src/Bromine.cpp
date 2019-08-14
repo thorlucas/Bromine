@@ -14,6 +14,7 @@ Bromine::Bromine() :
 	serverClosures(autoloadServerClosures),
 	nodeServer(getServer<NodeServer>()),
 	renderServer(getServer<RenderServer>()),
+	eventServer(getServer<EventServer>()),
 	logger(Logger::DEBUG) {
 
 	for (auto it : autoInitServers) {
@@ -36,10 +37,12 @@ Server& Bromine::getServer(std::type_index typeIndex) {
 	auto ret = serverMap.find(typeIndex);
 	if (ret != serverMap.end()) return ret->second;
 
-	Server& server = *serverClosures.at(typeIndex)();
-	serverMap.insert(std::pair<std::type_index, Server&>(typeIndex, server));
 
-	return server;
+	Server* server = serverClosures.at(typeIndex)();
+	serverMap.insert(std::pair<std::type_index, Server&>(typeIndex, *server));
+	serverVector.push_back(server);
+
+	return *server;
 }
 
 bool Bromine::run() {
@@ -51,23 +54,17 @@ bool Bromine::run(Scene* rootScene) {
 
 	currentScene->loadScene();
 
-	SDL_Event sdlEvent;
-
 	while (running) {
-		while (SDL_PollEvent(&sdlEvent)) {
-			switch (sdlEvent.type) {
-				case SDL_QUIT:
-					running = false;
-					break;
-				default:
-					break;
-			}
+		for (int i = 0; i < serverVector.size(); ++i) {
+			serverVector.at(i)->update();
 		}
-
-		renderServer.update();
 	}
 
 	return 0;
+}
+
+void Bromine::quit() {
+	running = false;
 }
 
 Node& Bromine::node(NodeID node) {

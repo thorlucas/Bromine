@@ -17,8 +17,8 @@ protected:
 
 	RenderTrait(const NodeID owner);
 	RenderTrait(const NodeID owner, const Vec2d& position);
+
 public:
-	
 	~RenderTrait(); 
 
 	Vec2d& position();

@@ -3,6 +3,7 @@
 
 // #include <SDL2/SDL.h>
 #include <unordered_map>
+#include <vector>
 #include <functional>
 #include <typeinfo>
 #include <typeindex>
@@ -17,6 +18,7 @@ namespace BromineEngine {
 
 class NodeServer;
 class RenderServer;
+class EventServer;
 
 /**
  * This is the engine singleton.
@@ -33,9 +35,10 @@ private:
 	 * When added to Bromine, the scene did enter is called.
 	 */
 	Scene* currentScene;
-
+	
 	std::unordered_map<std::type_index, std::function<Server*()>> serverClosures;
 	std::unordered_map<std::type_index, Server&> serverMap;
+	std::vector<Server*> serverVector;
 
 public:
 	// Singleton Setup
@@ -100,9 +103,12 @@ public:
 	// Commonly used servers have aliases here for quick access
 	NodeServer& nodeServer;
 	RenderServer& renderServer;
+	EventServer& eventServer;
 
 	bool run(Scene* rootScene);
 	bool run();
+
+	void quit();
 };
 
 }
