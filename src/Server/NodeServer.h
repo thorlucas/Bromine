@@ -30,6 +30,23 @@ public:
 
 	Node& getNode(NodeID id);
 
+	template <typename N>
+	N& createEmptyNode() {
+		N& nref = *(new N(requestID(), std::set<std::type_index>()));
+		nodeMap.insert(std::pair<NodeID, Node&>(nref.id, static_cast<Node&>(nref)));
+
+		Bromine::log(Logger::DEBUG, "Created node with ID %d: %p", nref.id, &nref);
+		return nref;
+	}
+
+	Node& createEmptyNode() {
+		Node& nref = *(new Node(requestID(), std::set<std::type_index>()));
+		nodeMap.insert(std::pair<NodeID, Node&>(nref.id, static_cast<Node&>(nref)));
+
+		Bromine::log(Logger::DEBUG, "Created node with ID %d: %p", nref.id, &nref);
+		return nref;
+	}
+
 	// TODO: Replace with a builder?
 	template <typename N, typename ...Ts, typename ...Ps>
 	N& createNode(Ps&&... ps) {
@@ -68,6 +85,13 @@ public:
 			return nodeServer.createNodeFromBuilder<N>(this);
 		}
 
+		template <typename ...Ps>
+		N& create(Ps&&... ps) {
+			// return nodeServer.createNodeFromBuilder<N>(this, std::forward<Ps>(ps)...);
+			return nodeServer.createNodeFromBuilder<N>(this, std::forward<Ps>(ps)...);
+		}
+
+
 	};
 
 	template <typename N>
@@ -75,9 +99,24 @@ public:
 		return new NodeBuilder<N>(*this, requestID());
 	}
 
+	NodeBuilder<Node>* buildNode() {
+		return buildNode<Node>();
+	}
+
 	template <typename N>
 	N& createNodeFromBuilder(NodeBuilder<N>* builder) {
 		N& nref = *(new N(builder->nodeID, builder->capabilities));
+		nodeMap.insert(std::pair<NodeID, Node&>(nref.id, static_cast<Node&>(nref)));
+
+		delete builder;
+
+		Bromine::log(Logger::DEBUG, "Created node with ID %d: %p", nref.id, &nref);
+		return nref;
+	}
+
+	template <typename N, typename ...Ps>
+	N& createNodeFromBuilder(NodeBuilder<N>* builder, Ps&&... ps) {
+		N& nref = *(new N(builder->nodeID, builder->capabilities, std::forward(ps...)));
 		nodeMap.insert(std::pair<NodeID, Node&>(nref.id, static_cast<Node&>(nref)));
 
 		delete builder;

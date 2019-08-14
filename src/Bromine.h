@@ -70,6 +70,16 @@ public:
 	// Aliases
 	static Node& node(NodeID node);
 
+	// TODO: Can't make alias because NodeServer is an incomplete type... shit
+	// template <typename N>
+	// static decltype(Bromine::instance().nodeServer.buildNode<N>()) node() {
+	// 	return Bromine::instance().nodeServer.buildNode<N>();
+	// }
+
+	// static decltype(Bromine::instance().nodeServer.buildNode()) node() {
+	// 	return Bromine::instance().nodeServer.buildNode();
+	// }
+
 	template <typename T>
 	static T& server() {
 		return Bromine::instance().getServer<T>();
@@ -86,7 +96,7 @@ public:
 		va_end(args);
 	}
 
-	// Server caches
+	// Server aliases
 	// Commonly used servers have aliases here for quick access
 	NodeServer& nodeServer;
 	RenderServer& renderServer;

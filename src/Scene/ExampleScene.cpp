@@ -9,7 +9,7 @@ namespace BromineEngine {
 ExampleScene::ExampleScene() {
 	ResourceID bromineTexture = Bromine::server<RenderServer>().loadTexture("Bromine.png");
 
-	Node& spriteNode = Bromine::instance().nodeServer.buildNode<Node>()
+	Node& spriteNode = Bromine::instance().nodeServer.buildNode()
 		->addTrait<SpriteRenderTrait>(bromineTexture, Vec2d(0.5, 0.5))
 		->create();
 
