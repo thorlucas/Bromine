@@ -3,9 +3,9 @@
 
 namespace BromineEngine {
 
-void LogicServer::update() {
+void LogicServer::update(double delta) {
 	for (auto& it : activeNodes) {
-		nodeMap.find(it)->second.update();
+		nodeMap.find(it)->second.update(delta);
 	}
 };
 

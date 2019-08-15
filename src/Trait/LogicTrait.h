@@ -12,7 +12,7 @@ protected:
 	LogicTrait(const NodeID owner);
 
 	virtual void activate();
-	virtual void update();
+	virtual void update(double delta);
 
 public:
 	~LogicTrait();

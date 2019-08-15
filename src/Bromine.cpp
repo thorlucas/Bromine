@@ -47,14 +47,29 @@ bool Bromine::run() {
 }
 
 bool Bromine::run(Scene* rootScene) {
+	lastFrame = std::chrono::high_resolution_clock::now();
+	lastSecondFrame = lastFrame;
+
 	currentScene = rootScene;
 
 	currentScene->loadScene();
 
 	while (running) {
+		thisFrame = std::chrono::high_resolution_clock::now();
+		delta = std::chrono::duration_cast<std::chrono::duration<double>>(thisFrame - lastFrame);
+
 		for (int i = 0; i < serverVector.size(); ++i) {
-			serverVector.at(i)->update();
+			serverVector.at(i)->update(delta.count());
 		}
+
+		++framesInSecond;
+		if (std::chrono::duration_cast<std::chrono::duration<double>>(thisFrame - lastSecondFrame).count() >= 1.0) {
+			Bromine::log(Logger::DEBUG, "[FPS] %d", framesInSecond);
+			lastSecondFrame = thisFrame;
+			framesInSecond = 0;
+		}
+
+		lastFrame = thisFrame;
 	}
 
 	return 0;

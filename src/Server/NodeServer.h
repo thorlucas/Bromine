@@ -23,7 +23,7 @@ protected:
 	NodeID requestID();
 	void activate(NodeID node) {}
 	
-	void update() {}
+	void update(double delta) {}
 	
 public:
 	NodeServer();

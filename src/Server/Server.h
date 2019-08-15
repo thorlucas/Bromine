@@ -11,7 +11,7 @@ public:
 	Server() {};
 	virtual ~Server() {};
 
-	virtual void update() = 0;
+	virtual void update(double delta) = 0;
 	virtual void activate(NodeID node) = 0;
 
 	// template<typename T>

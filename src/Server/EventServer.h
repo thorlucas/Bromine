@@ -18,7 +18,7 @@ private:
 	SDL_Event sdlEvent;
 
 public:
-	void update();
+	void update(double delta);
 	void activate(NodeID node);
 
 	EventTrait& getTrait(NodeID node);

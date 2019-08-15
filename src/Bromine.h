@@ -54,6 +54,13 @@ private:
 	std::unordered_map<std::type_index, Server&> serverMap;
 	std::vector<Server*> serverVector;
 
+	std::chrono::high_resolution_clock::time_point lastSecondFrame;
+	std::chrono::high_resolution_clock::time_point lastFrame;
+	std::chrono::high_resolution_clock::time_point thisFrame;
+	std::chrono::duration<double> delta;
+
+	unsigned int framesInSecond;
+
 public:
 	// Singleton Setup
 

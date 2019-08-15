@@ -11,13 +11,13 @@ void ExampleLogicTrait::activate() {
 	getOwner().getTrait<EventTrait>().setDelegate(this);
 }
 
-void ExampleLogicTrait::update() {
+void ExampleLogicTrait::update(double delta) {
 	if (movingUp != movingDown) {
-		(*spritePosition)[1] += movingDown ? 0.5 : -0.5;
+		(*spritePosition)[1] += movingDown ? 500.f * delta : -500.f * delta;
 	}
 
 	if (movingRight != movingLeft) {
-		(*spritePosition)[0] += movingRight ? 0.5 : -0.5;
+		(*spritePosition)[0] += movingRight ? 500.f * delta : -500.f * delta;
 	}
 }
 

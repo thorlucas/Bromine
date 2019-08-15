@@ -103,7 +103,7 @@ void RenderServer::drawTexture(const Vec2f &pos, const Vec2f &scale, ResourceID 
 	SDL_RenderCopy(renderer, resource.texture, &resource.source, &destination);
 }
 
-void RenderServer::update() {
+void RenderServer::update(double delta) {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
 	

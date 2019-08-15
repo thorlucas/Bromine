@@ -87,7 +87,7 @@ public:
 
 	Resource& getResource(ResourceID resource);
 
-	void update();
+	void update(double delta);
 
 	void activate(NodeID node);
 };

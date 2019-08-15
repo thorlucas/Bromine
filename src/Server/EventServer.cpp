@@ -3,7 +3,7 @@
 
 namespace BromineEngine {
 
-void EventServer::update() {
+void EventServer::update(double delta) {
 	while (SDL_PollEvent(&sdlEvent)) {
 		switch (sdlEvent.type) {
 			case SDL_QUIT:

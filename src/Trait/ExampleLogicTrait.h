@@ -15,7 +15,7 @@ private:
 protected:
 	ExampleLogicTrait(const NodeID owner);
 	void activate();
-	void update();
+	void update(double delta);
 
 public:
 	~ExampleLogicTrait();

@@ -14,7 +14,7 @@ private:
 	std::set<NodeID> activeNodes;
 
 public:
-	void update();
+	void update(double delta);
 	void activate(NodeID node);
 
 	LogicTrait& getTrait(NodeID node);
