@@ -3,9 +3,6 @@
 #include "Config/Config.h"
 #include "Config/ServersConfig.h"
 
-#include "Server/NodeServer.h"
-#include "Server/RenderServer.h"
-
 namespace BromineEngine {
 
 // TODO: Make resource manager have no constructor parameters,
@@ -15,6 +12,7 @@ Bromine::Bromine() :
 	nodeServer(getServer<NodeServer>()),
 	renderServer(getServer<RenderServer>()),
 	eventServer(getServer<EventServer>()),
+	logicServer(getServer<LogicServer>()),
 	logger(Logger::DEBUG) {
 
 	for (auto it : autoInitServers) {

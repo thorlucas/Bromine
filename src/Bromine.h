@@ -19,6 +19,7 @@ namespace BromineEngine {
 class NodeServer;
 class RenderServer;
 class EventServer;
+class LogicServer;
 
 /**
  * This is the engine singleton.
@@ -104,6 +105,7 @@ public:
 	NodeServer& nodeServer;
 	RenderServer& renderServer;
 	EventServer& eventServer;
+	LogicServer& logicServer;
 
 	bool run(Scene* rootScene);
 	bool run();

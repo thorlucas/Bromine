@@ -11,6 +11,7 @@
 #include "../Server/NodeServer.h"
 #include "../Server/RenderServer.h"
 #include "../Server/EventServer.h"
+#include "../Server/LogicServer.h"
 
 #define REG_SERVER(name, function) { typeid(name), function }
 #define SERVER_TYPE(name) typeid(name)
@@ -29,6 +30,9 @@ static const std::unordered_map<std::type_index, std::function<Server*()>> autol
 	}),
 	REG_SERVER(EventServer, [] {
 		return new EventServer;
+	}),
+	REG_SERVER(LogicServer, [] {
+		return new LogicServer;
 	})
 };
 
@@ -38,7 +42,8 @@ static const std::unordered_map<std::type_index, std::function<Server*()>> autol
 static const std::vector<std::type_index> autoInitServers = {
 	SERVER_TYPE(NodeServer),
 	SERVER_TYPE(RenderServer),
-	SERVER_TYPE(EventServer)
+	SERVER_TYPE(EventServer),
+	SERVER_TYPE(LogicServer)
 };
 
 }
