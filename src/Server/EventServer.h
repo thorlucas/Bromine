@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include "../Bromine.h"
 #include "Server.h"
+#include "../Util/Events.h"
 
 namespace BromineEngine {
 
