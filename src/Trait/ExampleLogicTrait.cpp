@@ -6,9 +6,13 @@ namespace BromineEngine {
 ExampleLogicTrait::ExampleLogicTrait(const NodeID owner) : LogicTrait(owner) {}
 ExampleLogicTrait::~ExampleLogicTrait() {}
 
+void ExampleLogicTrait::activate() {
+	spritePosition = &getOwner().getTrait<SpriteRenderTrait>().position();
+}
+
 void ExampleLogicTrait::update() {
 	Bromine::log(Logger::VERBOSE, "Example logic trait is saying hi!");
-	getOwner().getTrait<SpriteRenderTrait>().position()[0] += 0.4;
+	(*spritePosition)[0] += 0.4;
 }
 
 }

@@ -7,8 +7,12 @@ namespace BromineEngine {
 
 class ExampleLogicTrait : public LogicTrait {
 friend class LogicServer;
+private:
+	Vec2d* spritePosition;
+
 protected:
 	ExampleLogicTrait(const NodeID owner);
+	void activate();
 	void update();
 
 public:
