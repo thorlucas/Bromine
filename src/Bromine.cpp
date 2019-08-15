@@ -83,5 +83,9 @@ Node& Bromine::node(NodeID node) {
 	return Bromine::instance().nodeServer.getNode(node);
 }
 
+NodeBuilder<Node>* Bromine::node() {
+	return Bromine::instance().nodeServer.buildNode();
+}
+
 
 } // namespace BromineEngine

@@ -25,6 +25,9 @@ class RenderServer;
 class EventServer;
 class LogicServer;
 
+template <typename N>
+class NodeBuilder;
+
 /**
  * This is the engine singleton.
  * 
@@ -109,6 +112,8 @@ public:
 	// static decltype(Bromine::instance().nodeServer.buildNode()) node() {
 	// 	return Bromine::instance().nodeServer.buildNode();
 	// }
+
+	static NodeBuilder<Node>* node();
 
 	template <typename T>
 	static T& server() {
