@@ -10,6 +10,8 @@ class LogicTrait : public Trait<LogicTrait, LogicServer> {
 friend class LogicServer;
 protected:
 	LogicTrait(const NodeID owner);
+
+	virtual void activate();
 	virtual void update();
 
 public:

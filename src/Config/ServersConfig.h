@@ -21,7 +21,7 @@ namespace BromineEngine {
 /**
  * This map defines the closures that should be automatically loaded.
  */
-static const std::unordered_map<std::type_index, std::function<Server*()>> autoloadServerClosures = {
+const std::unordered_map<std::type_index, std::function<Server*()>> autoloadServerClosures = {
 	REG_SERVER(NodeServer, [] {
 		return new NodeServer;
 	}),
@@ -39,7 +39,7 @@ static const std::unordered_map<std::type_index, std::function<Server*()>> autol
 /**
  * List of server types that should be initiated on startup.
  */
-static const std::vector<std::type_index> autoInitServers = {
+const std::vector<std::type_index> autoInitServers = {
 	SERVER_TYPE(NodeServer),
 	SERVER_TYPE(RenderServer),
 	SERVER_TYPE(EventServer),

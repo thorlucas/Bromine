@@ -13,6 +13,10 @@ Vec2d& RenderTrait::position() {
 	return _position;
 }
 
+Vec2d RenderTrait::position() const {
+	return _position;
+}
+
 void RenderTrait::render() {}
 
 }

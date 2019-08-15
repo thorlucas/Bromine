@@ -9,7 +9,7 @@ class SpriteRenderTrait : public RenderTrait {
 friend class RenderServer;
 private:
 	ResourceID texture;
-	Vec2d scale;
+	Vec2d _scale;
 
 protected:
 	SpriteRenderTrait(const NodeID owner, ResourceID texture);
@@ -17,6 +17,9 @@ protected:
 
 public:
 	virtual void render();
+
+	Vec2d& scale();
+	Vec2d scale() const;
 };
 
 }

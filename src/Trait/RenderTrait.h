@@ -22,6 +22,8 @@ public:
 	~RenderTrait(); 
 
 	Vec2d& position();
+	Vec2d position() const;
+
 	virtual void render();
 };
 

@@ -1,7 +1,6 @@
 #ifndef _BROMINE_H_
 #define _BROMINE_H_
 
-// #include <SDL2/SDL.h>
 #include <unordered_map>
 #include <vector>
 #include <functional>
@@ -9,13 +8,17 @@
 #include <typeindex>
 #include <chrono>
 
-#include "Scene/Scene.h"
-#include "Node/Node.h"
-#include "Server/Server.h"
 #include "Util/Logger.h"
+#include "Util/Vec.h"
+#include "Util/Typedefs.h"
 
 namespace BromineEngine {
 
+// Forward declarations
+class Scene;
+class Node;
+
+class Server;
 class NodeServer;
 class RenderServer;
 class EventServer;
@@ -23,6 +26,16 @@ class LogicServer;
 
 /**
  * This is the engine singleton.
+ * 
+ * It's main purpose is to handle the various servers, by
+ * calling them in the main loop, and allowing the 
+ * registration and fetching thereof.
+ *
+ * It also manages the loading and unloading of scenes. TODO: Why?
+ *
+ * Bromine also provides aliases to commonly-used functions.
+ *
+ * TODO: Why do servers need to be added runtime?
  */
 class Bromine {
 private:
@@ -43,6 +56,7 @@ private:
 
 public:
 	// Singleton Setup
+
 	/**
 	 * Returns an instance of the Bromine engine singleton.
 	 */
@@ -55,6 +69,9 @@ public:
 	void operator=(Bromine const&) = delete;
 
 	~Bromine();
+
+
+	// Server registration and fetching
 
 	template <typename T>
 	bool registerServer(std::function<T*()> closure) {
@@ -72,6 +89,7 @@ public:
 
 
 	// Aliases
+	
 	static Node& node(NodeID node);
 
 	// TODO: Can't make alias because NodeServer is an incomplete type... shit
@@ -89,8 +107,17 @@ public:
 		return Bromine::instance().getServer<T>();
 	} 
 
+	// Server aliases
+	// Commonly used servers have aliases here for quick access
+	
+	NodeServer& 	nodeServer;
+	RenderServer& 	renderServer;
+	EventServer& 	eventServer;
+	LogicServer& 	logicServer;
 
-	// Logging stuff
+
+	// Logging
+
 	Logger logger;
 
 	static void log(Logger::Priority priority, const char* fmt,  ...) __attribute__ (( format(printf, 2, 3) )) {
@@ -100,12 +127,8 @@ public:
 		va_end(args);
 	}
 
-	// Server aliases
-	// Commonly used servers have aliases here for quick access
-	NodeServer& nodeServer;
-	RenderServer& renderServer;
-	EventServer& eventServer;
-	LogicServer& logicServer;
+
+	// Run and quit
 
 	bool run(Scene* rootScene);
 	bool run();

@@ -24,6 +24,9 @@ public:
 	// or some type of server?
 
 	~Trait() {}
+	Node& getOwner() {
+		return Bromine::node(owner);
+	}
 };
 
 }

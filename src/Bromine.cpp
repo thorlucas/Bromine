@@ -1,18 +1,17 @@
 #include "Bromine.h"
 
-#include "Config/Config.h"
 #include "Config/ServersConfig.h"
 
 namespace BromineEngine {
 
-// TODO: Make resource manager have no constructor parameters,
-// initialize everything later
 Bromine::Bromine() :
 	serverClosures(autoloadServerClosures),
+
 	nodeServer(getServer<NodeServer>()),
 	renderServer(getServer<RenderServer>()),
 	eventServer(getServer<EventServer>()),
 	logicServer(getServer<LogicServer>()),
+	
 	logger(Logger::DEBUG) {
 
 	for (auto it : autoInitServers) {

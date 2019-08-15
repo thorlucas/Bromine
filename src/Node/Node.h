@@ -8,10 +8,9 @@
 #include <typeindex>
 #include <algorithm>
 
-namespace BromineEngine {
+#include "../Bromine.h"
 
-typedef uint32_t NodeID;
-#define NODE_NULL INT32_MAX
+namespace BromineEngine {
 
 class Node {
 friend class NodeServer;
@@ -29,13 +28,20 @@ public:
 
 	~Node();
 
-	bool hasCapability(std::type_index capability) {
-		return capabilities.find(capability) != capabilities.end();
-	}
+	bool hasCapability(std::type_index capability);
 
 	template <typename T>
 	bool hasCapability() {
 		return hasCapability(typeid(T));
+	}
+
+	template <typename T>
+	T& getTrait() {
+		if (hasCapability<typename T::serverType>()) {
+			return static_cast<T&>(Bromine::server<typename T::serverType>().getTrait(id));
+		} else {
+			// TODO: Throw error!
+		}
 	}
 
 	// TODO: Notify scene on children change

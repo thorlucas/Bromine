@@ -40,4 +40,8 @@ void Node::activate() {
 	}
 }
 
+bool Node::hasCapability(std::type_index capability) {
+	return capabilities.find(capability) != capabilities.end();
+}
+
 } // namespace BromineEngine
