@@ -5,19 +5,19 @@ namespace BromineEngine {
 
 RenderServer::RenderServer() : window(nullptr), renderer(nullptr), nextAvailableID(0) {
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
-		Bromine::log(Logger::ERROR, "Failed to initialize video");
-		return; // TODO: Throw
+		Bromine::log(Logger::ERROR, "Failed to initialize video: %s", SDL_GetError());
+		throw BromineInitError(SDL_GetError()); 
 	}
 
 	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
-		Bromine::log(Logger::ERROR, "Failed to initialize image");
-		return; // TODO: Throw
+		Bromine::log(Logger::ERROR, "Failed to initialize image: %s", SDL_GetError());
+		throw BromineInitError(SDL_GetError()); 
 	}
 
 	SDL_CreateWindowAndRenderer(windowWidth, windowHeight, 0, &window, &renderer);
 	if (window == nullptr || renderer == nullptr) {
-		Bromine::log(Logger::ERROR, "Failed to create window");
-		return; // TODO: Throw
+		Bromine::log(Logger::ERROR, "Failed to create window: %s", SDL_GetError());
+		throw BromineInitError(SDL_GetError()); 
 	}
 }
 
@@ -44,11 +44,6 @@ RenderServer::~RenderServer() {
 
 RenderTrait& RenderServer::getTrait(NodeID node) {
 	return nodeMap.at(node);
-}
-
-bool RenderServer::registerTrait(RenderTrait& trait) {
-	// TODO: Note, failure to insert can potentially cause memory leaks
-	return nodeMap.insert(std::pair<NodeID, RenderTrait&>(trait.owner, trait)).second;
 }
 
 ResourceID RenderServer::loadTexture(const char* path) {

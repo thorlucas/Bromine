@@ -11,6 +11,7 @@
 #include "Util/Logger.h"
 #include "Util/Vec.h"
 #include "Util/Typedefs.h"
+#include "Util/Errors.h"
 
 namespace BromineEngine {
 

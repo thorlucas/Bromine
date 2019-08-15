@@ -24,7 +24,7 @@ public:
 		T& tref = *(new T(node, std::forward<Ps>(ps)...));
 		nodeMap.insert(std::pair<NodeID, LogicTrait&>(node, static_cast<LogicTrait&>(tref)));
 
-		Bromine::log(Logger::DEBUG, "Created event trait for Node %d: %p", node, &tref);
+		Bromine::log(Logger::DEBUG, "Created logic trait for Node %d: %p", node, &tref);
 		return tref;
 	}
 };

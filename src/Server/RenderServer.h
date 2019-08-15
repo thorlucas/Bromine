@@ -9,7 +9,6 @@
 #include "../Config/Config.h"
 
 #include "Server.h"
-#include "../Util/Vec.h"
 
 #include "../Bromine.h"
 
@@ -59,9 +58,6 @@ private:
 	 */
 	SDL_Rect destination;
 
-protected:
-	bool registerTrait(RenderTrait& trait);
-
 public:
 	RenderServer();
 	~RenderServer();
@@ -69,7 +65,6 @@ public:
 	// TODO: This should be protected and called through a base trait
 	void drawPoint(const Vec2f& pos);
 	void drawTexture(const Vec2f& pos, const Vec2f& scale, ResourceID texture);
-
 
 	RenderTrait& getTrait(NodeID node);
 

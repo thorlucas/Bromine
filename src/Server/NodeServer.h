@@ -65,7 +65,9 @@ public:
 		NodeBuilder* addTrait(Ps&&... ps) {
 			T& trait = Bromine::server<typename T::serverType>().template createTrait<T>(nodeID, std::forward<Ps>(ps)...);
 			auto ret = capabilities.insert(typeid(typename T::serverType));
-			// TODO: Check if inserted
+			
+			if (!ret.second) throw std::invalid_argument("Node builder can't add multiple traits for the same server.");
+
 			return this;
 		}
 

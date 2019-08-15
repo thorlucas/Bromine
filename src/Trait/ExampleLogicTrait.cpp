@@ -7,6 +7,9 @@ ExampleLogicTrait::ExampleLogicTrait(const NodeID owner) : LogicTrait(owner) {}
 ExampleLogicTrait::~ExampleLogicTrait() {}
 
 void ExampleLogicTrait::activate() {
+	movingUp = false; movingDown = false;
+	movingRight = false; movingLeft = false;
+
 	spritePosition = &getOwner().getTrait<SpriteRenderTrait>().position();
 	getOwner().getTrait<EventTrait>().setDelegate(this);
 }
