@@ -7,7 +7,7 @@ SpriteRenderTrait::SpriteRenderTrait(const NodeID owner, ResourceID texture, Vec
 
 void SpriteRenderTrait::render() {
 	// TODO: One of these is not like the other...
-	server.drawTexture(_position, _scale, texture);
+	server.drawTexture(&_position, &_scale, texture);
 }
 
 Vec2d& SpriteRenderTrait::scale() {

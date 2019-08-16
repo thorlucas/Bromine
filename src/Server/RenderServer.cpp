@@ -19,9 +19,21 @@ RenderServer::RenderServer() : window(nullptr), renderer(nullptr), nextAvailable
 		Bromine::log(Logger::ERROR, "Failed to create window: %s", SDL_GetError());
 		throw BromineInitError(SDL_GetError()); 
 	}
+
+	// Create render context pool
+	renderContextPool = new RenderContext[renderContextPoolSize];
+	for (RenderContext* it = &renderContextPool[0]; it < &renderContextPool[renderContextPoolSize]; ++it) {
+		it->next = it + 1;
+		it->type = RenderContext::NOTHING;
+	}
+	renderContextPool[renderContextPoolSize - 1].next = nullptr;
+	renderContextFirstDead = &renderContextPool[0];
 }
 
 RenderServer::~RenderServer() {
+	// Delete render context pool
+	delete[] renderContextPool;
+
 	for (auto& it : nodeMap) {
 		delete &(it.second);
 	}
@@ -85,17 +97,23 @@ Resource& RenderServer::getResource(ResourceID resource) {
 }
 
 // Drawing functions
-void RenderServer::drawPoint(const Vec2f& pos) {
-	SDL_RenderDrawPoint(renderer, int(pos[0]), int(pos[1]));
+void RenderServer::drawPoint(Vec2d* pos) {
+	// SDL_RenderDrawPoint(renderer, int(pos[0]), int(pos[1]));
+	currentContext->type = RenderContext::POINT;
+	currentContext->point.position = pos;
 }
 
-void RenderServer::drawTexture(const Vec2f &pos, const Vec2f &scale, ResourceID texture) {
-	Resource& resource = getResource(texture);
+void RenderServer::drawTexture(Vec2d* pos, Vec2d* scale, ResourceID texture) {
+	currentContext->type = RenderContext::TEXTURE;
+	currentContext->texture.position = pos;
+	currentContext->texture.scale = scale;
+	currentContext->texture.resource = &getResource(texture);
+	// Resource& resource = getResource(texture);
 
-	destination.x = pos[0]; destination.y = pos[1];
-	destination.w = scale[0] * resource.source.w; destination.h = scale[1] * resource.source.h;
+	// destination.x = pos[0]; destination.y = pos[1];
+	// destination.w = scale[0] * resource.source.w; destination.h = scale[1] * resource.source.h;
 
-	SDL_RenderCopy(renderer, resource.texture, &resource.source, &destination);
+	// SDL_RenderCopy(renderer, resource.texture, &resource.source, &destination);
 }
 
 void RenderServer::update(double delta) {
@@ -108,7 +126,7 @@ void RenderServer::update(double delta) {
 	// Sadly sets do not provide index operations
 	// Iterating over vectors by index is 7x faster than
 	// over sets by iterators!
-	for (auto it : activeNodes) {
+	// for (auto it : activeNodes) {
 		// TODO: Optimize
 		// We could use a "render context" method whereby each RenderTrait receives some sort of context number
 		// (This number could just be the NodeID since each should only have one Render Trait theoretically...)
@@ -125,36 +143,66 @@ void RenderServer::update(double delta) {
 		// render command in a plain array which can be iterated through blazingly fast.
 		//
 		// After benchmarking, it appears iterating through vectors by index is 4x faster than by iterator
-		nodeMap.at(it).render();
+	// 	nodeMap.at(it).render();
+	// }
+
+	for (RenderContext* it = &renderContextPool[0]; it < &renderContextPool[renderContextPoolSize]; ++it) {
+		if (it->type != RenderContext::NOTHING) {
+			if (it->type == RenderContext::POINT) {
+				SDL_RenderDrawPoint(renderer, static_cast<int>((*it->point.position)[0]), static_cast<int>((*it->point.position)[1]));
+			} else if (it->type == RenderContext::TEXTURE) {
+				destination.x = static_cast<int>((*it->texture.position)[0]);
+				destination.y = static_cast<int>((*it->texture.position)[1]);
+				destination.w = (*it->texture.scale)[0] * it->texture.resource->source.w;
+				destination.h = (*it->texture.scale)[1] * it->texture.resource->source.h;
+				SDL_RenderCopy(renderer, it->texture.resource->texture, &it->texture.resource->source, &destination);
+			}
+		}
 	}
 
 	SDL_RenderPresent(renderer);
 }
 
 void RenderServer::activate(NodeID node) {
-	Bromine::log(Logger::DEBUG, "Node %d has been activated in render server.", node);
-	if (nodeMap.find(node) != nodeMap.end()) {
-		activeNodes.insert(node);		
-	} else {
-		Bromine::log(Logger::WARNING, "Node %d is not in render server's node map.", node);
+	try {
+		RenderTrait& renderTrait = nodeMap.at(node);
+		activeNodes.insert(node);
+
+		currentContext = requestContext();
+		renderTrait.render();
+		currentContext = nullptr; // TODO: Probably not strictly necessary
+	} catch (std::out_of_range ex) {
+		Bromine::log(Logger::ERROR, "Node %d is not in render server's node map.", node);
+		throw std::out_of_range("Node is not in render server's node map.");
 	}
 }
 
 void RenderServer::nodeAddedChild(NodeID parent, NodeID child) {
-	Bromine::log(Logger::DEBUG, "Render scene adding child...");
 	try {
-		Bromine::log(Logger::DEBUG, "Getting parent trait...");
 		RenderTrait& parentTrait = getTrait(parent);
-		Bromine::log(Logger::DEBUG, "Getting child trait...");
 		RenderTrait& childTrait = getTrait(child);
 
-		Bromine::log(Logger::DEBUG, "Parent trait adding child trait...");
 		parentTrait.addChild(&childTrait);
-
 		Bromine::log(Logger::INFO, "Node %d added child %d in the render server.", parent, child);
 	} catch (std::out_of_range ex) {
 		return;
 	}
+}
+
+RenderServer::RenderContext* RenderServer::requestContext() {
+	if (renderContextFirstDead != nullptr) {
+		RenderContext* ret = renderContextFirstDead;
+		renderContextFirstDead = ret->next;
+		return ret;
+	} else {
+		throw std::out_of_range("Render Server ran out of render context space in pool");
+	}
+}
+
+void RenderServer::freeContext(RenderContext* context) {
+	context->next = renderContextFirstDead;
+	context->type = RenderContext::NOTHING;
+	renderContextFirstDead = context;
 }
 
 }

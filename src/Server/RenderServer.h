@@ -7,6 +7,7 @@
 #include <set>
 
 #include "../Config/Config.h"
+#include "../Config/RenderConfig.h"
 
 #include "Server.h"
 
@@ -58,13 +59,42 @@ private:
 	 */
 	SDL_Rect destination;
 
+	struct RenderContext {
+		enum Type {
+			NOTHING,
+			POINT,
+			TEXTURE
+		} type;
+
+		union {
+			struct {
+				Vec2d* position;
+			} point;
+
+			struct {
+				Vec2d* position;
+				Vec2d* scale;
+				Resource* resource;
+			} texture;				
+
+			RenderContext* next;
+		};
+	};
+
+	RenderContext* renderContextPool;
+	RenderContext* renderContextFirstDead;
+
+	RenderContext* currentContext;
+
+	RenderContext* requestContext();
+	void freeContext(RenderContext* context);
+
 public:
 	RenderServer();
 	~RenderServer();
 
-	// TODO: This should be protected and called through a base trait
-	void drawPoint(const Vec2f& pos);
-	void drawTexture(const Vec2f& pos, const Vec2f& scale, ResourceID texture);
+	void drawPoint(Vec2d* pos);
+	void drawTexture(Vec2d* pos, Vec2d* scale, ResourceID texture);
 
 	RenderTrait& getTrait(NodeID node);
 

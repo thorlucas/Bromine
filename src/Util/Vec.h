@@ -11,35 +11,22 @@ namespace BromineEngine {
 
 #define T_IS_ARITHMETIC typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type
 
+template<bool...> struct boolPack;
+template<bool ...Bs> 
+using allTrue = std::is_same<boolPack<Bs..., true>, boolPack<true, Bs...>>;
+
+template<class R, class... Ts>
+using are_all_convertible = allTrue<std::is_convertible<Ts, R>::value...>;
+
 template <std::size_t N, typename T, T_IS_ARITHMETIC>
 struct Vec {
 	T xs[N];
 
 	Vec() {
-		for (int i = 0; i < N; ++i) {
-			xs[i] = 0;
-		}
+		memset(xs, 0, sizeof(T) * N);
 	}
 
-	// TODO: One nuance of this method is that, when making a double, a . must be included.
-	// i.e. you MUST run Vec<2, double> v(5.0, 4.0)
-	Vec(T _x0, ...) {
-		xs[0] = _x0;
-
-		va_list xsList;
-		va_start(xsList, _x0);
-
-		for (int i = 1; i < N; ++i) {
-			xs[i] = (T)va_arg(xsList, T);
-		}
-
-		va_end(xsList);
-	}
-
-	Vec(std::initializer_list<T> _xs) {
-		std::copy(_xs.begin(), _xs.end(), xs);
-	}
-
+	// copy constructor
 	Vec(const Vec<N, T>& vec) {
 		std::memcpy(xs, vec.xs, N * sizeof(T));
 	}
@@ -59,6 +46,13 @@ struct Vec {
 		swap(*this, v);
 		return *this;
 	}
+
+	template <typename ...Us, typename = typename std::enable_if<are_all_convertible<double, Us...>::value>::type>
+	Vec(Us&&... us) : xs{static_cast<T>(us)...} {}
+
+	// Vec(std::initializer_list<T> _xs) {
+	// 	std::copy(_xs.begin(), _xs.end(), xs);
+	// }
 
 	template <typename U>
 	friend void swap(Vec<N, U>& v, Vec<N, U>& u) {

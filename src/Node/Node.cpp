@@ -37,6 +37,7 @@ void Node::addChild(Node& child) {
 
 void Node::activate() {
 	Bromine::log(Logger::VERBOSE, "Node %d is activating...", id);
+
 	for (auto it : capabilities) { // TODO: Faster to iterate by index, even in small numbers?
 		Bromine::instance().getServer(it).activate(id);
 	}
