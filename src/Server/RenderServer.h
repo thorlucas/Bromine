@@ -85,6 +85,8 @@ public:
 	void update(double delta);
 
 	void activate(NodeID node);
+
+	void nodeAddedChild(NodeID parent, NodeID child);
 };
 
 }

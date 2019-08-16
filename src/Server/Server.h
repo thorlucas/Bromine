@@ -14,8 +14,7 @@ public:
 	virtual void update(double delta) = 0;
 	virtual void activate(NodeID node) = 0;
 
-	// template<typename T>
-	// virtual T& createTrait
+	virtual void nodeAddedChild(NodeID parent, NodeID child) {};
 };
 
 }

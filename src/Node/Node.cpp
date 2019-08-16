@@ -19,10 +19,15 @@ void Node::setParent(NodeID parent) {
 }
 
 void Node::addChild(NodeID child) {
-	Bromine::log(Logger::DEBUG, "Node %d added child node %d", id, child);
 	children.insert(child);
-	Bromine::node(child).setParent(id);
-	// TODO: Notify capabilities
+	Node& nref = Bromine::node(child);
+	nref.setParent(id);
+
+	for (auto& capability : capabilities) {
+		Bromine::instance().getServer(capability).nodeAddedChild(id, child);
+	}
+
+	Bromine::log(Logger::DEBUG, "Node %d added child node %d", id, child);
 	// TODO: Notify scene
 }
 

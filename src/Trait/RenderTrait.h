@@ -4,13 +4,14 @@
 #include <SDL2/SDL.h>
 
 #include "Trait.h"
+#include "TraitTree.h"
 #include "../Server/RenderServer.h"
 
 #include "../Util/Vec.h"
 
 namespace BromineEngine {
 
-class RenderTrait : public Trait<RenderTrait, RenderServer> {
+class RenderTrait : public Trait<RenderTrait, RenderServer>, public TraitTree<RenderTrait> {
 friend class RenderServer;
 protected:
 	Vec2d _position;

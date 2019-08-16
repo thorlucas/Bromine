@@ -10,6 +10,8 @@
 
 #include "../Bromine.h"
 
+#include "../Util/Errors.h"
+
 namespace BromineEngine {
 
 class Node {
@@ -40,7 +42,7 @@ public:
 		if (hasCapability<typename T::serverType>()) {
 			return static_cast<T&>(Bromine::server<typename T::serverType>().getTrait(id));
 		} else {
-			// TODO: Throw error!
+			throw std::invalid_argument("Node does not have the requested trait.");
 		}
 	}
 

@@ -2,6 +2,7 @@
 #define _TRAIT_H_
 
 #include <cstdio>
+#include <vector>
 
 #include "../Node/Node.h"
 #include "../Bromine.h"

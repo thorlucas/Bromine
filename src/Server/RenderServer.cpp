@@ -136,7 +136,24 @@ void RenderServer::activate(NodeID node) {
 	if (nodeMap.find(node) != nodeMap.end()) {
 		activeNodes.insert(node);		
 	} else {
-		Bromine::log(Logger::WARNING, "Node %d is not in render server's node map", node);
+		Bromine::log(Logger::WARNING, "Node %d is not in render server's node map.", node);
+	}
+}
+
+void RenderServer::nodeAddedChild(NodeID parent, NodeID child) {
+	Bromine::log(Logger::DEBUG, "Render scene adding child...");
+	try {
+		Bromine::log(Logger::DEBUG, "Getting parent trait...");
+		RenderTrait& parentTrait = getTrait(parent);
+		Bromine::log(Logger::DEBUG, "Getting child trait...");
+		RenderTrait& childTrait = getTrait(child);
+
+		Bromine::log(Logger::DEBUG, "Parent trait adding child trait...");
+		parentTrait.addChild(&childTrait);
+
+		Bromine::log(Logger::INFO, "Node %d added child %d in the render server.", parent, child);
+	} catch (std::out_of_range ex) {
+		return;
 	}
 }
 
