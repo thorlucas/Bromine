@@ -15,8 +15,9 @@ protected:
 	SpriteRenderTrait(const NodeID owner, ResourceID texture);
 	SpriteRenderTrait(const NodeID owner, ResourceID texture, Vec2d scale);
 
-public:
 	virtual void render();
+
+public:
 
 	Vec2d& scale();
 	Vec2d scale() const;

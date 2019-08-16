@@ -98,22 +98,19 @@ Resource& RenderServer::getResource(ResourceID resource) {
 
 // Drawing functions
 void RenderServer::drawPoint(Vec2d* pos) {
-	// SDL_RenderDrawPoint(renderer, int(pos[0]), int(pos[1]));
 	currentContext->type = RenderContext::POINT;
 	currentContext->point.position = pos;
 }
 
 void RenderServer::drawTexture(Vec2d* pos, Vec2d* scale, ResourceID texture) {
+	// TODO: Render trait's vectors would be faster if they were right next to each other in memory
+	// Perhaps render traits can request vectors from the render server... which are stored in a pool
+	// Would be cool, huh?
+
 	currentContext->type = RenderContext::TEXTURE;
 	currentContext->texture.position = pos;
 	currentContext->texture.scale = scale;
 	currentContext->texture.resource = &getResource(texture);
-	// Resource& resource = getResource(texture);
-
-	// destination.x = pos[0]; destination.y = pos[1];
-	// destination.w = scale[0] * resource.source.w; destination.h = scale[1] * resource.source.h;
-
-	// SDL_RenderCopy(renderer, resource.texture, &resource.source, &destination);
 }
 
 void RenderServer::update(double delta) {

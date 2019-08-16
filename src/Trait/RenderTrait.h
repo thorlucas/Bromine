@@ -19,13 +19,13 @@ protected:
 	RenderTrait(const NodeID owner);
 	RenderTrait(const NodeID owner, const Vec2d& position);
 
+	virtual void render();
+
 public:
 	~RenderTrait(); 
 
 	Vec2d& position();
 	Vec2d position() const;
-
-	virtual void render();
 };
 
 }
