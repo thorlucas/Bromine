@@ -16,7 +16,7 @@ template<bool ...Bs>
 using allTrue = std::is_same<boolPack<Bs..., true>, boolPack<true, Bs...>>;
 
 template<class R, class... Ts>
-using are_all_convertible = allTrue<std::is_convertible<Ts, R>::value...>;
+using allConvertible = allTrue<std::is_convertible<Ts, R>::value...>;
 
 template <std::size_t N, typename T, T_IS_ARITHMETIC>
 struct Vec {
@@ -31,7 +31,7 @@ struct Vec {
 		std::memcpy(xs, vec.xs, N * sizeof(T));
 	}
 
-	template <typename U>
+	template <typename U, typename = typename std::enable_if<std::is_convertible<U, T>::value, U>::type>
 	Vec(const Vec<N, U>& v) {
 		std::copy(v.xs, v.xs + N, xs);
 	}
@@ -47,7 +47,7 @@ struct Vec {
 		return *this;
 	}
 
-	template <typename ...Us, typename = typename std::enable_if<are_all_convertible<double, Us...>::value>::type>
+	template <typename ...Us, typename = typename std::enable_if<allConvertible<double, Us...>::value>::type>
 	Vec(Us&&... us) : xs{static_cast<T>(us)...} {}
 
 	// Vec(std::initializer_list<T> _xs) {
