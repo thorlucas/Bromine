@@ -165,7 +165,8 @@ void RenderServer::activate(NodeID node) {
 		RenderTrait& renderTrait = nodeMap.at(node);
 		activeNodes.insert(node);
 
-		currentContext = requestContext();
+		currentContext = requestContext(&renderTrait);
+		contextMap.insert(std::pair<NodeID, RenderContext*>(node, currentContext));
 		renderTrait.render();
 		currentContext = nullptr; // TODO: Probably not strictly necessary
 	} catch (std::out_of_range ex) {
@@ -186,10 +187,11 @@ void RenderServer::nodeAddedChild(NodeID parent, NodeID child) {
 	}
 }
 
-RenderServer::RenderContext* RenderServer::requestContext() {
+RenderServer::RenderContext* RenderServer::requestContext(RenderTrait* trait) {
 	if (renderContextFirstDead != nullptr) {
 		RenderContext* ret = renderContextFirstDead;
 		renderContextFirstDead = ret->next;
+		ret->owner = trait;
 		return ret;
 	} else {
 		throw std::out_of_range("Render Server ran out of render context space in pool");
@@ -197,6 +199,7 @@ RenderServer::RenderContext* RenderServer::requestContext() {
 }
 
 void RenderServer::freeContext(RenderContext* context) {
+	// TODO: Check if a node owns this render context
 	context->next = renderContextFirstDead;
 	context->type = RenderContext::NOTHING;
 	renderContextFirstDead = context;
