@@ -13,8 +13,8 @@ public:
 	virtual void onMouseEvent() {};
 };
 
-class EventTrait : public Trait<EventTrait, EventServer> {
-friend class EventServer;
+class EventTrait : public Trait {
+DECLARE_BASE_TRAIT(EventServer)
 private:
 	EventDelegate* delegate;
 

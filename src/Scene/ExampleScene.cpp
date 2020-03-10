@@ -9,21 +9,25 @@
 namespace BromineEngine {
 
 ExampleScene::ExampleScene() {
-	ResourceID bromineTexture = Bromine::server<RenderServer>().loadTexture("Bromine.png");
+	// ResourceID bromineTexture = Bromine::server<RenderServer>().loadTexture("Bromine.png");
 
-	Node& testNode = Bromine::node()
-		->addTrait<SpriteRenderTrait>(bromineTexture, Vec2d(0.25, 0.25))
-		->create();
+	Node& testNode = Bromine::server<NodeServer>().createEmptyNode();
+	testNode.addTrait<EventTrait>();
+	testNode.addTrait<ExampleLogicTrait>();
 
-	Node& spriteNode = Bromine::node()
-		->addTrait<SpriteRenderTrait>(bromineTexture, Vec2d(0.5, 0.5))
-		->addTrait<EventTrait>()
-		->addTrait<ExampleLogicTrait>()
-		->create();
+	// Node& testNode = Bromine::node()
+	// 	->addTrait<SpriteRenderTrait>(bromineTexture)
+	// 	->create();
 
-	spriteNode.addChild(testNode);
+	// Node& spriteNode = Bromine::node()
+	// 	->addTrait<SpriteRenderTrait>(bromineTexture)
+	// 	->addTrait<EventTrait>()
+	// 	->addTrait<ExampleLogicTrait>()
+	// 	->create();
 
-	Bromine::node(rootNode).addChild(spriteNode);
+	// spriteNode.addChild(testNode);
+
+	Bromine::node(rootNode).addChild(testNode);
 
 	Bromine::log(Logger::DEBUG, "Creating new scene: %p", this);
 }

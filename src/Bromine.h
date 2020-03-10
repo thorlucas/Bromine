@@ -113,7 +113,7 @@ public:
 	// 	return Bromine::instance().nodeServer.buildNode();
 	// }
 
-	static NodeBuilder<Node>* node();
+	// static NodeBuilder<Node>* node();
 
 	template <typename T>
 	static T& server() {

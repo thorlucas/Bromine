@@ -3,6 +3,8 @@
 
 namespace BromineEngine {
 
+DEFINE_TRAIT_SERVER(EventServer, EventTrait)
+
 void EventServer::update(double delta) {
 	while (SDL_PollEvent(&sdlEvent)) {
 		switch (sdlEvent.type) {
@@ -13,8 +15,8 @@ void EventServer::update(double delta) {
 			case SDL_KEYUP:
 			{
 				const KeyboardEvent event(static_cast<Key>(sdlEvent.key.keysym.sym), static_cast<KeyState>(sdlEvent.key.state));
-				for (auto& it : activeNodes) {
-					nodeMap.at(it).onKeyEvent(event);
+				for (auto& it : activeTraits) {
+					it->onKeyEvent(event);
 				}
 				break;
 			}
@@ -28,13 +30,15 @@ EventTrait& EventServer::getTrait(NodeID node) {
 	return nodeMap.at(node);
 }
 
-void EventServer::activate(NodeID node) {
-	Bromine::log(Logger::DEBUG, "Node %d has been activated in event server.", node);
-	if (nodeMap.find(node) != nodeMap.end()) {
-		activeNodes.insert(node);		
-	} else {
-		Bromine::log(Logger::WARNING, "Node %d is not in event server's node map", node);
-	}
-}
+
+
+// void EventServer::activate(NodeID node) {
+// 	Bromine::log(Logger::DEBUG, "Node %d has been activated in event server.", node);
+// 	if (nodeMap.find(node) != nodeMap.end()) {
+// 		activeNodes.insert(node);		
+// 	} else {
+// 		Bromine::log(Logger::WARNING, "Node %d is not in event server's node map", node);
+// 	}
+// }
 
 }

@@ -6,7 +6,7 @@
 namespace BromineEngine {
 
 class SpriteRenderTrait : public RenderTrait {
-friend class RenderServer;
+DECLARE_TRAIT(RenderServer)
 private:
 	ResourceID texture;
 	Vec2d _scale;
@@ -15,7 +15,7 @@ protected:
 	SpriteRenderTrait(const NodeID owner, ResourceID texture);
 	SpriteRenderTrait(const NodeID owner, ResourceID texture, Vec2d scale);
 
-	virtual void render();
+	virtual void render() override;
 
 public:
 

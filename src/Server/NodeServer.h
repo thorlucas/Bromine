@@ -37,27 +37,27 @@ protected:
 	void update(double delta) {}
 
 	// TODO: I don't think we need another function for this
-	template <typename N>
-	N& createNodeFromBuilder(NodeBuilder<N>* builder) {
-		N& nref = *(new N(builder->nodeID, builder->capabilities));
-		nodeMap.insert(std::pair<NodeID, Node&>(nref.id, static_cast<Node&>(nref)));
+	// template <typename N>
+	// N& createNodeFromBuilder(NodeBuilder<N>* builder) {
+	// 	N& nref = *(new N(builder->nodeID, builder->capabilities));
+	// 	nodeMap.insert(std::pair<NodeID, Node&>(nref.id, static_cast<Node&>(nref)));
 
-		delete builder;
+	// 	delete builder;
 
-		Bromine::log(Logger::DEBUG, "Created node with ID %d: %p", nref.id, &nref);
-		return nref;
-	}
+	// 	Bromine::log(Logger::DEBUG, "Created node with ID %d: %p", nref.id, &nref);
+	// 	return nref;
+	// }
 
-	template <typename N, typename ...Ps>
-	N& createNodeFromBuilder(NodeBuilder<N>* builder, Ps&&... ps) {
-		N& nref = *(new N(builder->nodeID, builder->capabilities, std::forward(ps...)));
-		nodeMap.insert(std::pair<NodeID, Node&>(nref.id, static_cast<Node&>(nref)));
+	// template <typename N, typename ...Ps>
+	// N& createNodeFromBuilder(NodeBuilder<N>* builder, Ps&&... ps) {
+	// 	N& nref = *(new N(builder->nodeID, builder->capabilities, std::forward(ps...)));
+	// 	nodeMap.insert(std::pair<NodeID, Node&>(nref.id, static_cast<Node&>(nref)));
 
-		delete builder;
+	// 	delete builder;
 
-		Bromine::log(Logger::DEBUG, "Created node with ID %d: %p", nref.id, &nref);
-		return nref;
-	}
+	// 	Bromine::log(Logger::DEBUG, "Created node with ID %d: %p", nref.id, &nref);
+	// 	return nref;
+	// }
 	
 public:
 	NodeServer();
@@ -73,7 +73,7 @@ public:
 	 */
 	template <typename N>
 	N& createEmptyNode() {
-		N& nref = *(new N(requestID(), std::set<std::type_index>()));
+		N& nref = *(new N(requestID()));
 		nodeMap.insert(std::pair<NodeID, Node&>(nref.id, static_cast<Node&>(nref)));
 
 		Bromine::log(Logger::DEBUG, "Created node with ID %d: %p", nref.id, &nref);
@@ -94,17 +94,17 @@ public:
 	 *
 	 * @returns a pointer to the node builder.
 	 */
-	template <typename N>
-	NodeBuilder<N>* buildNode() {
-		return new NodeBuilder<N>(*this, requestID());
-	}
+	// template <typename N>
+	// NodeBuilder<N>* buildNode() {
+	// 	return new NodeBuilder<N>(*this, requestID());
+	// }
 
 	/**
 	 * Starts building a node. See buildNode<N>().
 	 *
 	 * @returns a pointer to the node builder.
 	 */
-	NodeBuilder<Node>* buildNode();
+	// NodeBuilder<Node>* buildNode();
 };
 
 /**
@@ -121,55 +121,56 @@ public:
  *     ->addTrait<Bar>(barArgs)
  *     ->create()
  */
-template <typename N>
-class NodeBuilder {
-friend class NodeServer;
-private:
-	NodeServer& nodeServer;
+// template <typename N>
+// class NodeBuilder {
+// friend class NodeServer;
+// private:
+// 	NodeServer& nodeServer;
 	
-protected:
-	const NodeID nodeID;
-	std::set<std::type_index> capabilities;
+// protected:
+// 	const NodeID nodeID;
+// 	std::set<std::type_index> capabilities;
 
-	NodeBuilder(NodeServer& nodeServer, const NodeID nodeID) : nodeServer(nodeServer), nodeID(nodeID) {};
+// 	NodeBuilder(NodeServer& nodeServer, const NodeID nodeID) : nodeServer(nodeServer), nodeID(nodeID) {};
 
-public:
-	/**
-	 * Adds the trait T to the node being built.
-	 * 
-	 * @param ps are the parameters forwarded to the trait constructor
-	 * @returns the node builder itself for chaining
-	 */
-	template <typename T, typename ...Ps>
-	NodeBuilder* addTrait(Ps&&... ps) {
-		T& trait = Bromine::server<typename T::serverType>().template createTrait<T>(nodeID, std::forward<Ps>(ps)...);
-		auto ret = capabilities.insert(typeid(typename T::serverType));
+// public:
+// 	/**
+// 	 * Adds the trait T to the node being built.
+// 	 * 
+// 	 * @param ps are the parameters forwarded to the trait constructor
+// 	 * @returns the node builder itself for chaining
+// 	 */
+// 	template <typename T, typename ...Ps>
+// 	NodeBuilder* addTrait(Ps&&... ps) {
+// 		T& trait = Bromine::server<typename T::serverType>().template createTrait<T>(nodeID, std::forward<Ps>(ps)...);
+// 		auto ret = capabilities.insert(typeid(typename T::serverType));
 		
-		if (!ret.second) throw std::invalid_argument("Node builder can't add multiple traits for the same server.");
+// 		// TODO: Why not?
+// 		if (!ret.second) throw std::invalid_argument("Node builder can't add multiple traits for the same server.");
 
-		return this;
-	}
+// 		return this;
+// 	}
 
-	/**
-	 * Creates the node.
-	 *
-	 * @returns a reference to the new node.
-	 */
-	N& create() {
-		return nodeServer.createNodeFromBuilder<N>(this);
-	}
+// 	/**
+// 	 * Creates the node.
+// 	 *
+// 	 * @returns a reference to the new node.
+// 	 */
+// 	N& create() {
+// 		return nodeServer.createNodeFromBuilder<N>(this);
+// 	}
 
-	/**
-	 * Creates the node with parameters.
-	 *
-	 * @param ps are the parameters forwarded to the node's constructor.
-	 * @returns a reference to the new node.
-	 */
-	template <typename ...Ps>
-	N& create(Ps&&... ps) {
-		return nodeServer.createNodeFromBuilder<N>(this, std::forward<Ps>(ps)...);
-	}
-};
+// 	/**
+// 	 * Creates the node with parameters.
+// 	 *
+// 	 * @param ps are the parameters forwarded to the node's constructor.
+// 	 * @returns a reference to the new node.
+// 	 */
+// 	template <typename ...Ps>
+// 	N& create(Ps&&... ps) {
+// 		return nodeServer.createNodeFromBuilder<N>(this, std::forward<Ps>(ps)...);
+// 	}
+// };
 
 }
 

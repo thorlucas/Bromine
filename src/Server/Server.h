@@ -3,6 +3,8 @@
 
 #include <unordered_map>
 #include "../Node/Node.h"
+#include "../Trait/Trait.h"
+#include "../Util/RTTI.h"
 
 namespace BromineEngine {
 
@@ -12,7 +14,6 @@ public:
 	virtual ~Server() {};
 
 	virtual void update(double delta) = 0;
-	virtual void activate(NodeID node) = 0;
 
 	virtual void nodeAddedChild(NodeID parent, NodeID child) {};
 };

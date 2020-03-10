@@ -4,18 +4,11 @@
 
 namespace BromineEngine {
 
-RenderTrait::RenderTrait(const NodeID owner) : Trait(owner), _position(Vec2d()) {}
-RenderTrait::RenderTrait(const NodeID owner, const Vec2d& position) : Trait(owner), _position(position) {}
+DEFINE_BASE_TRAIT(RenderTrait)
+
+RenderTrait::RenderTrait(const NodeID owner) : CONSTRUCT_BASE_TRAIT(RenderTrait) {}
 
 RenderTrait::~RenderTrait() {}
-
-Vec2d& RenderTrait::position() {
-	return _position;
-}
-
-Vec2d RenderTrait::position() const {
-	return _position;
-}
 
 void RenderTrait::render() {}
 

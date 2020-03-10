@@ -11,21 +11,15 @@
 
 namespace BromineEngine {
 
-class RenderTrait : public Trait<RenderTrait, RenderServer>, public TraitTree<RenderTrait> {
-friend class RenderServer;
+class RenderTrait : public Trait, public TraitTree<RenderTrait> {
+DECLARE_BASE_TRAIT(RenderServer)
 protected:
-	Vec2d _position;
-
 	RenderTrait(const NodeID owner);
-	RenderTrait(const NodeID owner, const Vec2d& position);
 
 	virtual void render();
 
 public:
 	~RenderTrait(); 
-
-	Vec2d& position();
-	Vec2d position() const;
 };
 
 }

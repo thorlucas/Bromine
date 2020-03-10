@@ -2,10 +2,11 @@
 
 namespace BromineEngine {
 
-LogicTrait::LogicTrait(const NodeID owner) : Trait(owner) {}
+DEFINE_BASE_TRAIT(LogicTrait)
+
+LogicTrait::LogicTrait(const NodeID owner) : CONSTRUCT_BASE_TRAIT(LogicTrait) {}
 LogicTrait::~LogicTrait() {}
 
-void LogicTrait::activate() {}
 void LogicTrait::update(double delta) {}
 
 }

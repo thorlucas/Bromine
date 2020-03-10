@@ -11,15 +11,13 @@ namespace BromineEngine {
 class EventTrait;
 
 class EventServer : public Server {
+DECLARE_TRAIT_SERVER(EventServer, EventTrait)
 private:
 	std::unordered_map<NodeID, EventTrait&> nodeMap;
-	std::set<NodeID> activeNodes;
-
 	SDL_Event sdlEvent;
 
 public:
 	void update(double delta);
-	void activate(NodeID node);
 
 	EventTrait& getTrait(NodeID node);
 

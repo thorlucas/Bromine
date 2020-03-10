@@ -9,13 +9,13 @@ namespace BromineEngine {
 class LogicTrait;
 
 class LogicServer : public Server {
+DECLARE_TRAIT_SERVER(LogicServer, LogicTrait)
 private:
 	std::unordered_map<NodeID, LogicTrait&> nodeMap;
 	std::set<NodeID> activeNodes;
 
 public:
 	void update(double delta);
-	void activate(NodeID node);
 
 	LogicTrait& getTrait(NodeID node);
 

@@ -3,31 +3,46 @@
 
 #include <cstdio>
 #include <vector>
+#include <string>
+#include <functional>
 
-#include "../Node/Node.h"
+#include "../Util/RTTI.h"
 #include "../Bromine.h"
 
 namespace BromineEngine {
 
-template <typename T, typename S>
+class Node;
+
 class Trait {
 protected:
-	S& server;
+	Trait(const NodeID& ownerID) : ownerID(ownerID) {}
+	virtual void initialize() {};
 
-	Trait(const NodeID& owner) : owner(owner), server(Bromine::instance().getServer<serverType>()) {}
+	const NodeID ownerID;
 
 public:
-	typedef S serverType;
+	static const std::size_t type;
 
-	const NodeID owner;
+	virtual bool isTraitType(const std::size_t traitType) const {
+		return (type == traitType);
+	}
 
 	// TODO: This should only be called from within a node
 	// or some type of server?
 
 	~Trait() {}
-	Node& getOwner() {
-		return Bromine::node(owner);
+
+	// TODO: Keep reference to owner?
+	Node& owner() {
+		return Bromine::node(ownerID);
 	}
+
+	virtual void activate() {}
+
+	// template <typename N>
+	// N& getTrait() {
+	// 	owner().template getTrait<N>();
+	// }
 };
 
 }

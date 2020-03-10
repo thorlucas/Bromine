@@ -3,6 +3,8 @@
 
 namespace BromineEngine {
 
+DEFINE_TRAIT_SERVER(RenderServer, RenderTrait)
+
 RenderServer::RenderServer() : window(nullptr), renderer(nullptr), nextAvailableID(0) {
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
 		Bromine::log(Logger::ERROR, "Failed to initialize video: %s", SDL_GetError());
@@ -160,20 +162,20 @@ void RenderServer::update(double delta) {
 	SDL_RenderPresent(renderer);
 }
 
-void RenderServer::activate(NodeID node) {
-	try {
-		RenderTrait& renderTrait = nodeMap.at(node);
-		activeNodes.insert(node);
+// void RenderServer::activate(NodeID node) {
+// 	try {
+// 		RenderTrait& renderTrait = nodeMap.at(node);
+// 		activeNodes.insert(node);
 
-		currentContext = requestContext(&renderTrait);
-		contextMap.insert(std::pair<NodeID, RenderContext*>(node, currentContext));
-		renderTrait.render();
-		currentContext = nullptr; // TODO: Probably not strictly necessary
-	} catch (std::out_of_range ex) {
-		Bromine::log(Logger::ERROR, "Node %d is not in render server's node map.", node);
-		throw std::out_of_range("Node is not in render server's node map.");
-	}
-}
+// 		currentContext = requestContext(&renderTrait);
+// 		contextMap.insert(std::pair<NodeID, RenderContext*>(node, currentContext));
+// 		renderTrait.render();
+// 		currentContext = nullptr; // TODO: Probably not strictly necessary
+// 	} catch (std::out_of_range ex) {
+// 		Bromine::log(Logger::ERROR, "Node %d is not in render server's node map.", node);
+// 		throw std::out_of_range("Node is not in render server's node map.");
+// 	}
+// }
 
 void RenderServer::nodeAddedChild(NodeID parent, NodeID child) {
 	try {

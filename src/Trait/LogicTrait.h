@@ -6,12 +6,10 @@
 
 namespace BromineEngine {
 
-class LogicTrait : public Trait<LogicTrait, LogicServer> {
-friend class LogicServer;
+class LogicTrait : public Trait {
+DECLARE_BASE_TRAIT(LogicServer)
 protected:
 	LogicTrait(const NodeID owner);
-
-	virtual void activate();
 	virtual void update(double delta);
 
 public:

@@ -7,20 +7,21 @@
 namespace BromineEngine {
 
 class ExampleLogicTrait : public LogicTrait, public EventDelegate {
-friend class LogicServer;
+DECLARE_TRAIT(LogicServer)
 private:
 	Vec2d* spritePosition;
 	bool movingLeft, movingRight, movingUp, movingDown;
 
 protected:
 	ExampleLogicTrait(const NodeID owner);
-	void activate();
-	void update(double delta);
+	void update(double delta) override;
+
+	virtual void initialize() override;
 
 public:
 	~ExampleLogicTrait();
 
-	void onKeyEvent(const KeyboardEvent& event);
+	void onKeyEvent(const KeyboardEvent& event) override;
 };
 
 }

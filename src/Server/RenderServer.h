@@ -24,7 +24,7 @@ struct Resource;
 
 class RenderServer : public Server {
 friend class Bromine;
-friend class RenderTrait;
+DECLARE_TRAIT_SERVER(RenderServer, RenderTrait);
 private:
 	ResourceID nextAvailableID;
 
@@ -79,7 +79,6 @@ public:
 	Resource& getResource(ResourceID resource);
 
 	void update(double delta);
-	void activate(NodeID node);
 
 	void nodeAddedChild(NodeID parent, NodeID child);
 

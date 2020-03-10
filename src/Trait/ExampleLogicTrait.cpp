@@ -3,15 +3,16 @@
 
 namespace BromineEngine {
 
-ExampleLogicTrait::ExampleLogicTrait(const NodeID owner) : LogicTrait(owner) {}
-ExampleLogicTrait::~ExampleLogicTrait() {}
+DEFINE_TRAIT(ExampleLogicTrait, LogicTrait)
 
-void ExampleLogicTrait::activate() {
+ExampleLogicTrait::ExampleLogicTrait(const NodeID owner) : CONSTRUCT_TRAIT(ExampleLogicTrait, LogicTrait) {
 	movingUp = false; movingDown = false;
 	movingRight = false; movingLeft = false;
+}
+ExampleLogicTrait::~ExampleLogicTrait() {}
 
-	spritePosition = &getOwner().getTrait<SpriteRenderTrait>().position();
-	getOwner().getTrait<EventTrait>().setDelegate(this);
+void ExampleLogicTrait::initialize() {
+	spritePosition = &owner().position();
 }
 
 void ExampleLogicTrait::update(double delta) {
@@ -25,6 +26,8 @@ void ExampleLogicTrait::update(double delta) {
 }
 
 void ExampleLogicTrait::onKeyEvent(const KeyboardEvent& event) {
+	Bromine::log(Logger::INFO, "ExampleLogicTrait %p for Node %d got key event", this, owner().id);
+
 	switch (event.key) {
 		case W:
 			movingUp = event.state;
