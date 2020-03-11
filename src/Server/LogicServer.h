@@ -10,23 +10,10 @@ class LogicTrait;
 
 class LogicServer : public Server {
 DECLARE_TRAIT_SERVER(LogicServer, LogicTrait)
-private:
-	std::unordered_map<NodeID, LogicTrait&> nodeMap;
-	std::set<NodeID> activeNodes;
-
+DEFINE_TRAIT_SERVER_CREATE_TRAIT_STANDARD(LogicTrait)
 public:
 	void update(double delta);
 
-	LogicTrait& getTrait(NodeID node);
-
-	template <typename T, typename ...Ps>
-	T& createTrait(NodeID node, Ps&&... ps) {
-		T& tref = *(new T(node, std::forward<Ps>(ps)...));
-		nodeMap.insert(std::pair<NodeID, LogicTrait&>(node, static_cast<LogicTrait&>(tref)));
-
-		Bromine::log(Logger::DEBUG, "Created logic trait for Node %d: %p", node, &tref);
-		return tref;
-	}
 };
 
 }

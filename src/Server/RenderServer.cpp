@@ -56,10 +56,6 @@ RenderServer::~RenderServer() {
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
-RenderTrait& RenderServer::getTrait(NodeID node) {
-	return nodeMap.at(node);
-}
-
 ResourceID RenderServer::loadTexture(const char* path) {
 	char buffer[128];
 	snprintf(buffer, 128, "%s%s", resourcePath, path);

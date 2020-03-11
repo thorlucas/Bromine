@@ -55,33 +55,6 @@ public:
 		throw std::out_of_range("Node does not have the requested trait.");
 	}
 
-	// bool hasCapability(std::type_index capability);
-
-	// template <typename S>
-	// bool hasCapability() {
-	// 	return hasCapability(typeid(S));
-	// }
-
-	// template <typename T>
-	// T& getTrait() {
-	// 	if (hasCapability<typename T::serverType>()) {
-	// 		return static_cast<T&>(Bromine::server<typename T::serverType>().getTrait(id));
-	// 	} else {
-	// 		throw std::invalid_argument("Node does not have the requested trait.");
-	// 	}
-	// }
-
-	// template <typename T, typename ...Ps>
-	// Node& addTrait(Ps&&... ps) {
-	// 	T& trait = Bromine::server<typename T::serverType>().template createTrait<T>(id, std::forward<Ps>(ps)...);
-	// 	auto ret = capabilities.insert(typeid(typename T::serverType));
-		
-	// 	// TODO: Why not?
-	// 	if (!ret.second) throw std::invalid_argument("Node builder can't add multiple traits for the same server.");
-
-	// 	return *this;
-	// }
-
 	// TODO: Notify scene on children change
 	void addChild(NodeID child);
 	void addChild(Node& child);

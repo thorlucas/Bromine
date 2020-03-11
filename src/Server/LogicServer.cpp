@@ -6,8 +6,8 @@ namespace BromineEngine {
 DEFINE_TRAIT_SERVER(LogicServer, LogicTrait)
 
 void LogicServer::update(double delta) {
-	for (auto& it : activeNodes) {
-		nodeMap.find(it)->second.update(delta);
+	for (auto& it : activeTraits) {
+		it->update(delta);
 	}
 };
 

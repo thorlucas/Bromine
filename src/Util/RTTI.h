@@ -43,12 +43,38 @@ CONSTRUCT_TRAIT(traitName, Trait)											\
 friend class traitName;														\
 private:																	\
 	std::vector<traitName*> activeTraits;									\
+	std::multimap<NodeID, traitName&> nodeMap;								\
 protected:																	\
 	void activateTrait(traitName* trait);									\
+public:																		\
+	auto getTraits(NodeID node) -> decltype(nodeMap.find(node));			\
+	traitName& getTrait(NodeID node);										\
 
 // Must be in trait server definition
 #define DEFINE_TRAIT_SERVER(serverName, traitName)							\
 void serverName::activateTrait(traitName* trait) {							\
 	activeTraits.push_back(trait);											\
-	Bromine::log(Logger::DEBUG, #traitName " %p for Node %d has been activated in " #serverName " server.", trait, trait->owner().id);	\
+	Bromine::log(Logger::DEBUG, 											\
+		#traitName " %p for Node %d has been activated in "					\
+		#serverName " server.",												\
+		trait, trait->owner().id);											\
 }																			\
+auto serverName::getTraits(NodeID node) -> decltype(nodeMap.find(node)) {	\
+	return nodeMap.find(node);												\
+}																			\
+traitName& serverName::getTrait(NodeID node) {								\
+	return nodeMap.find(node)->second;										\
+}																			\
+
+#define DEFINE_TRAIT_SERVER_CREATE_TRAIT_STANDARD(traitName)				\
+public:																		\
+	template <typename T, typename ...Ps>									\
+	T& createTrait(NodeID node, Ps&&... ps) {								\
+		T& tref = *(new T(node, std::forward<Ps>(ps)...));					\
+		nodeMap.insert(std::pair<NodeID, traitName&>(node, 					\
+			static_cast<traitName&>(tref)));								\
+																			\
+		Bromine::log(Logger::DEBUG, "Created " #traitName					\
+			" for Node %d: %p", node, &tref);								\
+		return tref;														\
+	}																		\

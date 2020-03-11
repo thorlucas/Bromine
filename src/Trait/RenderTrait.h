@@ -16,6 +16,10 @@ DECLARE_BASE_TRAIT(RenderServer)
 protected:
 	RenderTrait(const NodeID owner);
 
+	/**
+	 Executes the commands for rendering the node. 
+	 This command is cached and so further calls are not necessary.
+	*/
 	virtual void render();
 
 public:

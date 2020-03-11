@@ -26,11 +26,6 @@ void EventServer::update(double delta) {
 	}
 };
 
-EventTrait& EventServer::getTrait(NodeID node) {
-	return nodeMap.at(node);
-}
-
-
 
 // void EventServer::activate(NodeID node) {
 // 	Bromine::log(Logger::DEBUG, "Node %d has been activated in event server.", node);

@@ -2,6 +2,7 @@
 #define _SERVER_H_
 
 #include <unordered_map>
+#include <map>
 #include "../Node/Node.h"
 #include "../Trait/Trait.h"
 #include "../Util/RTTI.h"

@@ -12,7 +12,7 @@ Bromine::Bromine() :
 	eventServer(getServer<EventServer>()),
 	logicServer(getServer<LogicServer>()),
 	
-	logger(Logger::DEBUG) {
+	logger(Logger::LOGGER_MIN_PRIORITY) {
 
 	for (auto it : autoInitServers) {
 		getServer(it); // ensures servers are constructed

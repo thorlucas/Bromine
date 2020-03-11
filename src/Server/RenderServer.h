@@ -25,12 +25,10 @@ struct Resource;
 class RenderServer : public Server {
 friend class Bromine;
 DECLARE_TRAIT_SERVER(RenderServer, RenderTrait);
+DEFINE_TRAIT_SERVER_CREATE_TRAIT_STANDARD(RenderTrait);
 private:
 	ResourceID nextAvailableID;
-
-	std::unordered_map<NodeID, RenderTrait&> nodeMap;
 	std::unordered_map<ResourceID, Resource&> resourceMap;
-	std::set<NodeID> activeNodes; // TODO: Necessary?
 
 	SDL_Window* window;
 	SDL_Renderer* renderer;
@@ -61,17 +59,6 @@ public:
 
 	void drawPoint(Vec2d* pos);
 	void drawTexture(Vec2d* pos, Vec2d* scale, ResourceID texture);
-
-	RenderTrait& getTrait(NodeID node);
-
-	template <typename T, typename ...Ps>
-	T& createTrait(NodeID node, Ps&&... ps) {
-		T& tref = *(new T(node, std::forward<Ps>(ps)...));
-		nodeMap.insert(std::pair<NodeID, RenderTrait&>(node, static_cast<RenderTrait&>(tref)));
-
-		Bromine::log(Logger::DEBUG, "Created render trait for Node %d: %p", node, &tref);
-		return tref;
-	}
 
 	ResourceID loadTexture(const char* path);
 	void freeTexture(ResourceID id);
