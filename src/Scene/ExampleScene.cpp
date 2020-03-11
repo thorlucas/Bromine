@@ -18,11 +18,11 @@ ExampleScene::ExampleScene() {
 	testNode.addTrait<ExampleLogicTrait>();
 	testNode.addTrait<SpriteRenderTrait>(bromineTexture);
 
-	// Node& childNode = Bromine::server<NodeServer>().createEmptyNode();
-	// childNode.addTrait<SecondExampleLogicTrait>();
-	// childNode.addTrait<ParticleRenderTrait>();
+	Node& childNode = Bromine::server<NodeServer>().createEmptyNode();
+	childNode.addTrait<SecondExampleLogicTrait>();
+	childNode.addTrait<ParticleRenderTrait>();
 
-	// testNode.addChild(childNode);
+	testNode.addChild(childNode);
 
 	// Node& testNode = Bromine::node()
 	// 	->addTrait<SpriteRenderTrait>(bromineTexture)

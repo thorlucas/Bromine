@@ -58,21 +58,24 @@ bool Bromine::run(Scene* rootScene) {
 	uint32_t lastFrame = SDL_GetTicks();
 	uint32_t delta;
 	uint32_t acc = 0;
+	uint32_t frameCount = 0;
 
 	while (running) {
 		thisFrame = SDL_GetTicks();
 		delta = thisFrame - lastFrame;
 		acc += delta;
-		// thisFrame = std::chrono::high_resolution_clock::now();
-		// delta = std::chrono::duration_cast<std::chrono::duration<double>>(thisFrame - lastFrame);
 
-		if (acc >= 16) {
-			for (int i = 0; i < serverVector.size(); ++i) {
-				serverVector.at(i)->update(static_cast<double>(acc) / 1000.0);
-			}
-
-			acc = 0;
+		for (int i = 0; i < serverVector.size(); ++i) {
+			serverVector.at(i)->update(static_cast<double>(delta) / 1000.0);
 		}
+
+		++frameCount;
+		if (acc >= 1000) {
+			Bromine::log(Logger::DEBUG, "[FPS] %d", frameCount);
+			acc = 0;
+			frameCount = 0;
+		}
+
 
 		lastFrame = thisFrame;
 

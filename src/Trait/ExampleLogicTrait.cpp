@@ -18,11 +18,11 @@ void ExampleLogicTrait::initialize() {
 
 void ExampleLogicTrait::update(double delta) {
 	if (movingUp != movingDown) {
-		(*spritePosition)[1] += movingDown ? 300.f * delta : -300.f * delta;
+		(*spritePosition)[1] += movingDown ? 500.f * delta : -500.f * delta;
 	}
 
 	if (movingRight != movingLeft) {
-		(*spritePosition)[0] += movingRight ? 300.f * delta : -300.f * delta;
+		(*spritePosition)[0] += movingRight ? 500.f * delta : -500.f * delta;
 	}
 }
 
