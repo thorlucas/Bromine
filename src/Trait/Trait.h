@@ -15,9 +15,10 @@ class Node;
 
 class Trait {
 protected:
-	Trait(const NodeID& ownerID) : ownerID(ownerID) {}
+	Trait(const NodeID& ownerID) : ownerID(ownerID), initialized(false) {}
 	virtual void initialize() {};
 
+	bool initialized; // TODO: !!! This is stupid!
 	const NodeID ownerID;
 
 public:

@@ -19,13 +19,9 @@ void Node::setParent(NodeID parent) {
 }
 
 void Node::addChild(NodeID child) {
-	children.insert(child);
+	children.push_back(child);
 	Node& nref = Bromine::node(child);
 	nref.setParent(id);
-
-	// for (auto& capability : capabilities) {
-	// 	Bromine::instance().getServer(capability).nodeAddedChild(id, child);
-	// }
 
 	Bromine::log(Logger::DEBUG, "Node %d added child node %d", id, child);
 	// TODO: Notify scene
@@ -57,6 +53,14 @@ Vec2d& Node::position() {
 
 Vec2d Node::position() const {
 	return _position;
+}
+
+std::vector<NodeID> Node::getChildren() {
+	return children;
+}
+
+bool Node::hasChildren() const {
+	return children.size() != 0;
 }
 
 } // namespace BromineEngine

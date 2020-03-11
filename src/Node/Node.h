@@ -21,7 +21,7 @@ class Node {
 friend class NodeServer;
 protected:
 	NodeID parent; /**< Parent node, NODE_NULL if root. */
-	std::set<NodeID> children; /**< A list of the child nodes. */
+	std::vector<NodeID> children; /**< A list of the child nodes. */
 
 	std::vector<Trait*> traits;
 
@@ -58,6 +58,9 @@ public:
 	// TODO: Notify scene on children change
 	void addChild(NodeID child);
 	void addChild(Node& child);
+
+	std::vector<NodeID> getChildren();
+	bool hasChildren() const;
 
 	/**
 	 * Makes the node active.

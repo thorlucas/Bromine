@@ -22,20 +22,10 @@ RenderServer::RenderServer() : window(nullptr), renderer(nullptr), nextAvailable
 		throw BromineInitError(SDL_GetError()); 
 	}
 
-	// Create render context pool
-	renderContextPool = new RenderContext[renderContextPoolSize];
-	for (RenderContext* it = &renderContextPool[0]; it < &renderContextPool[renderContextPoolSize]; ++it) {
-		it->next = it + 1;
-		it->type = RenderContext::NOTHING;
-	}
-	renderContextPool[renderContextPoolSize - 1].next = nullptr;
-	renderContextFirstDead = &renderContextPool[0];
+	instructionsDirty = true;
 }
 
 RenderServer::~RenderServer() {
-	// Delete render context pool
-	delete[] renderContextPool;
-
 	for (auto& it : nodeMap) {
 		delete &(it.second);
 	}
@@ -96,111 +86,102 @@ Resource& RenderServer::getResource(ResourceID resource) {
 
 // Drawing functions
 void RenderServer::drawPoint(Vec2d* pos) {
-	currentContext->type = RenderContext::POINT;
-	currentContext->point.position = pos;
+	RenderInstruction instruction;
+	instruction.type = RenderInstruction::DRAW_POINT;
+	instruction.drawPoint.relPos = pos;
+
+	instructions.push_back(instruction);
 }
 
 void RenderServer::drawTexture(Vec2d* pos, Vec2d* scale, ResourceID texture) {
-	// TODO: Render trait's vectors would be faster if they were right next to each other in memory
-	// Perhaps render traits can request vectors from the render server... which are stored in a pool
-	// Would be cool, huh?
+	RenderInstruction instruction;
+	instruction.type = RenderInstruction::DRAW_TEXTURE;
+	instruction.drawTexture.relPos = pos;
+	instruction.drawTexture.scale = scale;
+	instruction.drawTexture.texture = &getResource(texture);
 
-	currentContext->type = RenderContext::TEXTURE;
-	currentContext->texture.position = pos;
-	currentContext->texture.scale = scale;
-	currentContext->texture.resource = &getResource(texture);
+	instructions.push_back(instruction);
 }
 
+void RenderServer::renderNode(Node& node) {
+	try {
+		node.getTrait<RenderTrait>().render();
+	} catch (...) {} // TODO: Isnt a render trait
+
+	if (node.hasChildren()) {
+		auto children = node.getChildren();
+
+		RenderInstruction instruction;
+
+		instruction.type = RenderInstruction::PUSH_REL_POS;
+		instruction.pushRelPos.relPos = &node.position();
+		instructions.push_back(instruction);
+
+		for (auto childID : children) {
+			Node& child = Bromine::node(childID);
+
+			renderNode(child);
+		}
+
+		instruction.type = RenderInstruction::POP_REL_POS;
+		instructions.push_back(instruction);
+	}
+};
+
 void RenderServer::update(double delta) {
+	if (instructionsDirty) {
+		Scene* currentScene = Bromine::instance().getCurrentScene();
+		Node& rootNode = Bromine::node(currentScene->rootNode);
+
+		renderNode(rootNode);
+
+		instructionsDirty = false;
+	}
+
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
 	
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
-	// TODO: Replace with iteration by index
-	// Sadly sets do not provide index operations
-	// Iterating over vectors by index is 7x faster than
-	// over sets by iterators!
-	// for (auto it : activeNodes) {
-		// TODO: Optimize
-		// We could use a "render context" method whereby each RenderTrait receives some sort of context number
-		// (This number could just be the NodeID since each should only have one Render Trait theoretically...)
-		// This context number maps to a render command struct
-		// The render command is essentially a declarative cached verison of the following render function
-		// When a render traits render() is called, the context that is being called is set within the server
-		// Then subsequent calls to drawTexture, drawPoint, etc, are stored in the command struct
-		// The server then loops through these structs, which contain references to the Vec2fs, etc.
-		// If a RenderTrait needs to be updated every time because of some sort of dynamic change besides position,
-		// then either a flag is set or the render() function must be called manually BEFORE each render tick
-		// 
-		// Also, iterating through a map or unordered map is relatively slow, we could consider trading memory
-		// by mapping each render trait's context to a reference to the render command, then keeping each
-		// render command in a plain array which can be iterated through blazingly fast.
-		//
-		// After benchmarking, it appears iterating through vectors by index is 4x faster than by iterator
-	// 	nodeMap.at(it).render();
-	// }
+	std::stack<Vec2d*> relPosStack;
+	Vec2d globalPos(0.0, 0.0);
 
-	for (RenderContext* it = &renderContextPool[0]; it < &renderContextPool[renderContextPoolSize]; ++it) {
-		if (it->type != RenderContext::NOTHING) {
-			if (it->type == RenderContext::POINT) {
-				SDL_RenderDrawPoint(renderer, static_cast<int>((*it->point.position)[0]), static_cast<int>((*it->point.position)[1]));
-			} else if (it->type == RenderContext::TEXTURE) {
-				destination.x = static_cast<int>((*it->texture.position)[0]);
-				destination.y = static_cast<int>((*it->texture.position)[1]);
-				destination.w = (*it->texture.scale)[0] * it->texture.resource->source.w;
-				destination.h = (*it->texture.scale)[1] * it->texture.resource->source.h;
-				SDL_RenderCopy(renderer, it->texture.resource->texture, &it->texture.resource->source, &destination);
-			}
+	for (auto& instr : instructions) {
+		if (instr.type == RenderInstruction::PUSH_REL_POS) {
+			relPosStack.emplace(instr.pushRelPos.relPos);
+			globalPos += *instr.pushRelPos.relPos;
+		} else if (instr.type == RenderInstruction::POP_REL_POS) {
+			globalPos -= *relPosStack.top();
+			relPosStack.pop();
+		} else if (instr.type == RenderInstruction::DRAW_POINT) {
+			SDL_RenderDrawPoint(renderer,
+				static_cast<int>((*instr.drawPoint.relPos)[0] + globalPos[0]),
+				static_cast<int>((*instr.drawPoint.relPos)[1] + globalPos[1])
+			);
+		} else if (instr.type == RenderInstruction::DRAW_TEXTURE) {
+			destination.x = static_cast<int>((*instr.drawTexture.relPos)[0] + globalPos[0]);
+			destination.y = static_cast<int>((*instr.drawTexture.relPos)[1] + globalPos[1]);
+			destination.w = (*instr.drawTexture.scale)[0] * instr.drawTexture.texture->source.w;
+			destination.h = (*instr.drawTexture.scale)[1] * instr.drawTexture.texture->source.h;
+			SDL_RenderCopy(renderer, instr.drawTexture.texture->texture, &instr.drawTexture.texture->source, &destination);
 		}
 	}
 
+	// for (RenderContext* it = &renderContextPool[0]; it < &renderContextPool[renderContextPoolSize]; ++it) {
+	// 	if (it->type != RenderContext::NOTHING) {
+	// 		if (it->type == RenderContext::POINT) {
+	// 			SDL_RenderDrawPoint(renderer, static_cast<int>((*it->point.position)[0]), static_cast<int>((*it->point.position)[1]));
+	// 		} else if (it->type == RenderContext::TEXTURE) {
+	// 			destination.x = static_cast<int>((*it->texture.position)[0]);
+	// 			destination.y = static_cast<int>((*it->texture.position)[1]);
+	// 			destination.w = (*it->texture.scale)[0] * it->texture.resource->source.w;
+	// 			destination.h = (*it->texture.scale)[1] * it->texture.resource->source.h;
+	// 			SDL_RenderCopy(renderer, it->texture.resource->texture, &it->texture.resource->source, &destination);
+	// 		}
+	// 	}
+	// }
+
 	SDL_RenderPresent(renderer);
-}
-
-// void RenderServer::activate(NodeID node) {
-// 	try {
-// 		RenderTrait& renderTrait = nodeMap.at(node);
-// 		activeNodes.insert(node);
-
-// 		currentContext = requestContext(&renderTrait);
-// 		contextMap.insert(std::pair<NodeID, RenderContext*>(node, currentContext));
-// 		renderTrait.render();
-// 		currentContext = nullptr; // TODO: Probably not strictly necessary
-// 	} catch (std::out_of_range ex) {
-// 		Bromine::log(Logger::ERROR, "Node %d is not in render server's node map.", node);
-// 		throw std::out_of_range("Node is not in render server's node map.");
-// 	}
-// }
-
-void RenderServer::nodeAddedChild(NodeID parent, NodeID child) {
-	try {
-		RenderTrait& parentTrait = getTrait(parent);
-		RenderTrait& childTrait = getTrait(child);
-
-		parentTrait.addChild(&childTrait);
-		Bromine::log(Logger::INFO, "Node %d added child %d in the render server.", parent, child);
-	} catch (std::out_of_range ex) {
-		return;
-	}
-}
-
-RenderServer::RenderContext* RenderServer::requestContext(RenderTrait* trait) {
-	if (renderContextFirstDead != nullptr) {
-		RenderContext* ret = renderContextFirstDead;
-		renderContextFirstDead = ret->next;
-		ret->owner = trait;
-		return ret;
-	} else {
-		throw std::out_of_range("Render Server ran out of render context space in pool");
-	}
-}
-
-void RenderServer::freeContext(RenderContext* context) {
-	// TODO: Check if a node owns this render context
-	context->next = renderContextFirstDead;
-	context->type = RenderContext::NOTHING;
-	renderContextFirstDead = context;
 }
 
 }

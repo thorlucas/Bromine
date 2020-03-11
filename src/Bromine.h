@@ -147,6 +147,10 @@ public:
 	bool run();
 
 	void quit();
+
+	// Getters and setters
+
+	Scene* getCurrentScene();
 };
 
 }

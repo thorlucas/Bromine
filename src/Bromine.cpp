@@ -83,6 +83,10 @@ Node& Bromine::node(NodeID node) {
 	return Bromine::instance().nodeServer.getNode(node);
 }
 
+Scene* Bromine::getCurrentScene() {
+	return currentScene;
+}
+
 // NodeBuilder<Node>* Bromine::node() {
 // 	return Bromine::instance().nodeServer.buildNode();
 // }

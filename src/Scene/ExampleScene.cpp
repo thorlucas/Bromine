@@ -3,17 +3,25 @@
 #include "../Trait/SpriteRenderTrait.h"
 #include "../Trait/EventTrait.h"
 #include "../Trait/ExampleLogicTrait.h"
+#include "../Trait/SecondExampleLogicTrait.h"
 #include "../Server/RenderServer.h"
 #include "../Server/NodeServer.h"
 
 namespace BromineEngine {
 
 ExampleScene::ExampleScene() {
-	// ResourceID bromineTexture = Bromine::server<RenderServer>().loadTexture("Bromine.png");
+	ResourceID bromineTexture = Bromine::server<RenderServer>().loadTexture("Bromine.png");
 
 	Node& testNode = Bromine::server<NodeServer>().createEmptyNode();
 	testNode.addTrait<EventTrait>();
 	testNode.addTrait<ExampleLogicTrait>();
+	testNode.addTrait<SpriteRenderTrait>(bromineTexture);
+
+	Node& childNode = Bromine::server<NodeServer>().createEmptyNode();
+	childNode.addTrait<SecondExampleLogicTrait>();
+	childNode.addTrait<SpriteRenderTrait>(bromineTexture, Vec2d(0.2, 0.2));
+
+	testNode.addChild(childNode);
 
 	// Node& testNode = Bromine::node()
 	// 	->addTrait<SpriteRenderTrait>(bromineTexture)

@@ -13,6 +13,7 @@ ExampleLogicTrait::~ExampleLogicTrait() {}
 
 void ExampleLogicTrait::initialize() {
 	spritePosition = &owner().position();
+	owner().getTrait<EventTrait>().setDelegate(this);
 }
 
 void ExampleLogicTrait::update(double delta) {
@@ -26,8 +27,6 @@ void ExampleLogicTrait::update(double delta) {
 }
 
 void ExampleLogicTrait::onKeyEvent(const KeyboardEvent& event) {
-	Bromine::log(Logger::INFO, "ExampleLogicTrait %p for Node %d got key event", this, owner().id);
-
 	switch (event.key) {
 		case W:
 			movingUp = event.state;

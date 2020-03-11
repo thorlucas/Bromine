@@ -26,6 +26,10 @@ bool traitName::isTraitType(const std::size_t traitType) const {			\
 
 #define DEFINE_BASE_TRAIT(traitName)										\
 void traitName::activate() {												\
+	if (!initialized) {														\
+		initialize();														\
+		initialized = true;													\
+	}																		\
 	server.activateTrait(this);												\
 }																			\
 DEFINE_TRAIT(traitName, Trait)												\
