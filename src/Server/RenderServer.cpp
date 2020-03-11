@@ -5,7 +5,7 @@ namespace BromineEngine {
 
 DEFINE_TRAIT_SERVER(RenderServer, RenderTrait)
 
-RenderServer::RenderServer() : window(nullptr), renderer(nullptr), nextAvailableID(0) {
+RenderServer::RenderServer() : window(nullptr), renderer(nullptr), nextAvailableID(0), globalPos(0.0, 0.0) {
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
 		Bromine::log(Logger::ERROR, "Failed to initialize video: %s", SDL_GetError());
 		throw BromineInitError(SDL_GetError()); 
@@ -24,6 +24,8 @@ RenderServer::RenderServer() : window(nullptr), renderer(nullptr), nextAvailable
 	}
 
 	instructionsDirty = true;
+	drawCustomFlag = false;
+	drawImmediateFlag = false;
 }
 
 RenderServer::~RenderServer() {
@@ -87,6 +89,9 @@ Resource& RenderServer::getResource(ResourceID resource) {
 
 // Drawing functions
 void RenderServer::drawPoint(Vec2d* pos) {
+	if (drawCustomFlag) return;
+	if (drawImmediateFlag) return drawPointImmediate(pos);
+
 	RenderInstruction instruction;
 	instruction.type = RenderInstruction::DRAW_POINT;
 	instruction.drawPoint.relPos = pos;
@@ -95,6 +100,9 @@ void RenderServer::drawPoint(Vec2d* pos) {
 }
 
 void RenderServer::drawTexture(Vec2d* pos, Vec2d* scale, ResourceID texture) {
+	if (drawCustomFlag) return;
+	if (drawImmediateFlag) return drawTextureImmediate(pos, scale, &getResource(texture));
+
 	RenderInstruction instruction;
 	instruction.type = RenderInstruction::DRAW_TEXTURE;
 	instruction.drawTexture.relPos = pos;
@@ -104,9 +112,38 @@ void RenderServer::drawTexture(Vec2d* pos, Vec2d* scale, ResourceID texture) {
 	instructions.push_back(instruction);
 }
 
+
+void RenderServer::enableCustomDrawing(RenderTrait* trait) {
+	if (drawImmediateFlag) return;
+
+	RenderInstruction instruction;
+	instruction.type = RenderInstruction::DRAW_CUSTOM;
+	instruction.drawCustom.trait = trait;
+
+	instructions.push_back(instruction);
+
+	drawCustomFlag = true;
+}
+
+void RenderServer::drawPointImmediate(Vec2d* relPos) {
+	SDL_RenderDrawPoint(renderer,
+		static_cast<int>((*relPos)[0] + globalPos[0]),
+		static_cast<int>((*relPos)[1] + globalPos[1])
+	);
+}
+
+void RenderServer::drawTextureImmediate(Vec2d* relPos, Vec2d* scale, Resource* texture) {
+	destination.x = static_cast<int>((*relPos)[0] + globalPos[0]);
+	destination.y = static_cast<int>((*relPos)[1] + globalPos[1]);
+	destination.w = (*scale)[0] * texture->source.w;
+	destination.h = (*scale)[1] * texture->source.h;
+	SDL_RenderCopy(renderer, texture->texture, &texture->source, &destination);
+}
+
 void RenderServer::renderNode(Node& node) {
 	try {
 		node.getTrait<RenderTrait>().render();
+		if (drawCustomFlag) drawCustomFlag = false;
 	} catch (...) {} // TODO: Isnt a render trait
 
 	if (node.hasChildren()) {
@@ -139,14 +176,15 @@ void RenderServer::update(double delta) {
 		instructionsDirty = false;
 	}
 
-	SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
 	SDL_RenderClear(renderer);
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	
-	std::stack<Vec2d*> relPosStack;
-	Vec2d globalPos(0.0, 0.0);
+	if (!relPosStack.empty()) {
+		Bromine::log(Logger::WARNING, "Relative positition stack is not empty at the beginning of render loop!");
+	}
 
 	for (auto& instr : instructions) {
 		if (instr.type == RenderInstruction::PUSH_REL_POS) {
@@ -156,16 +194,13 @@ void RenderServer::update(double delta) {
 			globalPos -= *relPosStack.top();
 			relPosStack.pop();
 		} else if (instr.type == RenderInstruction::DRAW_POINT) {
-			SDL_RenderDrawPoint(renderer,
-				static_cast<int>((*instr.drawPoint.relPos)[0] + globalPos[0]),
-				static_cast<int>((*instr.drawPoint.relPos)[1] + globalPos[1])
-			);
+			drawPointImmediate(instr.drawPoint.relPos);
 		} else if (instr.type == RenderInstruction::DRAW_TEXTURE) {
-			destination.x = static_cast<int>((*instr.drawTexture.relPos)[0] + globalPos[0]);
-			destination.y = static_cast<int>((*instr.drawTexture.relPos)[1] + globalPos[1]);
-			destination.w = (*instr.drawTexture.scale)[0] * instr.drawTexture.texture->source.w;
-			destination.h = (*instr.drawTexture.scale)[1] * instr.drawTexture.texture->source.h;
-			SDL_RenderCopy(renderer, instr.drawTexture.texture->texture, &instr.drawTexture.texture->source, &destination);
+			drawTextureImmediate(instr.drawTexture.relPos, instr.drawTexture.scale, instr.drawTexture.texture);
+		} else if (instr.type == RenderInstruction::DRAW_CUSTOM) {
+			drawImmediateFlag = true;
+			instr.drawCustom.trait->render();
+			drawImmediateFlag = false;
 		}
 	}
 

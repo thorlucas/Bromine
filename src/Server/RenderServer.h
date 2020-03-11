@@ -57,13 +57,18 @@ private:
 	 * TODO: There must be a cleaner way?
 	 */
 	SDL_Rect destination;
+	Vec2d globalPos;
+	std::stack<Vec2d*> relPosStack;
+	bool drawCustomFlag;
+	bool drawImmediateFlag;
 
 	struct RenderInstruction {
 		enum InstructionType {
 			PUSH_REL_POS,
 			POP_REL_POS,
 			DRAW_POINT,
-			DRAW_TEXTURE
+			DRAW_TEXTURE,
+			DRAW_CUSTOM
 		} type;
 
 		union {
@@ -80,6 +85,10 @@ private:
 				Vec2d* scale;
 				Resource* texture;
 			} drawTexture;
+
+			struct {
+				RenderTrait* trait;
+			} drawCustom;
 		};
 	};
 
@@ -88,10 +97,14 @@ private:
 
 	void renderNode(Node& node);
 
+	void drawPointImmediate(Vec2d* pos);
+	void drawTextureImmediate(Vec2d* relPos, Vec2d* scale, Resource* texture);
+
 public:
 	// TODO: Make a seperate class that I can pass to the traits for this
 	void drawPoint(Vec2d* pos);
 	void drawTexture(Vec2d* pos, Vec2d* scale, ResourceID texture);
+	void enableCustomDrawing(RenderTrait* trait);
 
 public:
 	RenderServer();

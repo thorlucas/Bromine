@@ -9,7 +9,7 @@ ParticleRenderTrait::ParticleRenderTrait(const NodeID owner, size_t particleCap)
 	particlePool = new Particle[particleCap];
 
 	for (int i = 0; i < particleCap; ++i) {
-		particlePool[i].alive = false;
+		particlePool[i].lifetime = 0;
 
 		if (i != particleCap - 1)
 			particlePool[i].nextDead = &particlePool[i + 1];
@@ -22,35 +22,65 @@ ParticleRenderTrait::ParticleRenderTrait(const NodeID owner, size_t particleCap)
 }
 
 void ParticleRenderTrait::render() {
+	server.enableCustomDrawing(this);
+
 	Particle* p = firstAlive;
 
 	while (p != nullptr) {
-		server.drawPoint(&p->pos);
-		p = p->nextAlive;	
+		if (p->lifetime == 0) {
+			Particle* n = p->nextAlive;
+			killParticle(p);
+			p = n;
+		} else {
+			p->lifetime -= 1;
+			server.drawPoint(&p->pos);
+			p = p->nextAlive;
+		}
 	}
 }
 
+Particle* ParticleRenderTrait::spawnParticle() {
+	return spawnParticle(Vec2d(0.0, 0.0), 1);
+}
+
 Particle* ParticleRenderTrait::spawnParticle(Vec2d pos) {
+	return spawnParticle(pos, 1);
+}
+
+Particle* ParticleRenderTrait::spawnParticle(unsigned int lifetime) {
+	return spawnParticle(Vec2d(0.0, 0.0), lifetime);
+}
+
+Particle* ParticleRenderTrait::spawnParticle(Vec2d pos, unsigned int lifetime) {
 	Particle* p = firstDead;
 	firstDead = p->nextDead;
 
-	p->alive = true;	
+	p->lifetime = lifetime;
 	p->pos = pos;
 	p->nextAlive = firstAlive;
+	p->lastAlive = nullptr;
+	if (firstAlive != nullptr)
+		firstAlive->lastAlive = p;
 	
 	firstAlive = p;
 
 	return p;
 }
 
-Particle* ParticleRenderTrait::spawnParticle() {
-	return spawnParticle(Vec2d(0.0, 0.0));
-}
 
 void ParticleRenderTrait::killParticle(Particle* p) {
-	firstAlive = p->nextAlive;
+	Bromine::log(Logger::DEBUG, "Particle died");
 
-	p->alive = false;
+	if (p->lastAlive != nullptr) {
+		p->lastAlive->nextAlive = p->nextAlive;
+	} else {
+		firstAlive = p->nextAlive;
+	}
+
+	if (p->nextAlive != nullptr)
+		p->nextAlive->lastAlive = p->lastAlive;
+
+	p->lifetime = 0;
 
 	p->nextDead = firstDead;
 	firstDead = p;
