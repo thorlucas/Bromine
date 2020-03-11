@@ -1,26 +1,23 @@
 #include "SecondExampleLogicTrait.h"
-#include "SpriteRenderTrait.h"
+#include "ParticleRenderTrait.h"
 
 namespace BromineEngine {
 
 DEFINE_TRAIT(SecondExampleLogicTrait, LogicTrait)
 
-SecondExampleLogicTrait::SecondExampleLogicTrait(const NodeID owner) : CONSTRUCT_TRAIT(SecondExampleLogicTrait, LogicTrait) {
-	phase = 0.0;
-}
+SecondExampleLogicTrait::SecondExampleLogicTrait(const NodeID owner) : CONSTRUCT_TRAIT(SecondExampleLogicTrait, LogicTrait) {}
 
 SecondExampleLogicTrait::~SecondExampleLogicTrait() {}
 
 void SecondExampleLogicTrait::initialize() {
-	spritePosition = &owner().position();
+	ParticleRenderTrait& particles = owner().getTrait<ParticleRenderTrait>();
+	for (int i = 0; i < 100; ++i) {
+		particles.spawnParticle(Vec2d(static_cast<double>(rand() % 50), static_cast<double>(rand() % 50)));
+	}
 }
 
 void SecondExampleLogicTrait::update(double delta) {
-	phase += 1.0 * delta;
-	phase = fmod(phase, 2.0 * M_PI);
 
-	(*spritePosition)[0] = cos(phase) * 50.0;
-	(*spritePosition)[1] = sin(phase) * 50.0;
 }
 
 }

@@ -1,6 +1,7 @@
 #include "ExampleScene.h"
 #include "../Bromine.h"
 #include "../Trait/SpriteRenderTrait.h"
+#include "../Trait/ParticleRenderTrait.h"
 #include "../Trait/EventTrait.h"
 #include "../Trait/ExampleLogicTrait.h"
 #include "../Trait/SecondExampleLogicTrait.h"
@@ -17,11 +18,11 @@ ExampleScene::ExampleScene() {
 	testNode.addTrait<ExampleLogicTrait>();
 	testNode.addTrait<SpriteRenderTrait>(bromineTexture);
 
-	Node& childNode = Bromine::server<NodeServer>().createEmptyNode();
-	childNode.addTrait<SecondExampleLogicTrait>();
-	childNode.addTrait<SpriteRenderTrait>(bromineTexture, Vec2d(0.2, 0.2));
+	// Node& childNode = Bromine::server<NodeServer>().createEmptyNode();
+	// childNode.addTrait<SecondExampleLogicTrait>();
+	// childNode.addTrait<ParticleRenderTrait>();
 
-	testNode.addChild(childNode);
+	// testNode.addChild(childNode);
 
 	// Node& testNode = Bromine::node()
 	// 	->addTrait<SpriteRenderTrait>(bromineTexture)

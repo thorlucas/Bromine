@@ -8,10 +8,6 @@ namespace BromineEngine {
 
 class SecondExampleLogicTrait : public LogicTrait {
 DECLARE_TRAIT(LogicServer)
-private:
-	Vec2d* spritePosition;
-	double phase;
-
 protected:
 	SecondExampleLogicTrait(const NodeID owner);
 	void update(double delta) override;

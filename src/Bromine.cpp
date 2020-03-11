@@ -47,29 +47,52 @@ bool Bromine::run() {
 }
 
 bool Bromine::run(Scene* rootScene) {
-	lastFrame = std::chrono::high_resolution_clock::now();
-	lastSecondFrame = lastFrame;
+	// lastFrame = std::chrono::high_resolution_clock::now();
+	// lastSecondFrame = lastFrame;
 
 	currentScene = rootScene;
 
 	currentScene->loadScene();
 
+	uint32_t thisFrame;
+	uint32_t lastFrame = SDL_GetTicks();
+	uint32_t delta;
+	uint32_t acc = 0;
+
 	while (running) {
-		thisFrame = std::chrono::high_resolution_clock::now();
-		delta = std::chrono::duration_cast<std::chrono::duration<double>>(thisFrame - lastFrame);
+		thisFrame = SDL_GetTicks();
+		delta = thisFrame - lastFrame;
+		acc += delta;
+		// thisFrame = std::chrono::high_resolution_clock::now();
+		// delta = std::chrono::duration_cast<std::chrono::duration<double>>(thisFrame - lastFrame);
 
-		for (int i = 0; i < serverVector.size(); ++i) {
-			serverVector.at(i)->update(delta.count());
-		}
+		if (acc >= 16) {
+			for (int i = 0; i < serverVector.size(); ++i) {
+				serverVector.at(i)->update(static_cast<double>(acc) / 1000.0);
+			}
 
-		++framesInSecond;
-		if (std::chrono::duration_cast<std::chrono::duration<double>>(thisFrame - lastSecondFrame).count() >= 1.0) {
-			Bromine::log(Logger::DEBUG, "[FPS] %d", framesInSecond);
-			lastSecondFrame = thisFrame;
-			framesInSecond = 0;
+			acc = 0;
 		}
 
 		lastFrame = thisFrame;
+
+		// ++framesInSecond;
+		// if (std::chrono::duration_cast<std::chrono::duration<double>>(thisFrame - lastSecondFrame).count() >= 1.0) {
+		// 	Bromine::log(Logger::DEBUG, "[FPS] %d", framesInSecond);
+		// 	lastSecondFrame = thisFrame;
+		// 	framesInSecond = 0;
+		// }
+
+		// lastFrame = thisFrame;
+
+		// int delayMs = ((1.0 / 60.0) - delta.count()) * 1000;
+		// if (delayMs > 0) {
+		// 	SDL_Delay(delayMs);
+		// }
+
+		// SDL_Delay(1000);
+
+		// SDL_Delay(static_cast<int>(((1.0 / 60.0) - delta.count()) * 1000));
 	}
 
 	return 0;

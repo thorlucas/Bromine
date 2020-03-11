@@ -16,7 +16,8 @@ RenderServer::RenderServer() : window(nullptr), renderer(nullptr), nextAvailable
 		throw BromineInitError(SDL_GetError()); 
 	}
 
-	SDL_CreateWindowAndRenderer(windowWidth, windowHeight, 0, &window, &renderer);
+	window = SDL_CreateWindow("Bromine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, 0);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	if (window == nullptr || renderer == nullptr) {
 		Bromine::log(Logger::ERROR, "Failed to create window: %s", SDL_GetError());
 		throw BromineInitError(SDL_GetError()); 
@@ -138,11 +139,12 @@ void RenderServer::update(double delta) {
 		instructionsDirty = false;
 	}
 
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderClear(renderer);
-	
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
+	SDL_RenderClear(renderer);
+
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	
 	std::stack<Vec2d*> relPosStack;
 	Vec2d globalPos(0.0, 0.0);
 
