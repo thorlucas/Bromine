@@ -2,7 +2,7 @@
 #define _SERVER_RENDER_H_
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_gpu.h>
 #include <map>
 #include <set>
 #include <stack>
@@ -30,8 +30,8 @@ struct Resource {
 
 	union {
 		struct {
-			SDL_Texture* texture;
-			SDL_Rect source;
+			GPU_Image* texture;
+			GPU_Rect source;
 		};
 	};
 
@@ -47,8 +47,10 @@ private:
 	ResourceID nextAvailableID;
 	std::unordered_map<ResourceID, Resource&> resourceMap;
 
-	SDL_Window* window;
-	SDL_Renderer* renderer;
+	// SDL_Window* window;
+	// SDL_Renderer* renderer;
+
+	GPU_Target* gpuTarget;
 
 	/**
 	 * This rect is reused in order to avoid having to make
@@ -56,7 +58,7 @@ private:
 	 *
 	 * TODO: There must be a cleaner way?
 	 */
-	SDL_Rect destination;
+	GPU_Rect destination;
 	Vec2d globalPos;
 	std::stack<Vec2d*> relPosStack;
 	bool drawCustomFlag;

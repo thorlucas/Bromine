@@ -5,23 +5,8 @@ namespace BromineEngine {
 
 DEFINE_TRAIT_SERVER(RenderServer, RenderTrait)
 
-RenderServer::RenderServer() : window(nullptr), renderer(nullptr), nextAvailableID(0), globalPos(0.0, 0.0) {
-	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
-		Bromine::log(Logger::ERROR, "Failed to initialize video: %s", SDL_GetError());
-		throw BromineInitError(SDL_GetError()); 
-	}
-
-	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
-		Bromine::log(Logger::ERROR, "Failed to initialize image: %s", SDL_GetError());
-		throw BromineInitError(SDL_GetError()); 
-	}
-
-	window = SDL_CreateWindow("Bromine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, 0);
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if (window == nullptr || renderer == nullptr) {
-		Bromine::log(Logger::ERROR, "Failed to create window: %s", SDL_GetError());
-		throw BromineInitError(SDL_GetError()); 
-	}
+RenderServer::RenderServer() : nextAvailableID(0), globalPos(0.0, 0.0) {
+	gpuTarget = GPU_Init(windowWidth, windowHeight, GPU_DEFAULT_INIT_FLAGS);
 
 	instructionsDirty = true;
 	drawCustomFlag = false;
@@ -35,39 +20,26 @@ RenderServer::~RenderServer() {
 
 	for (auto& it : resourceMap) {
 		if (it.second.type == Resource::TEXTURE) {
-			SDL_DestroyTexture(it.second.texture);
+			GPU_FreeImage(it.second.texture);
+			delete &(it.second);
 		}
-
-		delete &(it.second);
 	}
 
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-
-	IMG_Quit();
-
-	SDL_QuitSubSystem(SDL_INIT_VIDEO);
+	GPU_Quit();
 }
 
 ResourceID RenderServer::loadTexture(const char* path) {
 	char buffer[128];
 	snprintf(buffer, 128, "%s%s", resourcePath, path);
 
-	SDL_Surface* image = IMG_Load(buffer);
-	if (!image) {
-		Bromine::log(Logger::ERROR, "Failed to load texture: %s", path);
-		return RESOURCE_NULL;
-	}
-
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, image);
-	SDL_FreeSurface(image);
+	GPU_Image* texture = GPU_LoadImage(buffer);
 
 	Resource& resource = *(new Resource(nextAvailableID++, Resource::TEXTURE));
 	resource.texture = texture;
 
 	// Set up source rect to default full size
 	resource.source.x = 0; resource.source.y = 0;
-	SDL_QueryTexture(resource.texture, NULL, NULL, &resource.source.w, &resource.source.h);
+	resource.source.w = texture->w; resource.source.h = texture->h;
 
 	resourceMap.insert(std::pair<ResourceID, Resource&>(resource.id, resource));
 
@@ -79,7 +51,7 @@ ResourceID RenderServer::loadTexture(const char* path) {
 void RenderServer::freeTexture(ResourceID id) {
 	Resource& resource = getResource(id);
 	resourceMap.erase(id);
-	SDL_DestroyTexture(resource.texture);
+	GPU_FreeImage(resource.texture);
 	delete &resource;
 }
 
@@ -126,18 +98,26 @@ void RenderServer::enableCustomDrawing(RenderTrait* trait) {
 }
 
 void RenderServer::drawPointImmediate(Vec2d* relPos) {
-	SDL_RenderDrawPoint(renderer,
-		static_cast<int>((*relPos)[0] + globalPos[0]),
-		static_cast<int>((*relPos)[1] + globalPos[1])
+	GPU_Pixel(
+		gpuTarget, 
+		(*relPos)[0] + globalPos[0],
+		(*relPos)[1] + globalPos[1],
+		{0, 0, 0, 255}
 	);
 }
 
 void RenderServer::drawTextureImmediate(Vec2d* relPos, Vec2d* scale, Resource* texture) {
-	destination.x = static_cast<int>((*relPos)[0] + globalPos[0]);
-	destination.y = static_cast<int>((*relPos)[1] + globalPos[1]);
+	destination.x = (*relPos)[0] + globalPos[0];
+	destination.y = (*relPos)[1] + globalPos[1];
 	destination.w = (*scale)[0] * texture->source.w;
 	destination.h = (*scale)[1] * texture->source.h;
-	SDL_RenderCopy(renderer, texture->texture, &texture->source, &destination);
+
+	GPU_BlitRect(
+		texture->texture,
+		&texture->source,
+		gpuTarget,
+		&destination
+	);
 }
 
 void RenderServer::renderNode(Node& node) {
@@ -176,11 +156,7 @@ void RenderServer::update(double delta) {
 		instructionsDirty = false;
 	}
 
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
-	SDL_RenderClear(renderer);
-
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	GPU_ClearRGB(gpuTarget, 255, 255, 255);
 	
 	if (!relPosStack.empty()) {
 		Bromine::log(Logger::WARNING, "Relative positition stack is not empty at the beginning of render loop!");
@@ -204,21 +180,7 @@ void RenderServer::update(double delta) {
 		}
 	}
 
-	// for (RenderContext* it = &renderContextPool[0]; it < &renderContextPool[renderContextPoolSize]; ++it) {
-	// 	if (it->type != RenderContext::NOTHING) {
-	// 		if (it->type == RenderContext::POINT) {
-	// 			SDL_RenderDrawPoint(renderer, static_cast<int>((*it->point.position)[0]), static_cast<int>((*it->point.position)[1]));
-	// 		} else if (it->type == RenderContext::TEXTURE) {
-	// 			destination.x = static_cast<int>((*it->texture.position)[0]);
-	// 			destination.y = static_cast<int>((*it->texture.position)[1]);
-	// 			destination.w = (*it->texture.scale)[0] * it->texture.resource->source.w;
-	// 			destination.h = (*it->texture.scale)[1] * it->texture.resource->source.h;
-	// 			SDL_RenderCopy(renderer, it->texture.resource->texture, &it->texture.resource->source, &destination);
-	// 		}
-	// 	}
-	// }
-
-	SDL_RenderPresent(renderer);
+	GPU_Flip(gpuTarget);
 }
 
 }

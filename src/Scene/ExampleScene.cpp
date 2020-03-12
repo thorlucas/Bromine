@@ -24,10 +24,11 @@ ExampleScene::ExampleScene() {
 
 	// testNode.addChild(childNode);
 
+	ResourceID bromineTexture = Bromine::server<RenderServer>().loadTexture("Bromine.png");
+
 	Node& rootnref = Bromine::node(rootNode);
 
 	for (int i = 0; i < 1000; ++i) {
-		ResourceID bromineTexture = Bromine::server<RenderServer>().loadTexture("Bromine.png");
 		Node& node = Bromine::server<NodeServer>().createEmptyNode();
 		node.position() = Vec2d(static_cast<double>(rand() % 1280), static_cast<double>(rand() % 720));
 		node.addTrait<SpriteRenderTrait>(bromineTexture, Vec2d(0.05, 0.05));

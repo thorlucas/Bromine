@@ -8,7 +8,7 @@ CLFAGS := -g --std=c++11 -D _DEBUG -O2
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
-LIB := -L lib -lSDL2 -lSDL2_image
+LIB := -L lib -L /usr/local/SDL_gpu-0.11.0/lib/ -framework OpenGL -lSDL2_gpu -lSDL2
 INC := -I include
 INCLUDES := $(shell find include -type f -name *.h)
 
