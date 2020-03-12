@@ -9,20 +9,13 @@ SecondExampleLogicTrait::SecondExampleLogicTrait(const NodeID owner) : CONSTRUCT
 SecondExampleLogicTrait::~SecondExampleLogicTrait() {}
 
 void SecondExampleLogicTrait::initialize() {
-	ParticleRenderTrait& particleTrait = owner().getTrait<ParticleRenderTrait>();
-	for (int i = 0; i < 100; ++i) {
-		Particle* p = particleTrait.spawnParticle(Vec2d(static_cast<double>(rand() % 50), static_cast<double>(rand() % 50)), rand() % 1000);
-		particles.push_back(p);
-	}
+	ownerPosition = &(owner().position());
+	angle = (rand() % static_cast<int>(M_PI * 1000)) / 1000.0;
 }
 
 void SecondExampleLogicTrait::update(double delta) {
-	for (auto& p : particles) {
-		if (p->lifetime > 0) {
-			p->pos[0] += static_cast<double>((rand() % 3) - 1);
-			p->pos[1] += static_cast<double>((rand() % 3) - 1);
-		}
-	}
+	(*ownerPosition) += Vec2d(cos(angle), sin(angle)) * 50.0 * delta;
+	angle += ((rand() % 1000) - 500) / 50.0 * delta;
 }
 
 }

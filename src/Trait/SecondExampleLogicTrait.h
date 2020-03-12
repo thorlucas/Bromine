@@ -2,7 +2,6 @@
 #define _TRAIT_SECOND_EXAMPLE_LOGIC_
 
 #include "LogicTrait.h"
-#include "ParticleRenderTrait.h"
 #include <cmath>
 
 namespace BromineEngine {
@@ -10,8 +9,9 @@ namespace BromineEngine {
 class SecondExampleLogicTrait : public LogicTrait {
 DECLARE_TRAIT(LogicServer)
 private:
-	std::vector<Particle*> particles;
-	
+	Vec2d* ownerPosition;
+	double angle;
+
 protected:
 	SecondExampleLogicTrait(const NodeID owner);
 	void update(double delta) override;

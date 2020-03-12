@@ -11,18 +11,29 @@
 namespace BromineEngine {
 
 ExampleScene::ExampleScene() {
-	ResourceID bromineTexture = Bromine::server<RenderServer>().loadTexture("Bromine.png");
+	
 
-	Node& testNode = Bromine::server<NodeServer>().createEmptyNode();
-	testNode.addTrait<EventTrait>();
-	testNode.addTrait<ExampleLogicTrait>();
-	testNode.addTrait<SpriteRenderTrait>(bromineTexture);
+	// Node& testNode = Bromine::server<NodeServer>().createEmptyNode();
+	// testNode.addTrait<EventTrait>();
+	// testNode.addTrait<ExampleLogicTrait>();
+	// testNode.addTrait<SpriteRenderTrait>(bromineTexture);
 
-	Node& childNode = Bromine::server<NodeServer>().createEmptyNode();
-	childNode.addTrait<SecondExampleLogicTrait>();
-	childNode.addTrait<ParticleRenderTrait>();
+	// Node& childNode = Bromine::server<NodeServer>().createEmptyNode();
+	// childNode.addTrait<SecondExampleLogicTrait>();
+	// childNode.addTrait<ParticleRenderTrait>();
 
-	testNode.addChild(childNode);
+	// testNode.addChild(childNode);
+
+	Node& rootnref = Bromine::node(rootNode);
+
+	for (int i = 0; i < 1000; ++i) {
+		ResourceID bromineTexture = Bromine::server<RenderServer>().loadTexture("Bromine.png");
+		Node& node = Bromine::server<NodeServer>().createEmptyNode();
+		node.position() = Vec2d(static_cast<double>(rand() % 1280), static_cast<double>(rand() % 720));
+		node.addTrait<SpriteRenderTrait>(bromineTexture, Vec2d(0.05, 0.05));
+		node.addTrait<SecondExampleLogicTrait>();
+		rootnref.addChild(node);
+	}
 
 	// Node& testNode = Bromine::node()
 	// 	->addTrait<SpriteRenderTrait>(bromineTexture)
@@ -35,8 +46,6 @@ ExampleScene::ExampleScene() {
 	// 	->create();
 
 	// spriteNode.addChild(testNode);
-
-	Bromine::node(rootNode).addChild(testNode);
 
 	Bromine::log(Logger::DEBUG, "Creating new scene: %p", this);
 }
