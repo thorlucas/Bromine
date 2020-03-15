@@ -1,29 +1,135 @@
 #include "RenderServer.h"
 #include "../Trait/RenderTrait.h"
+#include <errno.h>
 
 namespace BromineEngine {
 
 DEFINE_TRAIT_SERVER(RenderServer, RenderTrait)
 
-RenderServer::RenderServer() : window(nullptr), renderer(nullptr), nextAvailableID(0), globalPos(0.0, 0.0) {
+Texture::Texture(uint32_t width, uint32_t height, void* pixels) : width(width), height(height), pixels(pixels) {
+	glGenTextures(1, &glTexture);
+	glBindTexture(GL_TEXTURE_2D, glTexture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
+	float borderColor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+Texture::~Texture() {
+	// delete[] pixels; For now deleted immediatley by SDL_FreeTexture so
+}
+
+RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailableID(0), globalPos(0.0, 0.0) {
+	// Initialize SDL
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
 		Bromine::log(Logger::ERROR, "Failed to initialize video: %s", SDL_GetError());
 		throw BromineInitError(SDL_GetError()); 
 	}
 
+	// Initialze SDL_image
 	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
 		Bromine::log(Logger::ERROR, "Failed to initialize image: %s", SDL_GetError());
 		throw BromineInitError(SDL_GetError()); 
 	}
 
-	window = SDL_CreateWindow("Bromine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, 0);
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if (window == nullptr || renderer == nullptr) {
+	// Set OpenGL 3.3 Attributes
+	glewExperimental = true;
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+	// Create window
+	window = SDL_CreateWindow("Bromine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_OPENGL);
+
+	if (window == nullptr) {
 		Bromine::log(Logger::ERROR, "Failed to create window: %s", SDL_GetError());
 		throw BromineInitError(SDL_GetError()); 
 	}
 
-	instructionsDirty = true;
+	// Create OpenGL context
+	glContext = SDL_GL_CreateContext(window);
+
+	if (glContext == nullptr) {
+		Bromine::log(Logger::ERROR, "Failed to create GL context: %s", SDL_GetError());
+		throw BromineInitError(SDL_GetError());
+	}
+
+	// Initialize Glew
+	GLenum glewInitError = glewInit();
+	if (glewInitError != GLEW_OK) {
+		Bromine::log(Logger::ERROR, "Failed to initialize glew: %s", glewGetErrorString(glewInitError));
+		throw BromineInitError("Failed to initialize glew.");
+	}
+
+	// Enable vsync
+	if (SDL_GL_SetSwapInterval(1) != 0) {
+		Bromine::log(Logger::ERROR, "Failed to set vsync: %s", SDL_GetError());
+		throw BromineInitError(SDL_GetError());
+	}
+
+	// Create OpenGL shader programs
+	textureShaderProgram = loadShaderProgram("Shaders/Texture.vert", "Shaders/Texture.frag");
+
+	// Set OpenGL render settings
+	glClearColor(1.0f, 1.0f, 1.0f, 1.f);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+	// Set up sprite unit quads
+	glGenVertexArrays(1, &glSpriteVAO);
+	glBindVertexArray(glSpriteVAO);
+
+	float spriteUnitQuadData[] = {
+		// Positions	// Texture Coords
+	     1.0f,  1.0f,	1.0f, 1.0f,
+	     1.0f, -1.0f,	1.0f, 0.0f,
+	    -1.0f,  1.0f,	0.0f, 1.0f,
+	    -1.0f, -1.0f,	0.0f, 0.0f,	
+	};
+
+	// Sprite VBO holds quad verticies and texture coords
+	uint32_t spriteDataVBO;
+	glGenBuffers(1, &spriteDataVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, spriteDataVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(spriteUnitQuadData), spriteUnitQuadData, GL_STATIC_DRAW);
+
+	// Set texture vertex shader in position
+	glVertexAttribPointer(0, 2, GL_FLOAT, false, 4 * sizeof(float), (void*)(0));
+	glEnableVertexAttribArray(0);
+
+	// Set texture vertex shader in texture coordinates
+	glVertexAttribPointer(1, 2, GL_FLOAT, false, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glBindVertexArray(0);
+
+	// Get uniform locations
+	glVUnifModel = glGetUniformLocation(textureShaderProgram, "vuModel");
+	glVUnifProjection = glGetUniformLocation(textureShaderProgram, "vuProjection");
+
+	// Print OpenGL version
+	// int32_t maj;
+	// int32_t min;
+	// glGetIntegerv(GL_MAJOR_VERSION, &maj);
+	// glGetIntegerv(GL_MINOR_VERSION, &min);
+
+	// printf("%d.%d\n", maj, min);
+
+	// Set up orthographic projection matrix
+	orthoProjection = glm::ortho(0.0f, static_cast<float>(windowWidth), static_cast<float>(windowHeight), 0.0f, -1.0f, 1.0f);
+
+	// Set flags
+	instructionsDirtyFlag = true;
 	drawCustomFlag = false;
 	drawImmediateFlag = false;
 }
@@ -34,14 +140,10 @@ RenderServer::~RenderServer() {
 	}
 
 	for (auto& it : resourceMap) {
-		if (it.second.type == Resource::TEXTURE) {
-			SDL_DestroyTexture(it.second.texture);
-		}
-
 		delete &(it.second);
 	}
 
-	SDL_DestroyRenderer(renderer);
+	SDL_GL_DeleteContext(glContext);
 	SDL_DestroyWindow(window);
 
 	IMG_Quit();
@@ -49,7 +151,82 @@ RenderServer::~RenderServer() {
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
+Shader RenderServer::loadShader(const char* path, ShaderType type) {
+	char buffer[128];
+	snprintf(buffer, 128, "%s%s", resourcePath, path);
+
+	SDL_RWops* shaderFile = SDL_RWFromFile(buffer, "r");
+
+	if (shaderFile == NULL) {
+		printf("Failed to open shader file\n");
+		return 0;
+	}
+
+	long long fileSize = SDL_RWsize(shaderFile);
+	char* shaderSource = new char[fileSize + 1];
+
+	SDL_RWread(shaderFile, shaderSource, sizeof(char), fileSize); // TODO detect error reading
+	SDL_RWclose(shaderFile);
+
+	shaderSource[fileSize] = '\0';
+
+	Shader shader;
+	shader = glCreateShader(type);
+
+	glShaderSource(shader, 1, &shaderSource, NULL);
+	
+	glCompileShader(shader);
+
+	int32_t vertexShaderCompiled = false;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &vertexShaderCompiled);
+	if (vertexShaderCompiled != true) {
+		char* buffer = new char[256];
+		int32_t infoLength;
+		glGetShaderInfoLog(shader, 256, &infoLength, buffer);
+		printf("Failed to compile shader: %s\n", buffer);
+		glDeleteShader(shader);
+		shader = 0;
+	}
+
+	delete[] shaderSource;
+
+	return shader;
+}
+
+void RenderServer::freeShader(Shader shader) {
+	glDeleteShader(shader);
+}
+
+ShaderProgram RenderServer::loadShaderProgram(const char* vertexShaderPath, const char* fragmentShaderPath) {
+	ShaderProgram shaderProgram = glCreateProgram();
+
+	Shader vertexShader = loadShader(vertexShaderPath, VERTEX_SHADER);
+	Shader fragmentShader = loadShader(fragmentShaderPath, FRAGMENT_SHADER);
+
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+
+	glLinkProgram(shaderProgram);
+
+	int32_t programLinked = false;
+	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &programLinked);
+	if (programLinked != true) {
+		// TODO: Get info
+		printf("Failed to link shader program\n");
+		glDeleteProgram(shaderProgram);
+		shaderProgram = 0;
+	}
+
+	freeShader(vertexShader);
+	freeShader(fragmentShader);
+
+	return shaderProgram;
+}
+
+
 ResourceID RenderServer::loadTexture(const char* path) {
+	// TODO Index loaded textures by path
+
 	char buffer[128];
 	snprintf(buffer, 128, "%s%s", resourcePath, path);
 
@@ -59,7 +236,7 @@ ResourceID RenderServer::loadTexture(const char* path) {
 		return RESOURCE_NULL;
 	}
 
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, image);
+	Texture* texture = new Texture(image->w, image->h, image->pixels);
 	SDL_FreeSurface(image);
 
 	Resource& resource = *(new Resource(nextAvailableID++, Resource::TEXTURE));
@@ -67,7 +244,7 @@ ResourceID RenderServer::loadTexture(const char* path) {
 
 	// Set up source rect to default full size
 	resource.source.x = 0; resource.source.y = 0;
-	SDL_QueryTexture(resource.texture, NULL, NULL, &resource.source.w, &resource.source.h);
+	resource.source.w = texture->width; resource.source.h = texture->height;
 
 	resourceMap.insert(std::pair<ResourceID, Resource&>(resource.id, resource));
 
@@ -79,7 +256,6 @@ ResourceID RenderServer::loadTexture(const char* path) {
 void RenderServer::freeTexture(ResourceID id) {
 	Resource& resource = getResource(id);
 	resourceMap.erase(id);
-	SDL_DestroyTexture(resource.texture);
 	delete &resource;
 }
 
@@ -126,18 +302,25 @@ void RenderServer::enableCustomDrawing(RenderTrait* trait) {
 }
 
 void RenderServer::drawPointImmediate(Vec2d* relPos) {
-	SDL_RenderDrawPoint(renderer,
-		static_cast<int>((*relPos)[0] + globalPos[0]),
-		static_cast<int>((*relPos)[1] + globalPos[1])
-	);
+	// SDL_RenderDrawPoint(renderer,
+	// 	static_cast<int>((*relPos)[0] + globalPos[0]),
+	// 	static_cast<int>((*relPos)[1] + globalPos[1])
+	// );
 }
 
 void RenderServer::drawTextureImmediate(Vec2d* relPos, Vec2d* scale, Resource* texture) {
-	destination.x = static_cast<int>((*relPos)[0] + globalPos[0]);
-	destination.y = static_cast<int>((*relPos)[1] + globalPos[1]);
-	destination.w = (*scale)[0] * texture->source.w;
-	destination.h = (*scale)[1] * texture->source.h;
-	SDL_RenderCopy(renderer, texture->texture, &texture->source, &destination);
+	glm::mat4 model(1.0f);
+	model = glm::translate(model, glm::vec3((*relPos)[0], (*relPos)[1], 0.0f));
+	model = glm::scale(model, glm::vec3(texture->texture->width, texture->texture->height, 1.0f));
+	model = glm::scale(model, glm::vec3((*scale)[0], (*scale)[1], 1.0f));
+
+	glBindVertexArray(glSpriteVAO);
+	glBindTexture(GL_TEXTURE_2D, texture->texture->glTexture);
+
+	glUniformMatrix4fv(glVUnifModel, 1, false, glm::value_ptr(model));
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glBindVertexArray(0);
 }
 
 void RenderServer::renderNode(Node& node) {
@@ -167,20 +350,19 @@ void RenderServer::renderNode(Node& node) {
 };
 
 void RenderServer::update(double delta) {
-	if (instructionsDirty) {
+	if (instructionsDirtyFlag) {
 		Scene* currentScene = Bromine::instance().getCurrentScene();
 		Node& rootNode = Bromine::node(currentScene->rootNode);
 
 		renderNode(rootNode);
 
-		instructionsDirty = false;
+		instructionsDirtyFlag = false;
 	}
 
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	glUseProgram(textureShaderProgram);
+	glClear(GL_COLOR_BUFFER_BIT);
 
-	SDL_RenderClear(renderer);
-
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	glUniformMatrix4fv(glVUnifProjection, 1, false, glm::value_ptr(orthoProjection));
 	
 	if (!relPosStack.empty()) {
 		Bromine::log(Logger::WARNING, "Relative positition stack is not empty at the beginning of render loop!");
@@ -204,21 +386,7 @@ void RenderServer::update(double delta) {
 		}
 	}
 
-	// for (RenderContext* it = &renderContextPool[0]; it < &renderContextPool[renderContextPoolSize]; ++it) {
-	// 	if (it->type != RenderContext::NOTHING) {
-	// 		if (it->type == RenderContext::POINT) {
-	// 			SDL_RenderDrawPoint(renderer, static_cast<int>((*it->point.position)[0]), static_cast<int>((*it->point.position)[1]));
-	// 		} else if (it->type == RenderContext::TEXTURE) {
-	// 			destination.x = static_cast<int>((*it->texture.position)[0]);
-	// 			destination.y = static_cast<int>((*it->texture.position)[1]);
-	// 			destination.w = (*it->texture.scale)[0] * it->texture.resource->source.w;
-	// 			destination.h = (*it->texture.scale)[1] * it->texture.resource->source.h;
-	// 			SDL_RenderCopy(renderer, it->texture.resource->texture, &it->texture.resource->source, &destination);
-	// 		}
-	// 	}
-	// }
-
-	SDL_RenderPresent(renderer);
+	SDL_GL_SwapWindow(window);
 }
 
 }

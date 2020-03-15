@@ -1,11 +1,14 @@
 #ifndef _SERVER_RENDER_H_
 #define _SERVER_RENDER_H_
 
+#include <GL/glew.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <map>
 #include <set>
 #include <stack>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "../Config/Config.h"
 #include "../Config/RenderConfig.h"
@@ -21,6 +24,24 @@ class RenderTrait;
 typedef uint32_t ResourceID;
 #define RESOURCE_NULL INT32_MAX
 
+struct Texture {
+	uint32_t glTexture;
+	uint32_t width;
+	uint32_t height;
+	void* pixels; // TODO will be invalid! segfault
+
+	Texture(uint32_t width, uint32_t height, void* pixels);
+	~Texture();
+};
+
+typedef uint32_t ShaderProgram;
+typedef uint32_t Shader;
+
+enum ShaderType {
+	VERTEX_SHADER = GL_VERTEX_SHADER,
+	FRAGMENT_SHADER = GL_FRAGMENT_SHADER,
+};
+
 struct Resource {
 	const ResourceID id;
 
@@ -30,12 +51,17 @@ struct Resource {
 
 	union {
 		struct {
-			SDL_Texture* texture;
+			Texture* texture;
 			SDL_Rect source;
 		};
 	};
 
 	Resource(ResourceID id, Type type) : id(id), type(type) {}
+	~Resource() {
+		if (type == TEXTURE) {
+			delete texture;
+		}
+	}
 };
 
 class RenderServer : public Server {
@@ -48,7 +74,17 @@ private:
 	std::unordered_map<ResourceID, Resource&> resourceMap;
 
 	SDL_Window* window;
-	SDL_Renderer* renderer;
+	SDL_GLContext glContext;
+
+	ShaderProgram textureShaderProgram;
+	ShaderProgram pointShaderProgram;
+
+	uint32_t glVUnifModel;
+	uint32_t glVUnifProjection;
+	
+	uint32_t glSpriteVAO;
+
+	glm::mat4 orthoProjection;
 
 	/**
 	 * This rect is reused in order to avoid having to make
@@ -92,23 +128,27 @@ private:
 		};
 	};
 
-	bool instructionsDirty;
+	bool instructionsDirtyFlag;
 	std::vector<RenderInstruction> instructions;
-
+	
 	void renderNode(Node& node);
 
 	void drawPointImmediate(Vec2d* pos);
 	void drawTextureImmediate(Vec2d* relPos, Vec2d* scale, Resource* texture);
 
 public:
+	RenderServer();
+	~RenderServer();	
 	// TODO: Make a seperate class that I can pass to the traits for this
+
 	void drawPoint(Vec2d* pos);
 	void drawTexture(Vec2d* pos, Vec2d* scale, ResourceID texture);
 	void enableCustomDrawing(RenderTrait* trait);
 
-public:
-	RenderServer();
-	~RenderServer();	
+	Shader loadShader(const char* path, ShaderType type);
+	void freeShader(Shader shader);
+
+	ShaderProgram loadShaderProgram(const char* vertexShaderPath, const char* fragmentShaderPath);
 
 	ResourceID loadTexture(const char* path);
 	void freeTexture(ResourceID id);
