@@ -152,8 +152,8 @@ RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailabl
 	glUseProgram(textureShaderProgram);
 	glUniformMatrix4fv(textureVUProjection, 1, false, glm::value_ptr(orthoProjection));
 
-	// glUseProgram(pointShaderProgram);
-	// glUniformMatrix4fv(pointVUProjection, 1, false, glm::value_ptr(orthoProjection));
+	glUseProgram(pointShaderProgram);
+	glUniformMatrix4fv(pointVUProjection, 1, false, glm::value_ptr(orthoProjection));
 
 	// Set flags
 	instructionsDirtyFlag = true;

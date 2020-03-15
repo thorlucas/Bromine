@@ -13,7 +13,7 @@ void SecondExampleLogicTrait::initialize() {
 	// ownerPosition = &(owner().position());
 	// angle = (rand() % static_cast<int>(M_PI * 1000)) / 1000.0;
 
-	owner().getTrait<ParticleRenderTrait>().spawnParticle(Vec2d(0.0, 0.0), 10000);
+	owner().getTrait<ParticleRenderTrait>().spawnParticle(Vec2d(100.0, 100.0), 10000);
 	// Generate particles
 }
 

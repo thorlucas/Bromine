@@ -25,7 +25,6 @@ ExampleScene::ExampleScene() {
 
 	Node& particleNode = Bromine::server<NodeServer>().createEmptyNode();
 
-	particleNode.position() = Vec2d(0.0, 0.0);
 	particleNode.addTrait<ParticleRenderTrait>(100);
 	particleNode.addTrait<SecondExampleLogicTrait>();
 
