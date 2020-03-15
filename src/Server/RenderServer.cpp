@@ -149,11 +149,12 @@ RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailabl
 	// Set up orthographic projection matrix
 	orthoProjection = glm::ortho(0.0f, static_cast<float>(windowWidth), static_cast<float>(windowHeight), 0.0f, -1.0f, 1.0f);
 
-	glUseProgram(textureShaderProgram);
-	glUniformMatrix4fv(textureVUProjection, 1, false, glm::value_ptr(orthoProjection));
-
 	glUseProgram(pointShaderProgram);
 	glUniformMatrix4fv(pointVUProjection, 1, false, glm::value_ptr(orthoProjection));
+
+	glUseProgram(textureShaderProgram);
+	glUniformMatrix4fv(textureVUProjection, 1, false, glm::value_ptr(orthoProjection));
+	instructionCurrentShaderProgram = textureShaderProgram;
 
 	// Set flags
 	instructionsDirtyFlag = true;
@@ -294,16 +295,21 @@ Resource& RenderServer::getResource(ResourceID resource) {
 }
 
 // Drawing functions
-void RenderServer::drawPoint(Vec2d* pos) {
+void RenderServer::drawPoint(Vec2d* pos, Vec3d* color) {
 	if (drawCustomFlag) return;
 	if (drawImmediateFlag) {
-		glUseProgram(pointShaderProgram);
-		return drawPointImmediate(pos);
+		switchShaderProgramImmediate(pointShaderProgram);
+		return drawPointImmediate(pos, color);
 	};
+
+	if (instructionCurrentShaderProgram != pointShaderProgram) {
+		switchShaderProgram(pointShaderProgram);
+	}
 
 	RenderInstruction instruction;
 	instruction.type = RenderInstruction::DRAW_POINT;
 	instruction.drawPoint.relPos = pos;
+	instruction.drawPoint.color = color;
 
 	instructions.push_back(instruction);
 }
@@ -311,15 +317,32 @@ void RenderServer::drawPoint(Vec2d* pos) {
 void RenderServer::drawTexture(Vec2d* pos, Vec2d* scale, ResourceID texture) {
 	if (drawCustomFlag) return;
 	if (drawImmediateFlag) {
-		glUseProgram(textureShaderProgram);
+		switchShaderProgramImmediate(textureShaderProgram);
 		return drawTextureImmediate(pos, scale, &getResource(texture));
 	};
+
+	if (instructionCurrentShaderProgram != textureShaderProgram) {
+		switchShaderProgram(textureShaderProgram);
+	}
 
 	RenderInstruction instruction;
 	instruction.type = RenderInstruction::DRAW_TEXTURE;
 	instruction.drawTexture.relPos = pos;
 	instruction.drawTexture.scale = scale;
 	instruction.drawTexture.texture = &getResource(texture);
+
+	instructions.push_back(instruction);
+}
+
+void RenderServer::switchShaderProgram(ShaderProgram program) {
+	if (drawCustomFlag) return;
+	if (drawImmediateFlag) {
+		return switchShaderProgramImmediate(program);
+	}
+
+	RenderInstruction instruction;
+	instruction.type = RenderInstruction::SWITCH_SHADER_PROGRAM;
+	instruction.switchShaderProgram.program = program;
 
 	instructions.push_back(instruction);
 }
@@ -337,12 +360,12 @@ void RenderServer::enableCustomDrawing(RenderTrait* trait) {
 	drawCustomFlag = true;
 }
 
-void RenderServer::drawPointImmediate(Vec2d* relPos) {
+void RenderServer::drawPointImmediate(Vec2d* relPos, Vec3d* color) {
 	glBindVertexArray(pointVAO);
 
 	float pointData[] = {
 		static_cast<float>((*relPos)[0]), static_cast<float>((*relPos)[1]),
-		1.0f, 0.0f, 0.0f, 1.0f,
+		static_cast<float>((*color)[0]), static_cast<float>((*color)[1]), static_cast<float>((*color)[2]), 1.0f,
 	};
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(pointData), pointData, GL_DYNAMIC_DRAW);
@@ -363,6 +386,10 @@ void RenderServer::drawTextureImmediate(Vec2d* relPos, Vec2d* scale, Resource* t
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
+}
+
+void RenderServer::switchShaderProgramImmediate(ShaderProgram program) {
+	glUseProgram(program);
 }
 
 void RenderServer::renderNode(Node& node) {
@@ -404,7 +431,7 @@ void RenderServer::update(double delta) {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	if (!relPosStack.empty()) {
-		Bromine::log(Logger::WARNING, "Relative positition stack is not empty at the beginning of render loop!");
+		Bromine::log(Logger::WARNING, "Relative positition stack is not empty at the beginning of render loop.");
 	}
 
 	for (auto& instr : instructions) {
@@ -416,7 +443,7 @@ void RenderServer::update(double delta) {
 			relPosStack.pop();
 		} else if (instr.type == RenderInstruction::DRAW_POINT) {
 			glUseProgram(pointShaderProgram);
-			drawPointImmediate(instr.drawPoint.relPos);
+			drawPointImmediate(instr.drawPoint.relPos, instr.drawPoint.color);
 		} else if (instr.type == RenderInstruction::DRAW_TEXTURE) {
 			glUseProgram(textureShaderProgram);
 			drawTextureImmediate(instr.drawTexture.relPos, instr.drawTexture.scale, instr.drawTexture.texture);

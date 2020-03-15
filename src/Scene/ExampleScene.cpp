@@ -1,7 +1,7 @@
 #include "ExampleScene.h"
 #include "../Bromine.h"
 #include "../Trait/SpriteRenderTrait.h"
-#include "../Trait/ParticleRenderTrait.h"
+#include "../Trait/PointRenderTrait.h"
 #include "../Trait/EventTrait.h"
 #include "../Trait/ExampleLogicTrait.h"
 #include "../Trait/SecondExampleLogicTrait.h"
@@ -23,12 +23,11 @@ ExampleScene::ExampleScene() {
 	
 	rootnref.addChild(spriteNode);
 
-	Node& particleNode = Bromine::server<NodeServer>().createEmptyNode();
+	Node& pointNode = Bromine::server<NodeServer>().createEmptyNode();
+	pointNode.position() = Vec2d(200.0, 200.0);
+	pointNode.addTrait<PointRenderTrait>(Vec3d(0.0, 1.0, 0.0));
 
-	particleNode.addTrait<ParticleRenderTrait>(100);
-	particleNode.addTrait<SecondExampleLogicTrait>();
-
-	rootnref.addChild(particleNode);
+	rootnref.addChild(pointNode);
 
 	Bromine::log(Logger::DEBUG, "Creating new scene: %p", this);
 }

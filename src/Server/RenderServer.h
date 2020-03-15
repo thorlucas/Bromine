@@ -109,7 +109,8 @@ private:
 			POP_REL_POS,
 			DRAW_POINT,
 			DRAW_TEXTURE,
-			DRAW_CUSTOM
+			DRAW_CUSTOM,
+			SWITCH_SHADER_PROGRAM,
 		} type;
 
 		union {
@@ -119,6 +120,7 @@ private:
 
 			struct {
 				Vec2d* relPos;
+				Vec3d* color;
 			} drawPoint;
 
 			struct {
@@ -130,25 +132,32 @@ private:
 			struct {
 				RenderTrait* trait;
 			} drawCustom;
+
+			struct {
+				ShaderProgram program;
+			} switchShaderProgram;
 		};
 	};
 
 	bool instructionsDirtyFlag;
+	ShaderProgram instructionCurrentShaderProgram;
 	std::vector<RenderInstruction> instructions;
 	
 	void renderNode(Node& node);
 
-	void drawPointImmediate(Vec2d* pos);
+	void drawPointImmediate(Vec2d* pos, Vec3d* color);
 	void drawTextureImmediate(Vec2d* relPos, Vec2d* scale, Resource* texture);
+	void switchShaderProgramImmediate(ShaderProgram program);
 
 public:
 	RenderServer();
 	~RenderServer();	
 	// TODO: Make a seperate class that I can pass to the traits for this
 
-	void drawPoint(Vec2d* pos);
+	void drawPoint(Vec2d* pos, Vec3d* color);
 	void drawTexture(Vec2d* pos, Vec2d* scale, ResourceID texture);
 	void enableCustomDrawing(RenderTrait* trait);
+	void switchShaderProgram(ShaderProgram program);
 
 	Shader loadShader(const char* path, ShaderType type);
 	void freeShader(Shader shader);
