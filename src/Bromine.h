@@ -131,12 +131,10 @@ public:
 
 	// Logging
 
-	Logger logger;
-
 	static void log(Logger::Priority priority, const char* fmt,  ...) __attribute__ (( format(printf, 2, 3) )) {
 		va_list args;
 		va_start(args, fmt);
-		Bromine::instance().logger.vlog(priority, fmt, args);
+		Logger::instance().vlog(priority, fmt, args);
 		va_end(args);
 	}
 

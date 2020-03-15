@@ -2,8 +2,7 @@
 
 namespace BromineEngine {
 
-Logger::Logger(Priority priority) : minPriority(priority) {
-}
+Logger::Logger() : minPriority(Logger::DEBUG) {}
 
 void Logger::log(Priority priority, const char* fmt...) {
 	if (priority >= minPriority) {
@@ -24,6 +23,10 @@ void Logger::vlog(Priority priority, const char* fmt, va_list args) {
 
 		vprintf(buffer, args);
 	}
+}
+
+void Logger::setMinimumPriority(Priority priority) {
+	minPriority = priority;
 }
 
 }

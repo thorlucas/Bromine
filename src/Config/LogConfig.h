@@ -3,7 +3,7 @@
 
 namespace BromineEngine {
 
-#define LOGGER_MIN_PRIORITY DEBUG
+#define LOGGER_MIN_PRIORITY Logger::DEBUG
 
 static const char* logFormats[] = {
 	"[VERBOSE] %s\n",

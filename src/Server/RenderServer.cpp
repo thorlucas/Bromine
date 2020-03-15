@@ -30,6 +30,8 @@ Texture::~Texture() {
 
 RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailableID(0), globalPos(0.0, 0.0) {
 	// Initialize SDL
+	Bromine::log(Logger::DEBUG, "Test");
+
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
 		Bromine::log(Logger::ERROR, "Failed to initialize video: %s", SDL_GetError());
 		throw BromineInitError(SDL_GetError()); 

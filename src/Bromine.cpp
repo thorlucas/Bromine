@@ -10,9 +10,9 @@ Bromine::Bromine() :
 	nodeServer(getServer<NodeServer>()),
 	renderServer(getServer<RenderServer>()),
 	eventServer(getServer<EventServer>()),
-	logicServer(getServer<LogicServer>()),
-	
-	logger(Logger::LOGGER_MIN_PRIORITY) {
+	logicServer(getServer<LogicServer>()) {
+
+	Logger::instance().setMinimumPriority(LOGGER_MIN_PRIORITY);
 
 	for (auto it : autoInitServers) {
 		getServer(it); // ensures servers are constructed
