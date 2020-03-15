@@ -30,8 +30,6 @@ Texture::~Texture() {
 
 RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailableID(0), globalPos(0.0, 0.0) {
 	// Initialize SDL
-	Bromine::log(Logger::DEBUG, "Test");
-
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
 		Bromine::log(Logger::ERROR, "Failed to initialize video: %s", SDL_GetError());
 		throw BromineInitError(SDL_GetError()); 
@@ -138,7 +136,7 @@ RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailabl
 	// Get uniform locations
 	textureVUModel = glGetUniformLocation(textureShaderProgram, "vuModel");
 	textureVUProjection = glGetUniformLocation(textureShaderProgram, "vuProjection");
-	// pointVUProjection = glGetUniformLocation(pointShaderProgram, "vuProjection");
+	pointVUProjection = glGetUniformLocation(pointShaderProgram, "vuProjection");
 
 	// Print OpenGL version
 	// int32_t maj;
@@ -187,7 +185,8 @@ Shader RenderServer::loadShader(const char* path, ShaderType type) {
 	SDL_RWops* shaderFile = SDL_RWFromFile(buffer, "r");
 
 	if (shaderFile == NULL) {
-		printf("Failed to open shader file\n");
+		Bromine::log(Logger::ERROR, "Failed to open shader file: %s", buffer);
+		// TODO: Throw
 		return 0;
 	}
 
@@ -209,11 +208,12 @@ Shader RenderServer::loadShader(const char* path, ShaderType type) {
 	int32_t vertexShaderCompiled = false;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &vertexShaderCompiled);
 	if (vertexShaderCompiled != true) {
-		char* buffer = new char[256];
+		char* errorBuffer = new char[256];
 		int32_t infoLength;
-		glGetShaderInfoLog(shader, 256, &infoLength, buffer);
-		printf("Failed to compile shader: %s\n", buffer);
+		glGetShaderInfoLog(shader, 256, &infoLength, errorBuffer);
+		Bromine::log(Logger::ERROR, "Failed to compile shader:\n%s", errorBuffer);
 		glDeleteShader(shader);
+		// TODO: Throw
 		shader = 0;
 	}
 
@@ -241,7 +241,8 @@ ShaderProgram RenderServer::loadShaderProgram(const char* vertexShaderPath, cons
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &programLinked);
 	if (programLinked != true) {
 		// TODO: Get info
-		printf("Failed to link shader program\n");
+		Bromine::log(Logger::ERROR, "Failed to link shader program.");
+		// TODO: Throw
 		glDeleteProgram(shaderProgram);
 		shaderProgram = 0;
 	}
