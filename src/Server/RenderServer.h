@@ -79,10 +79,15 @@ private:
 	ShaderProgram textureShaderProgram;
 	ShaderProgram pointShaderProgram;
 
-	uint32_t glVUnifModel;
-	uint32_t glVUnifProjection;
+	uint32_t textureVUModel;
+	uint32_t textureVUProjection;
+	uint32_t pointVUProjection;
+
+	uint32_t spriteVAO;
+	uint32_t pointVAO;
+	uint32_t pointDataVBO;
 	
-	uint32_t glSpriteVAO;
+	uint32_t glProgramID;
 
 	glm::mat4 orthoProjection;
 

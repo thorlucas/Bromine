@@ -25,7 +25,7 @@ Texture::Texture(uint32_t width, uint32_t height, void* pixels) : width(width), 
 }
 
 Texture::~Texture() {
-	// delete[] pixels; For now deleted immediatley by SDL_FreeTexture so
+	// delete[] pixels; TODO: For now deleted immediatley by SDL_FreeTexture so
 }
 
 RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailableID(0), globalPos(0.0, 0.0) {
@@ -78,16 +78,18 @@ RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailabl
 
 	// Create OpenGL shader programs
 	textureShaderProgram = loadShaderProgram("Shaders/Texture.vert", "Shaders/Texture.frag");
+	pointShaderProgram = loadShaderProgram("Shaders/Point.vert", "Shaders/Point.frag");
 
 	// Set OpenGL render settings
 	glClearColor(1.0f, 1.0f, 1.0f, 1.f);
+	glPointSize(10.0f);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	
 
 	// Set up sprite unit quads
-	glGenVertexArrays(1, &glSpriteVAO);
-	glBindVertexArray(glSpriteVAO);
+	glGenVertexArrays(1, &spriteVAO);
+	glBindVertexArray(spriteVAO);
 
 	float spriteUnitQuadData[] = {
 		// Positions	// Texture Coords
@@ -113,9 +115,28 @@ RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailabl
 
 	glBindVertexArray(0);
 
+
+	// Set up point VAOs and VBOs
+	glGenVertexArrays(1, &pointVAO);
+	glBindVertexArray(pointVAO);
+
+	glGenBuffers(1, &pointDataVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, pointDataVBO);
+	// glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 2, GL_FLOAT, false, 6 * sizeof(float), (void*)(0));
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 4, GL_FLOAT, false, 6 * sizeof(float), (void*)(2 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glBindVertexArray(0);
+
+
 	// Get uniform locations
-	glVUnifModel = glGetUniformLocation(textureShaderProgram, "vuModel");
-	glVUnifProjection = glGetUniformLocation(textureShaderProgram, "vuProjection");
+	textureVUModel = glGetUniformLocation(textureShaderProgram, "vuModel");
+	textureVUProjection = glGetUniformLocation(textureShaderProgram, "vuProjection");
+	// pointVUProjection = glGetUniformLocation(pointShaderProgram, "vuProjection");
 
 	// Print OpenGL version
 	// int32_t maj;
@@ -127,6 +148,12 @@ RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailabl
 
 	// Set up orthographic projection matrix
 	orthoProjection = glm::ortho(0.0f, static_cast<float>(windowWidth), static_cast<float>(windowHeight), 0.0f, -1.0f, 1.0f);
+
+	glUseProgram(textureShaderProgram);
+	glUniformMatrix4fv(textureVUProjection, 1, false, glm::value_ptr(orthoProjection));
+
+	// glUseProgram(pointShaderProgram);
+	// glUniformMatrix4fv(pointVUProjection, 1, false, glm::value_ptr(orthoProjection));
 
 	// Set flags
 	instructionsDirtyFlag = true;
@@ -266,7 +293,10 @@ Resource& RenderServer::getResource(ResourceID resource) {
 // Drawing functions
 void RenderServer::drawPoint(Vec2d* pos) {
 	if (drawCustomFlag) return;
-	if (drawImmediateFlag) return drawPointImmediate(pos);
+	if (drawImmediateFlag) {
+		glUseProgram(pointShaderProgram);
+		return drawPointImmediate(pos);
+	};
 
 	RenderInstruction instruction;
 	instruction.type = RenderInstruction::DRAW_POINT;
@@ -277,7 +307,10 @@ void RenderServer::drawPoint(Vec2d* pos) {
 
 void RenderServer::drawTexture(Vec2d* pos, Vec2d* scale, ResourceID texture) {
 	if (drawCustomFlag) return;
-	if (drawImmediateFlag) return drawTextureImmediate(pos, scale, &getResource(texture));
+	if (drawImmediateFlag) {
+		glUseProgram(textureShaderProgram);
+		return drawTextureImmediate(pos, scale, &getResource(texture));
+	};
 
 	RenderInstruction instruction;
 	instruction.type = RenderInstruction::DRAW_TEXTURE;
@@ -302,10 +335,16 @@ void RenderServer::enableCustomDrawing(RenderTrait* trait) {
 }
 
 void RenderServer::drawPointImmediate(Vec2d* relPos) {
-	// SDL_RenderDrawPoint(renderer,
-	// 	static_cast<int>((*relPos)[0] + globalPos[0]),
-	// 	static_cast<int>((*relPos)[1] + globalPos[1])
-	// );
+	glBindVertexArray(pointVAO);
+
+	float pointData[] = {
+		static_cast<float>((*relPos)[0]), static_cast<float>((*relPos)[1]),
+		1.0f, 0.0f, 0.0f, 1.0f,
+	};
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(pointData), pointData, GL_DYNAMIC_DRAW);
+	glDrawArrays(GL_POINTS, 0, 1);
+	glBindVertexArray(0);
 }
 
 void RenderServer::drawTextureImmediate(Vec2d* relPos, Vec2d* scale, Resource* texture) {
@@ -314,10 +353,10 @@ void RenderServer::drawTextureImmediate(Vec2d* relPos, Vec2d* scale, Resource* t
 	model = glm::scale(model, glm::vec3(texture->texture->width, texture->texture->height, 1.0f));
 	model = glm::scale(model, glm::vec3((*scale)[0], (*scale)[1], 1.0f));
 
-	glBindVertexArray(glSpriteVAO);
+	glBindVertexArray(spriteVAO);
 	glBindTexture(GL_TEXTURE_2D, texture->texture->glTexture);
 
-	glUniformMatrix4fv(glVUnifModel, 1, false, glm::value_ptr(model));
+	glUniformMatrix4fv(textureVUModel, 1, false, glm::value_ptr(model));
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
@@ -359,11 +398,8 @@ void RenderServer::update(double delta) {
 		instructionsDirtyFlag = false;
 	}
 
-	glUseProgram(textureShaderProgram);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glUniformMatrix4fv(glVUnifProjection, 1, false, glm::value_ptr(orthoProjection));
-	
 	if (!relPosStack.empty()) {
 		Bromine::log(Logger::WARNING, "Relative positition stack is not empty at the beginning of render loop!");
 	}
@@ -376,8 +412,10 @@ void RenderServer::update(double delta) {
 			globalPos -= *relPosStack.top();
 			relPosStack.pop();
 		} else if (instr.type == RenderInstruction::DRAW_POINT) {
+			glUseProgram(pointShaderProgram);
 			drawPointImmediate(instr.drawPoint.relPos);
 		} else if (instr.type == RenderInstruction::DRAW_TEXTURE) {
+			glUseProgram(textureShaderProgram);
 			drawTextureImmediate(instr.drawTexture.relPos, instr.drawTexture.scale, instr.drawTexture.texture);
 		} else if (instr.type == RenderInstruction::DRAW_CUSTOM) {
 			drawImmediateFlag = true;

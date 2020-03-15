@@ -14,13 +14,22 @@ ExampleScene::ExampleScene() {
 	Node& rootnref = Bromine::node(rootNode);
 
 	ResourceID bromineTexture = Bromine::server<RenderServer>().loadTexture("Bromine.png");
-	Node& node = Bromine::server<NodeServer>().createEmptyNode();
+	Node& spriteNode = Bromine::server<NodeServer>().createEmptyNode();
 
-	node.position() = Vec2d(static_cast<double>(rand() % 1280), static_cast<double>(rand() % 720));
-	node.addTrait<SpriteRenderTrait>(bromineTexture, Vec2d(0.2, 0.2));
-	node.addTrait<SecondExampleLogicTrait>();
+	spriteNode.position() = Vec2d(static_cast<double>(rand() % 1280), static_cast<double>(rand() % 720));
+	spriteNode.addTrait<EventTrait>();
+	spriteNode.addTrait<SpriteRenderTrait>(bromineTexture, Vec2d(0.2, 0.2));
+	spriteNode.addTrait<ExampleLogicTrait>();
 	
-	rootnref.addChild(node);
+	rootnref.addChild(spriteNode);
+
+	Node& particleNode = Bromine::server<NodeServer>().createEmptyNode();
+
+	particleNode.position() = Vec2d(0.0, 0.0);
+	particleNode.addTrait<ParticleRenderTrait>(100);
+	particleNode.addTrait<SecondExampleLogicTrait>();
+
+	rootnref.addChild(particleNode);
 
 	Bromine::log(Logger::DEBUG, "Creating new scene: %p", this);
 }

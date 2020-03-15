@@ -6,6 +6,6 @@ uniform mat4 vuProjection;
 out vec2 voTexCoords;
 void main()
 {
-   gl_Position = vuProjection * vuModel * vec4(viPos.x, viPos.y, 0.0, 1.0);
+	gl_Position = vuProjection * vuModel * vec4(viPos.xy, 0.0, 1.0);
 	voTexCoords = viTexCoords;
 }
