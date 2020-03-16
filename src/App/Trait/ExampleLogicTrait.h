@@ -1,10 +1,9 @@
-#ifndef _TRAIT_EXAMPLE_LOGIC_H_
-#define _TRAIT_EXAMPLE_LOGIC_H_
+#pragma once
 
 #include <Bromine/Trait/LogicTrait.h>
 #include <Bromine/Trait/EventTrait.h>
 
-namespace BromineEngine {
+using namespace BromineEngine;
 
 class ExampleLogicTrait : public LogicTrait, public EventDelegate {
 DECLARE_TRAIT(LogicServer)
@@ -23,7 +22,3 @@ public:
 
 	void onKeyEvent(const KeyboardEvent& event) override;
 };
-
-}
-
-#endif

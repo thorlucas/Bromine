@@ -1,10 +1,9 @@
-#ifndef _TRAIT_SECOND_EXAMPLE_LOGIC_
-#define _TRAIT_SECOND_EXAMPLE_LOGIC_
+#pragma once
 
 #include <Bromine/Trait/LogicTrait.h>
 #include <cmath>
 
-namespace BromineEngine {
+using namespace BromineEngine;
 
 class SecondExampleLogicTrait : public LogicTrait {
 DECLARE_TRAIT(LogicServer)
@@ -21,7 +20,3 @@ protected:
 public:
 	~SecondExampleLogicTrait();
 };
-
-}
-
-#endif

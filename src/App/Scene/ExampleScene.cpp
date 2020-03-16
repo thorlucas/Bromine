@@ -10,8 +10,6 @@
 #include <Bromine/Server/RenderServer.h>
 #include <Bromine/Server/NodeServer.h>
 
-namespace BromineEngine {
-
 ExampleScene::ExampleScene() {
 	Node& rootnref = Bromine::node(rootNode);
 
@@ -37,6 +35,4 @@ ExampleScene::~ExampleScene() {}
 
 void ExampleScene::loadScene() {
 	Scene::loadScene();
-}
-
 }

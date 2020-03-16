@@ -1,8 +1,6 @@
 #include "SecondExampleLogicTrait.h"
 #include <Bromine/Trait/ParticleRenderTrait.h>
 
-namespace BromineEngine {
-
 DEFINE_TRAIT(SecondExampleLogicTrait, LogicTrait)
 
 SecondExampleLogicTrait::SecondExampleLogicTrait(const NodeID owner) : CONSTRUCT_TRAIT(SecondExampleLogicTrait, LogicTrait) {}
@@ -20,6 +18,4 @@ void SecondExampleLogicTrait::initialize() {
 void SecondExampleLogicTrait::update(double delta) {
 	// (*ownerPosition) += Vec2d(cos(angle), sin(angle)) * 50.0 * delta;
 	// angle += ((rand() % 1000) - 500) / 50.0 * delta;
-}
-
 }

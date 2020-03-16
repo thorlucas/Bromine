@@ -1,8 +1,6 @@
 #include "ExampleLogicTrait.h"
 #include <Bromine/Trait/SpriteRenderTrait.h>
 
-namespace BromineEngine {
-
 DEFINE_TRAIT(ExampleLogicTrait, LogicTrait)
 
 ExampleLogicTrait::ExampleLogicTrait(const NodeID owner) : CONSTRUCT_TRAIT(ExampleLogicTrait, LogicTrait) {
@@ -43,6 +41,4 @@ void ExampleLogicTrait::onKeyEvent(const KeyboardEvent& event) {
 		default:
 			break;
 	}
-}
-
 }

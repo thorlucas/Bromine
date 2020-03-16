@@ -1,9 +1,8 @@
-#ifndef _EXAMPLE_SCENE_H_
-#define _EXAMPLE_SCENE_H_
+#pragma once
 
 #include <Bromine/Scene/Scene.h>
 
-namespace BromineEngine {
+using namespace BromineEngine;
 
 class ExampleScene : public Scene {
 public:
@@ -12,7 +11,3 @@ public:
 
 	void loadScene();
 };
-
-}
-
-#endif // _EXAMPLE_SCENE_H_
