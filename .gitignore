@@ -3,3 +3,6 @@
 build
 lib/*
 bin/*
+
+*.sublime-workspace
+*.sublime-project
