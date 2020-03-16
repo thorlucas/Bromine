@@ -3,11 +3,6 @@
 
 namespace BromineEngine {
 
-/**
- * Pool size of render contexts.
- */
-const unsigned int renderContextPoolSize = 500;
-
 }
 
 #endif // _CONFIG_RENDER_H_

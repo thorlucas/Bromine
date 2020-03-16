@@ -6,7 +6,6 @@ namespace BromineEngine {
 
 Bromine::Bromine() :
 	serverClosures(autoloadServerClosures),
-
 	nodeServer(getServer<NodeServer>()),
 	renderServer(getServer<RenderServer>()),
 	eventServer(getServer<EventServer>()),

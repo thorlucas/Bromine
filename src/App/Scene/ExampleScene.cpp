@@ -1,10 +1,12 @@
 #include "ExampleScene.h"
+
+#include <App/Trait/ExampleLogicTrait.h>
+#include <App/Trait/SecondExampleLogicTrait.h>
+
 #include <Bromine/Bromine.h>
 #include <Bromine/Trait/SpriteRenderTrait.h>
 #include <Bromine/Trait/PointRenderTrait.h>
 #include <Bromine/Trait/EventTrait.h>
-#include <Bromine/Trait/ExampleLogicTrait.h>
-#include <Bromine/Trait/SecondExampleLogicTrait.h>
 #include <Bromine/Server/RenderServer.h>
 #include <Bromine/Server/NodeServer.h>
 
