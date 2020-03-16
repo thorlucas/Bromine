@@ -1,245 +1,57 @@
-#ifndef _VEC_H_
-#define _VEC_H_
+#pragma once
 
-#include <type_traits>
-#include <cstdarg>
-#include <cstring>
-#include <algorithm>
-#include <initializer_list>
+#include <glm/glm.hpp>
+#include <glm/gtx/string_cast.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace BromineEngine {
+	using Vec2 = glm::vec2;
+	using Vec3 = glm::vec3;
+	using Vec4 = glm::vec4;
 
-#define T_IS_ARITHMETIC typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type
+	using Vec2f = glm::vec2;
+	using Vec3f = glm::vec3;
+	using Vec4f = glm::vec4;
 
-template<bool...> struct boolPack;
-template<bool ...Bs> 
-using allTrue = std::is_same<boolPack<Bs..., true>, boolPack<true, Bs...>>;
+	using Vec2d = glm::dvec2;
+	using Vec3d = glm::dvec3;
+	using Vec4d = glm::dvec4;
 
-template<class R, class... Ts>
-using allConvertible = allTrue<std::is_convertible<Ts, R>::value...>;
+	using Vec2b = glm::bvec2;
+	using Vec3b = glm::bvec3;
+	using Vec4b = glm::bvec4;
 
-template <std::size_t N, typename T, T_IS_ARITHMETIC>
-struct Vec {
-	T xs[N];
+	using Vec2i = glm::ivec2;
+	using Vec3i = glm::ivec3;
+	using Vec4i = glm::ivec4;
 
-	Vec() {
-		memset(xs, 0, sizeof(T) * N);
+	using Vec2u = glm::uvec2;
+	using Vec3u = glm::uvec3;
+	using Vec4u = glm::uvec4;
+
+	using  Mat2f 	= glm::mat2;
+	using  Mat2x2f 	= glm::mat2x2;
+	using  Mat2x3f 	= glm::mat2x3;
+	using  Mat2x4f 	= glm::mat2x4;
+
+	using  Mat3x2f 	= glm::mat3x2;
+	using  Mat3f 	= glm::mat3;
+	using  Mat3x3f 	= glm::mat3x3;
+	using  Mat3x4f 	= glm::mat3x4;
+
+	using  Mat4x2f 	= glm::mat4x2;
+	using  Mat4x3f 	= glm::mat4x3;
+	using  Mat4f 	= glm::mat4;
+	using  Mat4x4f 	= glm::mat4x4;
+
+	template <glm::length_t C, glm::length_t R, typename T> 
+	using Mat = glm::mat<C, R, T>; // TODO: defaultp isn't anything?
+
+	template <glm::length_t R, typename T>
+	using Vec = glm::vec<R, T>;
+
+	template <typename M>
+	inline std::string matrixToString(M& mat) {
+		return glm::to_string(mat);
 	}
-
-	// copy constructor
-	Vec(const Vec<N, T>& vec) {
-		std::memcpy(xs, vec.xs, N * sizeof(T));
-	}
-
-	template <typename U, typename = typename std::enable_if<std::is_convertible<U, T>::value, U>::type>
-	Vec(const Vec<N, U>& v) {
-		std::copy(v.xs, v.xs + N, xs);
-	}
-
-	Vec(Vec<N, T>&& v) {
-		using std::swap;
-
-		swap(xs, v.xs);
-	}
-
-	Vec<N, T>& operator=(Vec<N, T> v) {
-		swap(*this, v);
-		return *this;
-	}
-
-	template <typename ...Us, typename = typename std::enable_if<allConvertible<double, Us...>::value>::type>
-	Vec(Us&&... us) : xs{static_cast<T>(us)...} {}
-
-	// Vec(std::initializer_list<T> _xs) {
-	// 	std::copy(_xs.begin(), _xs.end(), xs);
-	// }
-
-	template <typename U>
-	friend void swap(Vec<N, U>& v, Vec<N, U>& u) {
-		using std::swap;
-
-		swap(v.xs, u.xs);
-	}
-
-	T& operator[](std::size_t i) {
-		return xs[i];
-	}
-
-	T operator[](std::size_t i) const {
-		return xs[i];
-	}
-};
-
-
-// Specializations
-
-// template <typename T>
-// struct Vec<2, T> {
-// 	union {
-// 		T xs[2];
-// 		struct {
-// 			T x0;
-// 			T x1;
-// 		};
-// 		struct {
-// 			T x;
-// 			T y;
-// 		};
-// 		struct {
-// 			T w;
-// 			T h;
-// 		};
-// 	};
-
-// 	Vec() {
-// 		x0 = 0; x1 = 0;
-// 	}
-
-// 	Vec(T _x0, T _x1) {
-// 		x0 = _x0; x1 = _x1;
-// 	}
-
-// 	T& operator[](std::size_t i) {
-// 		return xs[i];
-// 	}
-
-// 	T operator[](std::size_t i) const {
-// 		return xs[i];
-// 	}
-// };
-
-// template <typename T>
-// struct Vec<3, T> {
-// 	union {
-// 		T xs[3];
-// 		struct {
-// 			T x0;
-// 			T x1;
-// 			T x2;
-// 		};
-// 		struct {
-// 			T x;
-// 			T y;
-// 			T z;
-// 		};
-// 		struct {
-// 			T w;
-// 			T h;
-// 			T l;
-// 		};
-// 	};
-
-// 	Vec() {
-// 		x0 = 0; x1 = 0; x2 = 0;
-// 	}
-
-// 	Vec(T _x0, T _x1, T _x2) {
-// 		x0 = _x0; x1 = _x1; x2 = _x2;
-// 	}
-
-// 	T& operator[](std::size_t i) {
-// 		return xs[i];
-// 	}
-
-// 	T operator[](std::size_t i) const {
-// 		return xs[i];
-// 	}
-// };
-
-// Typedefs
-
-typedef Vec<2, double> Vec2;
-typedef Vec<3, double> Vec3;
-
-typedef Vec<2, double> Vec2d;
-typedef Vec<3, double> Vec3d;
-
-typedef Vec<2, int> Vec2i;
-typedef Vec<3, int> Vec3i;
-
-// TODO: Not working?
-typedef Vec<2, float> Vec2f;
-typedef Vec<3, float> Vec3f;
-
-// Operators
-
-// Dot Product
-template<std::size_t N, typename T, typename U>
-auto operator*(const Vec<N, T>& lhs, const Vec<N, U>& rhs) -> decltype(std::declval<T>() * std::declval<U>()) {
-	decltype(std::declval<T>() * std::declval<U>()) acc = 0;
-	for (int i = 0; i < N; ++i) {
-		acc += lhs[i] * rhs[i];
-	}
-	return acc;
 }
-
-
-// Vector Addition
-// TODO: possible rvalue type optimization?
-template<std::size_t N, typename T, typename U>
-auto operator+(const Vec<N, T>& lhs, const Vec<N, U>& rhs) -> Vec<N, decltype(std::declval<T>() + std::declval<U>())> {
-	Vec<N, decltype(std::declval<T>() + std::declval<U>())> v;
-	for (int i = 0; i < N; ++i) {
-		v[i] = lhs[i] + rhs[i];
-	}
-	return v;
-}
-
-template<std::size_t N, typename T, typename U>
-Vec<N, T>& operator+=(Vec<N, T>& lhs, const Vec<N, U>& rhs) {
-	for (int i = 0; i < N; ++i) {
-		lhs[i] += rhs[i];
-	}
-	return lhs;
-}
-
-
-// Vector Subtraction
-template<std::size_t N, typename T, typename U>
-auto operator-(const Vec<N, T>& lhs, const Vec<N, U>& rhs) -> Vec<N, decltype(std::declval<T>() - std::declval<U>())> {
-	Vec<N, decltype(std::declval<T>() - std::declval<U>())> v;
-	for (int i = 0; i < N; ++i) {
-		v[i] = lhs[i] - rhs[i];
-	}
-	return v;
-}
-
-template<std::size_t N, typename T, typename U>
-Vec<N, T>& operator-=(Vec<N, T>& lhs, const Vec<N, U>& rhs) {
-	for (int i = 0; i < N; ++i) {
-		lhs[i] -= rhs[i];
-	}
-	return lhs;
-}
-
-
-// Scalar Multiplication
-template<std::size_t N, typename T, typename U, T_IS_ARITHMETIC>
-auto operator*(const T& lhs, const Vec<N, U>& rhs) -> Vec<N, decltype(std::declval<T>() * std::declval<U>())> {
-	Vec<N, decltype(std::declval<T>() * std::declval<U>())> v;
-	for (int i = 0; i < N; ++i) {
-		v[i] = lhs * rhs[i];
-	}
-	return v;
-}
-
-template<std::size_t N, typename T, typename U, T_IS_ARITHMETIC>
-auto operator*(const Vec<N, U>& lhs, const T& rhs) -> Vec<N, decltype(std::declval<T>() * std::declval<U>())> {
-	Vec<N, decltype(std::declval<T>() * std::declval<U>())> v;
-	for (int i = 0; i < N; ++i) {
-		v[i] = rhs * lhs[i];
-	}
-	return v;
-}
-
-template<std::size_t N, typename T, typename U, T_IS_ARITHMETIC>
-Vec<N, U>& operator*=(Vec<N, U>& lhs, const T rhs) {
-	for (int i = 0; i < N; ++i) {
-		lhs[i] *= rhs;
-	}
-	return lhs;
-}
-
-} // namespace
-
-#endif

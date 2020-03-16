@@ -47,11 +47,11 @@ void Node::activate() {
 // 	return capabilities.find(capability) != capabilities.end();
 // }
 
-Vec2d& Node::position() {
+Vec2f& Node::position() {
 	return _position;
 }
 
-Vec2d Node::position() const {
+Vec2f Node::position() const {
 	return _position;
 }
 

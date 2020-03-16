@@ -14,14 +14,14 @@ ExampleScene::ExampleScene() {
 	Node& rootnref = Bromine::node(rootNode);
 
 	Node& spriteNode = Bromine::node()
-		->position(Vec2d(static_cast<double>(rand() % 1280), static_cast<double>(rand() % 720)))
+		->position(Vec2f(rand() % 1280, rand() % 720))
 		->trait<EventTrait>()
-		->trait<SpriteRenderTrait>(Bromine::server<RenderServer>().loadTexture("Bromine.png"), Vec2d(0.2, 0.2))
+		->trait<SpriteRenderTrait>(Bromine::server<RenderServer>().loadTexture("Bromine.png"), Vec2f(0.2, 0.2))
 		->trait<ExampleLogicTrait>()
 	->create();
 
 	Node& pointNode = Bromine::node()
-		->position(Vec2d(200.0, 200.0))
+		->position(Vec2f(200.0, 200.0))
 		->trait<PointRenderTrait>(Vec3d(0.0, 1.0, 1.0))
 	->create();
 

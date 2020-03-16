@@ -98,8 +98,8 @@ private:
 	 * TODO: There must be a cleaner way?
 	 */
 	SDL_Rect destination;
-	Vec2d globalPos;
-	std::stack<Vec2d*> relPosStack;
+	Vec2f globalPos;
+	std::stack<Vec2f*> relPosStack;
 	bool drawCustomFlag;
 	bool drawImmediateFlag;
 
@@ -115,17 +115,17 @@ private:
 
 		union {
 			struct {
-				Vec2d* relPos;
+				Vec2f* relPos;
 			} pushRelPos;
 
 			struct {
-				Vec2d* relPos;
+				Vec2f* relPos;
 				Vec3d* color;
 			} drawPoint;
 
 			struct {
-				Vec2d* relPos;
-				Vec2d* scale;
+				Vec2f* relPos;
+				Vec2f* scale;
 				Resource* texture;
 			} drawTexture;
 
@@ -145,8 +145,8 @@ private:
 	
 	void renderNode(Node& node);
 
-	void drawPointImmediate(Vec2d* pos, Vec3d* color);
-	void drawTextureImmediate(Vec2d* relPos, Vec2d* scale, Resource* texture);
+	void drawPointImmediate(Vec2f* pos, Vec3d* color);
+	void drawTextureImmediate(Vec2f* relPos, Vec2f* scale, Resource* texture);
 	void switchShaderProgramImmediate(ShaderProgram program);
 
 public:
@@ -154,8 +154,8 @@ public:
 	~RenderServer();	
 	// TODO: Make a seperate class that I can pass to the traits for this
 
-	void drawPoint(Vec2d* pos, Vec3d* color);
-	void drawTexture(Vec2d* pos, Vec2d* scale, ResourceID texture);
+	void drawPoint(Vec2f* pos, Vec3d* color);
+	void drawTexture(Vec2f* pos, Vec2f* scale, ResourceID texture);
 	void enableCustomDrawing(RenderTrait* trait);
 	void switchShaderProgram(ShaderProgram program);
 

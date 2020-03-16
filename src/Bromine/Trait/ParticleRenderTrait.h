@@ -23,9 +23,9 @@ protected:
 
 public:
 	Particle* spawnParticle();
-	Particle* spawnParticle(Vec2d pos);
+	Particle* spawnParticle(Vec2f pos);
 	Particle* spawnParticle(unsigned int lifetime);
-	Particle* spawnParticle(Vec2d pos, unsigned int lifetime);
+	Particle* spawnParticle(Vec2f pos, unsigned int lifetime);
 
 	void killParticle(Particle* p);
 };
@@ -36,7 +36,7 @@ public:
 
 	union {
 		struct {
-			Vec2d pos;
+			Vec2f pos;
 			Particle* nextAlive;
 			Particle* lastAlive;
 		};

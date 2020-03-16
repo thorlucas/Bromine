@@ -40,18 +40,18 @@ void ParticleRenderTrait::render() {
 }
 
 Particle* ParticleRenderTrait::spawnParticle() {
-	return spawnParticle(Vec2d(0.0, 0.0), 1);
+	return spawnParticle(Vec2f(0.0, 0.0), 1);
 }
 
-Particle* ParticleRenderTrait::spawnParticle(Vec2d pos) {
+Particle* ParticleRenderTrait::spawnParticle(Vec2f pos) {
 	return spawnParticle(pos, 1);
 }
 
 Particle* ParticleRenderTrait::spawnParticle(unsigned int lifetime) {
-	return spawnParticle(Vec2d(0.0, 0.0), lifetime);
+	return spawnParticle(Vec2f(0.0, 0.0), lifetime);
 }
 
-Particle* ParticleRenderTrait::spawnParticle(Vec2d pos, unsigned int lifetime) {
+Particle* ParticleRenderTrait::spawnParticle(Vec2f pos, unsigned int lifetime) {
 	Particle* p = firstDead;
 	firstDead = p->nextDead;
 
@@ -86,6 +86,6 @@ void ParticleRenderTrait::killParticle(Particle* p) {
 	firstDead = p;
 }
 
-Particle::Particle() : pos(Vec2d(0.0, 0.0)) {}
+Particle::Particle() : pos(Vec2f(0.0, 0.0)) {}
 
 }

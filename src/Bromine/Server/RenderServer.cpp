@@ -295,7 +295,7 @@ Resource& RenderServer::getResource(ResourceID resource) {
 }
 
 // Drawing functions
-void RenderServer::drawPoint(Vec2d* pos, Vec3d* color) {
+void RenderServer::drawPoint(Vec2f* pos, Vec3d* color) {
 	if (drawCustomFlag) return;
 	if (drawImmediateFlag) {
 		switchShaderProgramImmediate(pointShaderProgram);
@@ -314,7 +314,7 @@ void RenderServer::drawPoint(Vec2d* pos, Vec3d* color) {
 	instructions.push_back(instruction);
 }
 
-void RenderServer::drawTexture(Vec2d* pos, Vec2d* scale, ResourceID texture) {
+void RenderServer::drawTexture(Vec2f* pos, Vec2f* scale, ResourceID texture) {
 	if (drawCustomFlag) return;
 	if (drawImmediateFlag) {
 		switchShaderProgramImmediate(textureShaderProgram);
@@ -360,7 +360,7 @@ void RenderServer::enableCustomDrawing(RenderTrait* trait) {
 	drawCustomFlag = true;
 }
 
-void RenderServer::drawPointImmediate(Vec2d* relPos, Vec3d* color) {
+void RenderServer::drawPointImmediate(Vec2f* relPos, Vec3d* color) {
 	glBindVertexArray(pointVAO);
 
 	float pointData[] = {
@@ -373,7 +373,7 @@ void RenderServer::drawPointImmediate(Vec2d* relPos, Vec3d* color) {
 	glBindVertexArray(0);
 }
 
-void RenderServer::drawTextureImmediate(Vec2d* relPos, Vec2d* scale, Resource* texture) {
+void RenderServer::drawTextureImmediate(Vec2f* relPos, Vec2f* scale, Resource* texture) {
 	glm::mat4 model(1.0f);
 	model = glm::translate(model, glm::vec3((*relPos)[0], (*relPos)[1], 0.0f));
 	model = glm::scale(model, glm::vec3(texture->texture->width, texture->texture->height, 1.0f));

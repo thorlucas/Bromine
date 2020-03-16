@@ -25,7 +25,7 @@ protected:
 
 	std::vector<Trait*> traits;
 
-	Vec2d _position;
+	Vec2f _position;
 
 	Node(NodeID id);
 	void setParent(NodeID parent);
@@ -35,8 +35,8 @@ public:
 
 	~Node();
 
-	Vec2d& position();
-	Vec2d position() const;
+	Vec2f& position();
+	Vec2f position() const;
 
 	template <typename T, typename ...Ps>
 	T& addTrait(Ps&&... ps) {

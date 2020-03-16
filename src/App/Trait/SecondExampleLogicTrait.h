@@ -8,7 +8,7 @@ using namespace BromineEngine;
 class SecondExampleLogicTrait : public LogicTrait {
 DECLARE_TRAIT(LogicServer)
 private:
-	Vec2d* ownerPosition;
+	Vec2f* ownerPosition;
 	double angle;
 
 protected:

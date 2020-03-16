@@ -89,7 +89,7 @@ public:
  * Node& node = Bromine::node()
  *     ->trait<Foo>(fooArgs)
  *     ->trait<Bar>(barArgs)
- *	   ->position(Vec2d(100.0, 100.0))
+ *	   ->position(Vec2f(100.0, 100.0))
  *     ->create()
  */
 template <typename N>
@@ -123,7 +123,7 @@ public:
 	 * @param position the new position of the node
 	 * @returns the node builder itself for chaining
 	 */
-	NodeBuilder* position(Vec2d position) {
+	NodeBuilder* position(Vec2f position) {
 		node.position() = position;
 
 		return this;

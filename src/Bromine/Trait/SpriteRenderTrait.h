@@ -9,18 +9,18 @@ class SpriteRenderTrait : public RenderTrait {
 DECLARE_TRAIT(RenderServer)
 private:
 	ResourceID texture;
-	Vec2d _scale;
+	Vec2f _scale;
 
 protected:
 	SpriteRenderTrait(const NodeID owner, ResourceID texture);
-	SpriteRenderTrait(const NodeID owner, ResourceID texture, Vec2d scale);
+	SpriteRenderTrait(const NodeID owner, ResourceID texture, Vec2f scale);
 
 	virtual void render() override;
 
 public:
 
-	Vec2d& scale();
-	Vec2d scale() const;
+	Vec2f& scale();
+	Vec2f scale() const;
 };
 
 }

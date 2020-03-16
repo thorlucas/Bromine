@@ -8,7 +8,7 @@ using namespace BromineEngine;
 class ExampleLogicTrait : public LogicTrait, public EventDelegate {
 DECLARE_TRAIT(LogicServer)
 private:
-	Vec2d* spritePosition;
+	Vec2f* spritePosition;
 	bool movingLeft, movingRight, movingUp, movingDown;
 
 protected:
