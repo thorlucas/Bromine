@@ -1,8 +1,8 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
-#include "../Scene/Scene.h"
-#include "../Scene/ExampleScene.h"
+#include <Bromine/Scene/Scene.h>
+#include <App/Scene/ExampleScene.h>
 
 namespace BromineEngine {
 

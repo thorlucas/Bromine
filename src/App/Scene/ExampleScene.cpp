@@ -1,12 +1,12 @@
 #include "ExampleScene.h"
-#include "../Bromine.h"
-#include "../Trait/SpriteRenderTrait.h"
-#include "../Trait/PointRenderTrait.h"
-#include "../Trait/EventTrait.h"
-#include "../Trait/ExampleLogicTrait.h"
-#include "../Trait/SecondExampleLogicTrait.h"
-#include "../Server/RenderServer.h"
-#include "../Server/NodeServer.h"
+#include <Bromine/Bromine.h>
+#include <Bromine/Trait/SpriteRenderTrait.h>
+#include <Bromine/Trait/PointRenderTrait.h>
+#include <Bromine/Trait/EventTrait.h>
+#include <Bromine/Trait/ExampleLogicTrait.h>
+#include <Bromine/Trait/SecondExampleLogicTrait.h>
+#include <Bromine/Server/RenderServer.h>
+#include <Bromine/Server/NodeServer.h>
 
 namespace BromineEngine {
 

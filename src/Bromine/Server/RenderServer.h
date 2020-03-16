@@ -10,8 +10,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../Config/Config.h"
-#include "../Config/RenderConfig.h"
+#include <Config/Config.h>
+#include <Config/RenderConfig.h>
 
 #include "Server.h"
 

@@ -7,11 +7,11 @@
 #include <typeinfo>
 #include <typeindex>
 
-#include "../Server/Server.h"
-#include "../Server/NodeServer.h"
-#include "../Server/RenderServer.h"
-#include "../Server/EventServer.h"
-#include "../Server/LogicServer.h"
+#include <Bromine/Server/Server.h>
+#include <Bromine/Server/NodeServer.h>
+#include <Bromine/Server/RenderServer.h>
+#include <Bromine/Server/EventServer.h>
+#include <Bromine/Server/LogicServer.h>
 
 #define REG_SERVER(name, function) { typeid(name), function }
 #define SERVER_TYPE(name) typeid(name)

@@ -1,5 +1,5 @@
 #include "ExampleLogicTrait.h"
-#include "SpriteRenderTrait.h"
+#include <Bromine/Trait/SpriteRenderTrait.h>
 
 namespace BromineEngine {
 

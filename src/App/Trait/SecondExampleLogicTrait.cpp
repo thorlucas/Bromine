@@ -1,5 +1,5 @@
 #include "SecondExampleLogicTrait.h"
-#include "ParticleRenderTrait.h"
+#include <Bromine/Trait/ParticleRenderTrait.h>
 
 namespace BromineEngine {
 

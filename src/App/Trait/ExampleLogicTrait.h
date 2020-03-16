@@ -1,8 +1,8 @@
 #ifndef _TRAIT_EXAMPLE_LOGIC_H_
 #define _TRAIT_EXAMPLE_LOGIC_H_
 
-#include "LogicTrait.h"
-#include "EventTrait.h"
+#include <Bromine/Trait/LogicTrait.h>
+#include <Bromine/Trait/EventTrait.h>
 
 namespace BromineEngine {
 

@@ -1,7 +1,7 @@
 #ifndef _EXAMPLE_SCENE_H_
 #define _EXAMPLE_SCENE_H_
 
-#include "Scene.h"
+#include <Bromine/Scene/Scene.h>
 
 namespace BromineEngine {
 

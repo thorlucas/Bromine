@@ -1,6 +1,6 @@
 #include "Bromine.h"
 
-#include "Config/ServersConfig.h"
+#include <Config/ServersConfig.h>
 
 namespace BromineEngine {
 

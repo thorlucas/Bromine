@@ -3,7 +3,7 @@
 
 #include <cstdio>
 #include <cstdarg>
-#include "../Config/LogConfig.h"
+#include <Config/LogConfig.h>
 
 namespace BromineEngine {
 

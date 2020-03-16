@@ -1,4 +1,4 @@
-#include "Bromine.h"
+#include <Bromine/Bromine.h>
 
 using namespace BromineEngine;
 

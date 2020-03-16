@@ -1,7 +1,7 @@
 #ifndef _TRAIT_SECOND_EXAMPLE_LOGIC_
 #define _TRAIT_SECOND_EXAMPLE_LOGIC_
 
-#include "LogicTrait.h"
+#include <Bromine/Trait/LogicTrait.h>
 #include <cmath>
 
 namespace BromineEngine {

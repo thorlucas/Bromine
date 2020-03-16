@@ -9,7 +9,7 @@ SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
 LIB := -L lib -framework OpenGL -lglew -lSDL2 -lSDL2_image
-INC := -I include
+INC := -I include -I src
 INCLUDES := $(shell find include -type f -name *.h)
 
 $(TARGET): $(OBJECTS) $(INCLUDES)
