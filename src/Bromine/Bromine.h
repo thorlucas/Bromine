@@ -104,10 +104,11 @@ public:
 	static Node& node(NodeID node);
 
 	// TODO: Can't make alias because NodeServer is an incomplete type... shit
-	// template <typename N>
-	// static decltype(Bromine::instance().nodeServer.buildNode<N>()) node() {
-	// 	return Bromine::instance().nodeServer.buildNode<N>();
+	// template <typename N, typename ...Ps>
+	// static NodeBuilder<N> node(Ps&&... ps) {
+	// 	return Bromine::instance().nodeServer.buildNode<N>(ps);
 	// }
+	static NodeBuilder<Node>* node();
 
 	// static decltype(Bromine::instance().nodeServer.buildNode()) node() {
 	// 	return Bromine::instance().nodeServer.buildNode();

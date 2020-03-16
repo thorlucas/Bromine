@@ -35,29 +35,6 @@ protected:
 	NodeID requestID();
 	void activate(NodeID node) {}
 	void update(double delta) {}
-
-	// TODO: I don't think we need another function for this
-	// template <typename N>
-	// N& createNodeFromBuilder(NodeBuilder<N>* builder) {
-	// 	N& nref = *(new N(builder->nodeID, builder->capabilities));
-	// 	nodeMap.insert(std::pair<NodeID, Node&>(nref.id, static_cast<Node&>(nref)));
-
-	// 	delete builder;
-
-	// 	Bromine::log(Logger::DEBUG, "Created node with ID %d: %p", nref.id, &nref);
-	// 	return nref;
-	// }
-
-	// template <typename N, typename ...Ps>
-	// N& createNodeFromBuilder(NodeBuilder<N>* builder, Ps&&... ps) {
-	// 	N& nref = *(new N(builder->nodeID, builder->capabilities, std::forward(ps...)));
-	// 	nodeMap.insert(std::pair<NodeID, Node&>(nref.id, static_cast<Node&>(nref)));
-
-	// 	delete builder;
-
-	// 	Bromine::log(Logger::DEBUG, "Created node with ID %d: %p", nref.id, &nref);
-	// 	return nref;
-	// }
 	
 public:
 	NodeServer();
@@ -71,9 +48,9 @@ public:
 	/**
 	 * @returns a reference to a new empty node (no traits) of type N.
 	 */
-	template <typename N>
-	N& createEmptyNode() {
-		N& nref = *(new N(requestID()));
+	template <typename N, typename ...Ps>
+	N& createEmptyNode(Ps&&... ps) {
+		N& nref = *(new N(requestID(), ps...));
 		nodeMap.insert(std::pair<NodeID, Node&>(nref.id, static_cast<Node&>(nref)));
 
 		Bromine::log(Logger::DEBUG, "Created node with ID %d: %p", nref.id, &nref);
@@ -94,17 +71,10 @@ public:
 	 *
 	 * @returns a pointer to the node builder.
 	 */
-	// template <typename N>
-	// NodeBuilder<N>* buildNode() {
-	// 	return new NodeBuilder<N>(*this, requestID());
-	// }
-
-	/**
-	 * Starts building a node. See buildNode<N>().
-	 *
-	 * @returns a pointer to the node builder.
-	 */
-	// NodeBuilder<Node>* buildNode();
+	template <typename N, typename ...Ps>
+	NodeBuilder<N>* buildNode(Ps&&... ps) {
+		return new NodeBuilder<N>(*this, createEmptyNode<N>(ps...));
+	}
 };
 
 /**
@@ -117,60 +87,57 @@ public:
  * It's functions can all be chained together for ease of use,
  * for example:
  * Node& node = Bromine::node()
- *     ->addTrait<Foo>(fooArgs)
- *     ->addTrait<Bar>(barArgs)
+ *     ->trait<Foo>(fooArgs)
+ *     ->trait<Bar>(barArgs)
+ *	   ->position(Vec2d(100.0, 100.0))
  *     ->create()
  */
-// template <typename N>
-// class NodeBuilder {
-// friend class NodeServer;
-// private:
-// 	NodeServer& nodeServer;
+template <typename N>
+class NodeBuilder {
+friend class NodeServer;
+private:
+	NodeServer& nodeServer;
+	Node& node;
 	
-// protected:
-// 	const NodeID nodeID;
-// 	std::set<std::type_index> capabilities;
+protected:
 
-// 	NodeBuilder(NodeServer& nodeServer, const NodeID nodeID) : nodeServer(nodeServer), nodeID(nodeID) {};
+	NodeBuilder(NodeServer& nodeServer, Node& emptyNode) : nodeServer(nodeServer), node(emptyNode) {}
 
-// public:
-// 	/**
-// 	 * Adds the trait T to the node being built.
-// 	 * 
-// 	 * @param ps are the parameters forwarded to the trait constructor
-// 	 * @returns the node builder itself for chaining
-// 	 */
-// 	template <typename T, typename ...Ps>
-// 	NodeBuilder* addTrait(Ps&&... ps) {
-// 		T& trait = Bromine::server<typename T::serverType>().template createTrait<T>(nodeID, std::forward<Ps>(ps)...);
-// 		auto ret = capabilities.insert(typeid(typename T::serverType));
-		
-// 		// TODO: Why not?
-// 		if (!ret.second) throw std::invalid_argument("Node builder can't add multiple traits for the same server.");
+public:
+	/**
+	 * Adds the trait T to the node being built.
+	 * 
+	 * @param ps are the parameters forwarded to the trait constructor
+	 * @returns the node builder itself for chaining
+	 */
+	template <typename T, typename ...Ps>
+	NodeBuilder* trait(Ps&&... ps) {
+		node.addTrait<T>(ps...);
 
-// 		return this;
-// 	}
+		return this;
+	}
 
-// 	/**
-// 	 * Creates the node.
-// 	 *
-// 	 * @returns a reference to the new node.
-// 	 */
-// 	N& create() {
-// 		return nodeServer.createNodeFromBuilder<N>(this);
-// 	}
+	/**
+	 * Sets the node's position.
+	 *
+	 * @param position the new position of the node
+	 * @returns the node builder itself for chaining
+	 */
+	NodeBuilder* position(Vec2d position) {
+		node.position() = position;
 
-// 	/**
-// 	 * Creates the node with parameters.
-// 	 *
-// 	 * @param ps are the parameters forwarded to the node's constructor.
-// 	 * @returns a reference to the new node.
-// 	 */
-// 	template <typename ...Ps>
-// 	N& create(Ps&&... ps) {
-// 		return nodeServer.createNodeFromBuilder<N>(this, std::forward<Ps>(ps)...);
-// 	}
-// };
+		return this;
+	}
+
+	/**
+	 * Creates the node.
+	 *
+	 * @returns a reference to the new node.
+	 */
+	N& create() {
+		return node;
+	}
+};
 
 }
 
