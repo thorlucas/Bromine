@@ -67,7 +67,7 @@ public:
 	 * builder, and each subsequent call to the builder also returns a pointer,
 	 * except the create() function. This means the node builder can be chained.
 	 *
-	 * TODO: Replace with a reference so that it cant be acci
+	 * @param ps the parameters passed to the new Node.
 	 *
 	 * @returns a pointer to the node builder.
 	 */
