@@ -5,6 +5,7 @@ namespace BromineEngine {
 
 DEFINE_TRAIT_SERVER(EventServer, EventTrait)
 DEFINE_DEFAULT_SERVER_ACTIVATE_TRAIT_STANDARD(EventServer, EventTrait)
+DEFINE_TRAIT_SERVER_DESTROY_TRAIT_STANDARD(EventServer, EventTrait)
 
 void EventServer::update(double delta) {
 	while (SDL_PollEvent(&sdlEvent)) {

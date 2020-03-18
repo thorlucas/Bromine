@@ -19,9 +19,9 @@ protected:
 	virtual void initialize() {};
 
 	bool initialized; // TODO: !!! This is stupid!
-	const NodeID ownerID;
 
 public:
+	const NodeID ownerID;
 	static const std::size_t type;
 
 	virtual bool isTraitType(const std::size_t traitType) const {

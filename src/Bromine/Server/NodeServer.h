@@ -75,6 +75,8 @@ public:
 	NodeBuilder<N>* buildNode(Ps&&... ps) {
 		return new NodeBuilder<N>(*this, createEmptyNode<N>(ps...));
 	}
+
+	void destroyNode(NodeID id);
 };
 
 /**

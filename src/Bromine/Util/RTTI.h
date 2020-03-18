@@ -15,6 +15,7 @@ public:																		\
 	typedef serverName serverType;											\
 	virtual void activate() override;										\
 	virtual void deactivate() override;										\
+	void destroy();															\
 DECLARE_TRAIT(serverName)													\
 
 // This must be included in each trait's definition file
@@ -36,6 +37,10 @@ void traitName::activate() {												\
 void traitName::deactivate() {												\
 	server.deactivateTrait(this);											\
 }																			\
+void traitName::destroy() {													\
+	deactivate();															\
+	server.destroy(this);													\
+}																			\
 DEFINE_TRAIT(traitName, Trait)												\
 
 // Must be included in trait constructor list
@@ -55,6 +60,7 @@ private:																	\
 protected:																	\
 	void activateTrait(traitName* trait);									\
 	void deactivateTrait(traitName* trait);									\
+	void destroyTrait(traitName* trait);									\
 public:																		\
 	auto getTraits(NodeID node) -> decltype(nodeMap.find(node));			\
 	traitName& getTrait(NodeID node);										\
@@ -98,3 +104,13 @@ public:																		\
 			" for Node %d: %p", node, &tref);								\
 		return tref;														\
 	}																		\
+
+#define DEFINE_TRAIT_SERVER_DESTROY_TRAIT_STANDARD(serverName, traitName)	\
+void serverName::destroyTrait(traitName* trait) {							\
+	nodeMap.erase(trait->ownerID);											\
+	Bromine::log(Logger::DEBUG, "Destroyed " #traitName						\
+		" for Node %d: %p", trait->ownerID, trait);							\
+	delete trait;															\
+}																			\
+
+// TODO: Destroy trait should be in a .cpp file

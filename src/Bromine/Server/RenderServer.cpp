@@ -5,6 +5,7 @@
 namespace BromineEngine {
 
 DEFINE_TRAIT_SERVER(RenderServer, RenderTrait)
+DEFINE_TRAIT_SERVER_DESTROY_TRAIT_STANDARD(RenderServer, RenderTrait)
 
 Texture::Texture(uint32_t width, uint32_t height, void* pixels) : width(width), height(height), pixels(pixels) {
 	glGenTextures(1, &glTexture);

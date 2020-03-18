@@ -25,4 +25,9 @@ Node& NodeServer::getNode(NodeID id) {
 	return nodeMap.at(id);
 }
 
+void NodeServer::destroyNode(NodeID id) {
+	delete &(nodeMap.at(id));
+	nodeMap.erase(id);
+}
+
 }

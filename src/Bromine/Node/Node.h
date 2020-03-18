@@ -71,6 +71,8 @@ public:
 	void activate();
 	void deactivate();
 	bool isActive() const;
+
+	void destroy();
 };
 
 }

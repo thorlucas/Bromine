@@ -81,4 +81,14 @@ bool Node::hasChildren() const {
 	return children.size() != 0;
 }
 
+void Node::destroy() {
+	deactivate();
+
+	for (auto& trait : traits) {
+		trait->destroy();
+	}
+
+	Bromine::instance().nodeServer.destroyNode(id);
+}
+
 } // namespace BromineEngine
