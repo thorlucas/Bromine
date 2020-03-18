@@ -1,0 +1,9 @@
+#pragma once
+
+#include "Trait.h"
+#include "EventTrait.h"
+#include "LogicTrait.h"
+#include "RenderTrait.h"
+#include "ParticleRenderTrait.h"
+#include "PointRenderTrait.h"
+#include "SpriteRenderTrait.h"

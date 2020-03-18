@@ -51,7 +51,27 @@ namespace BromineEngine {
 	using Vec = glm::vec<R, T>;
 
 	template <typename M>
-	inline std::string matrixToString(M& mat) {
+	inline std::string matrixToString(M const & mat) {
 		return glm::to_string(mat);
+	}
+
+	template <typename T>
+	inline glm::tmat4x4<T> translateMat(glm::tmat4x4<T> const & mat, glm::tvec3<T> const & vec) {
+		return glm::translate(mat, vec);
+	}
+
+	template <typename T>
+	inline glm::tmat4x4<T> translateMat(glm::tvec3<T> const & vec) {
+		return glm::translate(glm::tmat4x4<T>(static_cast<T>(1)), vec);
+	}
+
+	template <typename T>
+	inline glm::tmat4x4<T> scaleMat(glm::tmat4x4<T> const & mat, glm::tvec3<T> const & vec) {
+		return glm::scale(mat, vec);
+	}
+
+	template <typename T>
+	inline glm::tmat4x4<T> scaleMat(glm::tvec3<T> const & vec) {
+		return glm::scale(glm::tmat4x4<T>(static_cast<T>(1)), vec);
 	}
 }

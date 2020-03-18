@@ -7,8 +7,6 @@
 #include <map>
 #include <set>
 #include <stack>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include <Config/Config.h>
 #include <Config/RenderConfig.h>
@@ -89,7 +87,7 @@ private:
 	
 	uint32_t glProgramID;
 
-	glm::mat4 orthoProjection;
+	Mat4f orthoProjection;
 
 	/**
 	 * This rect is reused in order to avoid having to make

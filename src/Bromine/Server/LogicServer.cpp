@@ -4,6 +4,7 @@
 namespace BromineEngine {
 
 DEFINE_TRAIT_SERVER(LogicServer, LogicTrait)
+DEFINE_DEFAULT_SERVER_ACTIVATE_TRAIT_STANDARD(LogicServer, LogicTrait)
 
 void LogicServer::update(double delta) {
 	for (auto& it : activeTraits) {

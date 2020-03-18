@@ -179,6 +179,13 @@ RenderServer::~RenderServer() {
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
+void RenderServer::activateTrait(RenderTrait* trait) {
+	activeTraits.push_back(trait);
+
+	Bromine::log(Logger::DEBUG, "RenderTrait %p for Node %d has been activated in RenderServer.", trait, trait->owner().id);
+	instructionsDirtyFlag = true;
+}
+
 Shader RenderServer::loadShader(const char* path, ShaderType type) {
 	char buffer[128];
 	snprintf(buffer, 128, "%s%s", resourcePath, path);

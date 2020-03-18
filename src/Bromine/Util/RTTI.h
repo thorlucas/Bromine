@@ -56,18 +56,20 @@ public:																		\
 
 // Must be in trait server definition
 #define DEFINE_TRAIT_SERVER(serverName, traitName)							\
+auto serverName::getTraits(NodeID node) -> decltype(nodeMap.find(node)) {	\
+	return nodeMap.find(node);												\
+}																			\
+traitName& serverName::getTrait(NodeID node) {								\
+	return nodeMap.find(node)->second;										\
+}																			\
+
+#define DEFINE_DEFAULT_SERVER_ACTIVATE_TRAIT_STANDARD(serverName, traitName)\
 void serverName::activateTrait(traitName* trait) {							\
 	activeTraits.push_back(trait);											\
 	Bromine::log(Logger::DEBUG, 											\
 		#traitName " %p for Node %d has been activated in "					\
 		#serverName " server.",												\
 		trait, trait->owner().id);											\
-}																			\
-auto serverName::getTraits(NodeID node) -> decltype(nodeMap.find(node)) {	\
-	return nodeMap.find(node);												\
-}																			\
-traitName& serverName::getTrait(NodeID node) {								\
-	return nodeMap.find(node)->second;										\
 }																			\
 
 #define DEFINE_TRAIT_SERVER_CREATE_TRAIT_STANDARD(traitName)				\
