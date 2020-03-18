@@ -14,6 +14,7 @@ public:																		\
 public:																		\
 	typedef serverName serverType;											\
 	virtual void activate() override;										\
+	virtual void deactivate() override;										\
 DECLARE_TRAIT(serverName)													\
 
 // This must be included in each trait's definition file
@@ -31,6 +32,9 @@ void traitName::activate() {												\
 		initialized = true;													\
 	}																		\
 	server.activateTrait(this);												\
+}																			\
+void traitName::deactivate() {												\
+	server.deactivateTrait(this);											\
 }																			\
 DEFINE_TRAIT(traitName, Trait)												\
 
@@ -50,6 +54,7 @@ private:																	\
 	std::multimap<NodeID, traitName&> nodeMap;								\
 protected:																	\
 	void activateTrait(traitName* trait);									\
+	void deactivateTrait(traitName* trait);									\
 public:																		\
 	auto getTraits(NodeID node) -> decltype(nodeMap.find(node));			\
 	traitName& getTrait(NodeID node);										\
@@ -68,6 +73,15 @@ void serverName::activateTrait(traitName* trait) {							\
 	activeTraits.push_back(trait);											\
 	Bromine::log(Logger::DEBUG, 											\
 		#traitName " %p for Node %d has been activated in "					\
+		#serverName " server.",												\
+		trait, trait->owner().id);											\
+}																			\
+void serverName::deactivateTrait(traitName* trait) {						\
+	activeTraits.erase(														\
+		std::find(activeTraits.begin(), activeTraits.end(), trait)			\
+	);																		\
+	Bromine::log(Logger::DEBUG, 											\
+		#traitName " %p for Node %d has been deactivated in "				\
 		#serverName " server.",												\
 		trait, trait->owner().id);											\
 }																			\

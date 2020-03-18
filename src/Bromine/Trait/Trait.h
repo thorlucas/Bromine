@@ -39,6 +39,7 @@ public:
 	}
 
 	virtual void activate() {}
+	virtual void deactivate() {}
 
 	// template <typename N>
 	// N& getTrait() {

@@ -6,7 +6,7 @@
 namespace BromineEngine {
 
 
-Node::Node(NodeID id) : id(id) {}
+Node::Node(NodeID id) : id(id), active(false) {}
 
 
 Node::~Node() {
@@ -33,6 +33,7 @@ void Node::addChild(Node& child) {
 
 void Node::activate() {
 	Bromine::log(Logger::DEBUG, "Node %d is activating...", id);
+	active = true;
 
 	for (auto& trait : traits) {
 		trait->activate();
@@ -41,6 +42,23 @@ void Node::activate() {
 	for (auto it : children) {
 		Bromine::node(it).activate();
 	}
+}
+
+void Node::deactivate() {
+	Bromine::log(Logger::DEBUG, "Node %d is deactivating...", id);
+	active = false;
+
+	for (auto& trait : traits) {
+		trait->deactivate();
+	}
+	
+	for (auto it : children) {
+		Bromine::node(it).deactivate();
+	}
+}
+
+bool Node::isActive() const {
+	return active;
 }
 
 // bool Node::hasCapability(std::type_index capability) {
@@ -55,7 +73,7 @@ Vec2f Node::position() const {
 	return _position;
 }
 
-std::vector<NodeID> Node::getChildren() {
+std::vector<NodeID> Node::getChildren() const {
 	return children;
 }
 

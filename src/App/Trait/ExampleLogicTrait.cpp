@@ -38,6 +38,9 @@ void ExampleLogicTrait::onKeyEvent(const KeyboardEvent& event) {
 		case D:
 			movingRight = event.state;
 			break;
+		case Q:
+			owner().deactivate();
+			break;
 		default:
 			break;
 	}

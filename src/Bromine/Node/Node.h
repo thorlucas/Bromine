@@ -22,6 +22,7 @@ friend class NodeServer;
 protected:
 	NodeID parent; /**< Parent node, NODE_NULL if root. */
 	std::vector<NodeID> children; /**< A list of the child nodes. */
+	bool active;
 
 	std::vector<Trait*> traits;
 
@@ -59,7 +60,7 @@ public:
 	void addChild(NodeID child);
 	void addChild(Node& child);
 
-	std::vector<NodeID> getChildren();
+	std::vector<NodeID> getChildren() const;
 	bool hasChildren() const;
 
 	/**
@@ -68,6 +69,8 @@ public:
 	 * the relevant servers that this node is not activate.
 	 */
 	void activate();
+	void deactivate();
+	bool isActive() const;
 };
 
 }
