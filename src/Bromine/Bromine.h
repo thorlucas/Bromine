@@ -25,7 +25,6 @@ class RenderServer;
 class EventServer;
 class LogicServer;
 
-template <typename N>
 class NodeBuilder;
 
 /**
@@ -98,23 +97,11 @@ public:
 		return dynamic_cast<T&>(getServer(typeid(T)));
 	}
 
-
 	// Aliases
 	
 	static Node& node(NodeID node);
 
-	// TODO: Can't make alias because NodeServer is an incomplete type... shit
-	// template <typename N, typename ...Ps>
-	// static NodeBuilder<N> node(Ps&&... ps) {
-	// 	return Bromine::instance().nodeServer.buildNode<N>(ps);
-	// }
-	static NodeBuilder<Node>* node();
-
-	// static decltype(Bromine::instance().nodeServer.buildNode()) node() {
-	// 	return Bromine::instance().nodeServer.buildNode();
-	// }
-
-	// static NodeBuilder<Node>* node();
+	static NodeBuilder node();
 
 	template <typename T>
 	static T& server() {
@@ -132,6 +119,7 @@ public:
 
 	// Logging
 
+	// TODO: Make a v version that takes a v list 
 	static void log(Logger::Priority priority, const char* fmt,  ...) __attribute__ (( format(printf, 2, 3) )) {
 		va_list args;
 		va_start(args, fmt);

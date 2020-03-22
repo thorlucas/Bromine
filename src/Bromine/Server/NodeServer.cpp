@@ -14,7 +14,15 @@ NodeID NodeServer::requestID() {
 }
 
 Node& NodeServer::createEmptyNode() {
-	return createEmptyNode<Node>();
+	Node& node = *(new Node(requestID()));
+	nodeMap.insert(std::pair<NodeID, Node&>(node.id, node));
+
+	Bromine::log(Logger::DEBUG, "Created node with ID %d: %p", node.id, &node);
+	return node;
+}
+
+NodeBuilder NodeServer::buildNode() {
+	return NodeBuilder(*this, createEmptyNode());
 }
 
 // NodeBuilder<Node>* NodeServer::buildNode() {
@@ -28,6 +36,23 @@ Node& NodeServer::getNode(NodeID id) {
 void NodeServer::destroyNode(NodeID id) {
 	delete &(nodeMap.at(id));
 	nodeMap.erase(id);
+}
+
+NodeBuilder& NodeBuilder::position(Vec2f position) {
+	node.position() = position;
+
+	return *this;
+}
+
+NodeBuilder& NodeBuilder::addChild(Node& child) {
+	node.addChild(child);	
+
+	return *this;
+}
+
+
+Node& NodeBuilder::create() {
+	return node;
 }
 
 }

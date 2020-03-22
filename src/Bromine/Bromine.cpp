@@ -108,17 +108,13 @@ Node& Bromine::node(NodeID node) {
 	return Bromine::instance().nodeServer.getNode(node);
 }
 
-NodeBuilder<Node>* Bromine::node() {
-	return Bromine::instance().nodeServer.buildNode<Node>();
+NodeBuilder Bromine::node() {
+	return Bromine::instance().nodeServer.buildNode();
 }
 
 Scene* Bromine::getCurrentScene() {
 	return currentScene;
 }
-
-// NodeBuilder<Node>* Bromine::node() {
-// 	return Bromine::instance().nodeServer.buildNode();
-// }
 
 
 } // namespace BromineEngine
