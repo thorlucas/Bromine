@@ -20,13 +20,13 @@ ExampleScene::ExampleScene() {
 		->trait<ExampleLogicTrait>()
 	->create();
 
-	Node& pointNode = Bromine::node()
-		->position(Vec2f(200.0, 200.0))
-		->trait<PointRenderTrait>(Vec3d(0.0, 1.0, 1.0))
-	->create();
+	// Node& pointNode = Bromine::node()
+	// 	->position(Vec2f(200.0, 200.0))
+	// 	->trait<PointRenderTrait>(Vec3d(0.0, 1.0, 1.0))
+	// ->create();
 
 	rootnref.addChild(spriteNode);
-	rootnref.addChild(pointNode);
+	// rootnref.addChild(pointNode);
 
 	Bromine::log(Logger::DEBUG, "Creating new scene: %p", this);
 }

@@ -8,9 +8,6 @@ namespace BromineEngine {
 
 class Scene {
 friend class Bromine;
-protected:
-	std::set<NodeID> nodes;
-
 public:
 	const NodeID rootNode;
 

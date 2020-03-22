@@ -13,9 +13,9 @@ public:																		\
 #define DECLARE_BASE_TRAIT(serverName)										\
 public:																		\
 	typedef serverName serverType;											\
-	virtual void activate() override;										\
-	virtual void deactivate() override;										\
-	void destroy();															\
+	virtual void notifyActivate() override;									\
+	virtual void notifyDeactivate() override;								\
+	virtual void destroy() override;										\
 DECLARE_TRAIT(serverName)													\
 
 // This must be included in each trait's definition file
@@ -27,19 +27,18 @@ bool traitName::isTraitType(const std::size_t traitType) const {			\
 }																			\
 
 #define DEFINE_BASE_TRAIT(traitName)										\
-void traitName::activate() {												\
+void traitName::notifyActivate() {											\
 	if (!initialized) {														\
 		initialize();														\
 		initialized = true;													\
 	}																		\
 	server.activateTrait(this);												\
 }																			\
-void traitName::deactivate() {												\
+void traitName::notifyDeactivate() {										\
 	server.deactivateTrait(this);											\
 }																			\
 void traitName::destroy() {													\
-	deactivate();															\
-	server.destroy(this);													\
+	server.destroyTrait(this);												\
 }																			\
 DEFINE_TRAIT(traitName, Trait)												\
 
@@ -108,6 +107,9 @@ public:																		\
 #define DEFINE_TRAIT_SERVER_DESTROY_TRAIT_STANDARD(serverName, traitName)	\
 void serverName::destroyTrait(traitName* trait) {							\
 	nodeMap.erase(trait->ownerID);											\
+	auto t = std::find(activeTraits.begin(), activeTraits.end(), trait);	\
+	if (t != activeTraits.end())											\
+		activeTraits.erase(t);												\
 	Bromine::log(Logger::DEBUG, "Destroyed " #traitName						\
 		" for Node %d: %p", trait->ownerID, trait);							\
 	delete trait;															\

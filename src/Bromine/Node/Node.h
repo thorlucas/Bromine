@@ -1,40 +1,39 @@
-#ifndef _NODE_H_
-#define _NODE_H_
+#pragma once
 
-#include <set>
-#include <cstdint>
-#include <cstdio>
-#include <typeinfo>
-#include <typeindex>
+#include <vector>
 #include <algorithm>
-
-#include "../Bromine.h"
-
-#include "../Trait/Trait.h"
-
-#include "../Util/Errors.h"
-#include "../Util/Vec.h"
+#include <Bromine/Util/Vec.h>
+#include <Bromine/Trait/Trait.h>
 
 namespace BromineEngine {
 
-class Node {
+class Node final {
 friend class NodeServer;
+friend class Scene; // TODO: Temporary so that Scene can call parentdidActivate()
+private:
+	void bubbleActivate();
+	void bubbleDeactivate();
+
 protected:
 	NodeID parent; /**< Parent node, NODE_NULL if root. */
 	std::vector<NodeID> children; /**< A list of the child nodes. */
-	bool active;
 
 	std::vector<Trait*> traits;
 
+	// Fields
 	Vec2f _position;
+	bool _enabled;
+	bool _parentIsActive;
 
 	Node(NodeID id);
-	void setParent(NodeID parent);
+	~Node(); // Only NodeServer can delete a node, call destroy() instead
+	void setParent(NodeID newParent);
+
+	void parentDidDeactivate();
+	void parentDidActivate();
 
 public:
 	const NodeID id; /**< A constant ID, which should be requested from the scene. */
-
-	~Node();
 
 	Vec2f& position();
 	Vec2f position() const;
@@ -53,28 +52,47 @@ public:
 			if (trait->isTraitType(T::type)) return static_cast<T&>(*trait);
 		}
 
+		// TODO: Custom error
 		throw std::out_of_range("Node does not have the requested trait.");
 	}
 
-	// TODO: Notify scene on children change
+	template <typename T>
+	std::vector<T*> getTraits() {
+		std::vector<T*> foundTraits;
+		for (auto& trait : traits) {
+			if (trait->isTraitType(T::type)) foundTraits.push_back(trait);
+		}
+
+		return foundTraits;
+	}
+
+	void removeTrait(Trait* trait);
+
+	template <typename T>
+	void removeTrait(T& trait) {
+		removeTrait(&trait);
+	}
+
+	template <typename T>
+	void removeTrait() {
+		removeTrait(getTrait<T>());
+	}
+
 	void addChild(NodeID child);
 	void addChild(Node& child);
+
+	void removeChild(NodeID child);
+	void removeChild(Node& child);
 
 	std::vector<NodeID> getChildren() const;
 	bool hasChildren() const;
 
-	/**
-	 * Makes the node active.
-	 * This will loop through capabilities and notify
-	 * the relevant servers that this node is not activate.
-	 */
-	void activate();
-	void deactivate();
-	bool isActive() const;
+	void enable();
+	void disable();
+
+	bool active() const;
 
 	void destroy();
 };
 
 }
-
-#endif //_NODE_H_

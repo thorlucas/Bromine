@@ -409,7 +409,7 @@ void RenderServer::switchShaderProgramImmediate(ShaderProgram program) {
 }
 
 void RenderServer::renderNode(Node& node) {
-	if (!node.isActive()) {
+	if (!node.active()) {
 		return;
 	};
 

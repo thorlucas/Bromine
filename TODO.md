@@ -10,6 +10,9 @@
 	- Have a transform
 	- Keep track of parents and children
 	- Should be final
+		- Factories can be used to set up custom nodes
+		- This also allows prefabs to exist!
+		- A factory is a sort of prefab!
 	- Deactivate and activate (updates only their own bool!)
 	- Be destroyed, which removes the Node from the scene, calls destroy on the `Trait`s and on `NodeServer`.
 - `NodeServer` can then:
