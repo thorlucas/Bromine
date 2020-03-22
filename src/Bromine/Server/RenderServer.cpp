@@ -330,12 +330,9 @@ void RenderServer::drawPoint(Vec2f* pos, Vec3d* color) {
 void RenderServer::drawTexture(Vec2f* pos, Vec2f* scale, ResourceID texture) {
 	if (drawCustomFlag) return;
 	if (drawImmediateFlag) {
-		Bromine::log(Logger::DEBUG, "Drawing texture immediate");
 		switchShaderProgramImmediate(textureShaderProgram);
 		return drawTextureImmediate(pos, scale, &getResource(texture));
 	};
-
-	Bromine::log(Logger::DEBUG, "Drawing texture");
 
 	if (instructionCurrentShaderProgram != textureShaderProgram) {
 		switchShaderProgram(textureShaderProgram);
