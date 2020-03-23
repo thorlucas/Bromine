@@ -437,10 +437,7 @@ void RenderServer::renderNode(Node& node) {
 void RenderServer::update(double delta) {
 	if (instructionsDirtyFlag) {
 		instructions.clear();
-		Scene* currentScene = Bromine::instance().getCurrentScene();
-		Node& rootNode = Bromine::node(currentScene->rootNode);
-
-		renderNode(rootNode);
+		renderNode(Bromine::instance().getCurrentScene()->rootNode());
 
 		instructionsDirtyFlag = false;
 	}
