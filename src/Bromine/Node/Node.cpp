@@ -6,35 +6,35 @@
 namespace BromineEngine {
 
 
-Node::Node(NodeID id) : id(id), _enabled(true), _parentIsActive(false), parent(NODE_NULL) {}
+Node::Node(NodeID id) : id(id), _enabled(true), _parentIsActive(false), _parent(NODE_NULL) {}
 
 Node::~Node() {}
 
-void Node::setParent(NodeID newParent) {
-	if (newParent == NODE_NULL) {
-		if (parent != NODE_NULL && Bromine::node(parent).active())
+void Node::setParent(NodeID newParentID) {
+	if (newParentID == NODE_NULL) {
+		if (_parent != NODE_NULL && parent().active())
 			parentDidDeactivate();
 
-		parent = newParent;
+		_parent = newParentID;
 		return;
 	}
 
-	Node& newParentRef = Bromine::node(newParent);
+	Node& newParent = Bromine::node(newParentID);
 
-	if (parent != NODE_NULL) {
-		Node& oldParentRef = Bromine::node(parent);
-		oldParentRef.removeChild(*this);
+	if (_parent != NODE_NULL) {
+		Node& oldParent = parent();
+		oldParent.removeChild(*this);
 
-		if (oldParentRef.active() && !newParentRef.active())
+		if (oldParent.active() && !newParent.active())
 			parentDidDeactivate();
-		else if (!oldParentRef.active() && newParentRef.active())
+		else if (!oldParent.active() && newParent.active())
 			parentDidActivate();
 	} else {
-		if (newParentRef.active())
+		if (newParent.active())
 			parentDidActivate();
 	}
 
-	parent = newParent;
+	_parent = newParentID;
 }
 
 void Node::addChild(NodeID child) {
@@ -42,7 +42,7 @@ void Node::addChild(NodeID child) {
 }
 
 void Node::addChild(Node& child) {
-	children.push_back(child.id);
+	_children.push_back(child.id);
 	child.setParent(id);
 
 	Bromine::log(Logger::DEBUG, "Node %d added child node %d", id, child.id);
@@ -53,7 +53,7 @@ void Node::removeChild(NodeID child) {
 }
 
 void Node::removeChild(Node& child) {
-	children.erase(std::find(children.begin(), children.end(), child.id));
+	_children.erase(std::find(_children.begin(), _children.end(), child.id));
 	child.setParent(NODE_NULL);
 }
 
@@ -103,8 +103,8 @@ void Node::bubbleActivate() {
 		trait->ownerDidActivate();
 	}
 	
-	for (auto child : children) {
-		Bromine::node(child).parentDidActivate();
+	for (auto child : children()) {
+		child->parentDidActivate();
 	}
 }
 
@@ -113,8 +113,8 @@ void Node::bubbleDeactivate() {
 		trait->ownerDidDeactivate();
 	}
 
-	for (auto children : children) {
-		Bromine::node(children).parentDidDeactivate();
+	for (auto child : children()) {
+		child->parentDidDeactivate();
 	}
 }
 
@@ -130,16 +130,24 @@ Vec2f Node::position() const {
 	return _position;
 }
 
-std::vector<NodeID> Node::getChildren() const {
-	return children;
+std::vector<Node*> Node::children() const {
+	std::vector<Node*> childrenRefs;
+	for (auto childID : _children) {
+		childrenRefs.push_back(&Bromine::node(childID));
+	}
+	return childrenRefs;
 }
 
 bool Node::hasChildren() const {
-	return children.size() != 0;
+	return _children.size() != 0;
+}
+
+Node& Node::parent() const {
+	return Bromine::node(_parent);
 }
 
 void Node::destroy() {
-	Bromine::node(parent).removeChild(*this);
+	parent().removeChild(*this);
 
 	for (auto& trait : traits) {
 		trait->destroy();

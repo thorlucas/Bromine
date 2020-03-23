@@ -15,8 +15,8 @@ private:
 	void bubbleDeactivate();
 
 protected:
-	NodeID parent; /**< Parent node, NODE_NULL if root. */
-	std::vector<NodeID> children; /**< A list of the child nodes. */
+	NodeID _parent; /**< Parent node, NODE_NULL if root. */
+	std::vector<NodeID> _children; /**< A list of the child nodes. */
 
 	std::vector<Trait*> traits;
 
@@ -27,7 +27,7 @@ protected:
 
 	Node(NodeID id);
 	~Node(); // Only NodeServer can delete a node, call destroy() instead
-	void setParent(NodeID newParent);
+	void setParent(NodeID newParentID);
 
 	void parentDidDeactivate();
 	void parentDidActivate();
@@ -84,8 +84,10 @@ public:
 	void removeChild(NodeID child);
 	void removeChild(Node& child);
 
-	std::vector<NodeID> getChildren() const;
+	std::vector<Node*> children() const;
 	bool hasChildren() const;
+
+	Node& parent() const;
 
 	void enable();
 	void disable();

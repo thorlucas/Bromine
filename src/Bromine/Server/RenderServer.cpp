@@ -417,7 +417,7 @@ void RenderServer::renderNode(Node& node) {
 	} catch (...) {} // TODO: Isnt a render trait
 
 	if (node.hasChildren()) {
-		auto children = node.getChildren();
+		auto children = node.children();
 
 		RenderInstruction instruction;
 
@@ -425,10 +425,8 @@ void RenderServer::renderNode(Node& node) {
 		instruction.pushRelPos.relPos = &node.position();
 		instructions.push_back(instruction);
 
-		for (auto childID : children) {
-			Node& child = Bromine::node(childID);
-
-			renderNode(child);
+		for (auto child : children) {
+			renderNode(*child);
 		}
 
 		instruction.type = RenderInstruction::POP_REL_POS;
