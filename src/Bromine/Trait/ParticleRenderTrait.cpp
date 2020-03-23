@@ -5,7 +5,7 @@ namespace BromineEngine {
 DEFINE_TRAIT(ParticleRenderTrait, RenderTrait)
 
 ParticleRenderTrait::ParticleRenderTrait(const NodeID owner) : ParticleRenderTrait(owner, 512) {};
-ParticleRenderTrait::ParticleRenderTrait(const NodeID owner, size_t particleCap) : CONSTRUCT_TRAIT(ParticleRenderTrait, RenderTrait), particleCap(particleCap), color(Vec3d(1.0, 0.0, 0.0)) {
+ParticleRenderTrait::ParticleRenderTrait(const NodeID owner, size_t particleCap) : CONSTRUCT_TRAIT(ParticleRenderTrait, RenderTrait), particleCap(particleCap), color(Vec3f(1.0, 0.0, 0.0)) {
 	particlePool = new Particle[particleCap];
 
 	for (int i = 0; i < particleCap; ++i) {

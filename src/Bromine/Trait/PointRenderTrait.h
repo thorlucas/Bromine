@@ -7,16 +7,16 @@ namespace BromineEngine {
 class PointRenderTrait : public RenderTrait {
 DECLARE_TRAIT(RenderServer)
 private:
-	Vec3d _color;
+	Vec3f _color;
 
 protected:
-	PointRenderTrait(const NodeID owner, Vec3d color);
+	PointRenderTrait(const NodeID owner, Vec3f color);
 
 	virtual void render() override;
 
 public:
-	Vec3d& color();
-	Vec3d color() const;
+	Vec3f& color();
+	Vec3f color() const;
 };
 
 }

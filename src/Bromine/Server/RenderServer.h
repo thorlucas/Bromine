@@ -118,7 +118,7 @@ private:
 
 			struct {
 				Vec2f* relPos;
-				Vec3d* color;
+				Vec3f* color;
 			} drawPoint;
 
 			struct {
@@ -143,7 +143,7 @@ private:
 	
 	void renderNode(Node& node);
 
-	void drawPointImmediate(Vec2f* pos, Vec3d* color);
+	void drawPointImmediate(Vec2f* pos, Vec3f* color);
 	void drawTextureImmediate(Vec2f* relPos, Vec2f* scale, Resource* texture);
 	void switchShaderProgramImmediate(ShaderProgram program);
 
@@ -152,7 +152,7 @@ public:
 	~RenderServer();	
 	// TODO: Make a seperate class that I can pass to the traits for this
 
-	void drawPoint(Vec2f* pos, Vec3d* color);
+	void drawPoint(Vec2f* pos, Vec3f* color);
 	void drawTexture(Vec2f* pos, Vec2f* scale, ResourceID texture);
 	void enableCustomDrawing(RenderTrait* trait);
 	void switchShaderProgram(ShaderProgram program);

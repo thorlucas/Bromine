@@ -26,7 +26,8 @@ Texture::Texture(uint32_t width, uint32_t height, void* pixels) : width(width), 
 }
 
 Texture::~Texture() {
-	// delete[] pixels; TODO: For now deleted immediatley by SDL_FreeTexture so
+	// delete[] pixels;
+	// TODO: For now deleted immediatley by SDL_FreeTexture so
 }
 
 RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailableID(0), globalPos(0.0, 0.0) {
@@ -207,7 +208,7 @@ Shader RenderServer::loadShader(const char* path, ShaderType type) {
 	long long fileSize = SDL_RWsize(shaderFile);
 	char* shaderSource = new char[fileSize + 1];
 
-	SDL_RWread(shaderFile, shaderSource, sizeof(char), fileSize); // TODO detect error reading
+	SDL_RWread(shaderFile, shaderSource, sizeof(char), fileSize); // TODO: detect error reading
 	SDL_RWclose(shaderFile);
 
 	shaderSource[fileSize] = '\0';
@@ -269,7 +270,7 @@ ShaderProgram RenderServer::loadShaderProgram(const char* vertexShaderPath, cons
 
 
 ResourceID RenderServer::loadTexture(const char* path) {
-	// TODO Index loaded textures by path
+	// TODO: Index loaded textures by path
 
 	char buffer[128];
 	snprintf(buffer, 128, "%s%s", resourcePath, path);
@@ -308,7 +309,7 @@ Resource& RenderServer::getResource(ResourceID resource) {
 }
 
 // Drawing functions
-void RenderServer::drawPoint(Vec2f* pos, Vec3d* color) {
+void RenderServer::drawPoint(Vec2f* pos, Vec3f* color) {
 	if (drawCustomFlag) return;
 	if (drawImmediateFlag) {
 		switchShaderProgramImmediate(pointShaderProgram);
@@ -373,12 +374,12 @@ void RenderServer::enableCustomDrawing(RenderTrait* trait) {
 	drawCustomFlag = true;
 }
 
-void RenderServer::drawPointImmediate(Vec2f* relPos, Vec3d* color) {
+void RenderServer::drawPointImmediate(Vec2f* relPos, Vec3f* color) {
 	glBindVertexArray(pointVAO);
 
-	float pointData[] = {
-		static_cast<float>((*relPos)[0]), static_cast<float>((*relPos)[1]),
-		static_cast<float>((*color)[0]), static_cast<float>((*color)[1]), static_cast<float>((*color)[2]), 1.0f,
+	float pointData[6] = {
+		relPos->x + globalPos.x, relPos->y + globalPos.y,
+		color->r, color->g, color->b, 1.0f,
 	};
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(pointData), pointData, GL_DYNAMIC_DRAW);
@@ -388,9 +389,9 @@ void RenderServer::drawPointImmediate(Vec2f* relPos, Vec3d* color) {
 
 void RenderServer::drawTextureImmediate(Vec2f* relPos, Vec2f* scale, Resource* texture) {
 	glm::mat4 model(1.0f);
-	model = glm::translate(model, glm::vec3((*relPos)[0], (*relPos)[1], 0.0f));
+	model = glm::translate(model, glm::vec3(*relPos + globalPos, 0.0f));
 	model = glm::scale(model, glm::vec3(texture->texture->width, texture->texture->height, 1.0f));
-	model = glm::scale(model, glm::vec3((*scale)[0], (*scale)[1], 1.0f));
+	model = glm::scale(model, glm::vec3(*scale, 1.0f));
 
 	glBindVertexArray(spriteVAO);
 	glBindTexture(GL_TEXTURE_2D, texture->texture->glTexture);

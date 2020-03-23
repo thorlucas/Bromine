@@ -45,7 +45,7 @@ namespace BromineEngine {
 	using  Mat4x4f 	= glm::mat4x4;
 
 	template <glm::length_t C, glm::length_t R, typename T> 
-	using Mat = glm::mat<C, R, T>; // TODO: defaultp isn't anything?
+	using Mat = glm::mat<C, R, T>;
 
 	template <glm::length_t R, typename T>
 	using Vec = glm::vec<R, T>;

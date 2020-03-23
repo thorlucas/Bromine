@@ -13,7 +13,7 @@ private:
 	Particle* particlePool;
 	Particle* firstDead;
 	Particle* firstAlive;
-	Vec3d color;
+	Vec3f color;
 
 protected:
 	ParticleRenderTrait(const NodeID owner, size_t particleCap);
