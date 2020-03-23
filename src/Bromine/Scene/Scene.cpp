@@ -6,16 +6,20 @@ namespace BromineEngine {
 
 Scene::Scene() : Scene(Bromine::instance().nodeServer.createEmptyNode()) {}
 
-Scene::Scene(NodeID rootNode) : Scene(Bromine::node(rootNode)) {}
+Scene::Scene(NodeID rootNodeID) : Scene(Bromine::node(rootNodeID)) {}
 
-Scene::Scene(Node& rootNref) : rootNode(rootNref.id) {}
+Scene::Scene(Node& rootNode) : _rootNode(rootNode.id) {}
 
 Scene::~Scene() {}
 
 void Scene::loadScene() {
 	Bromine::log(Logger::INFO, "Loading scene: %p", this);
 	
-	Bromine::node(rootNode).parentDidActivate();
+	rootNode().parentDidActivate();
+}
+
+Node& Scene::rootNode() const {
+	return Bromine::node(_rootNode);
 }
 
 }

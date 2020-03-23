@@ -11,7 +11,7 @@
 #include <Bromine/Server/NodeServer.h>
 
 ExampleScene::ExampleScene() {
-	Bromine::node(rootNode).addChild(
+	rootNode().addChild(
 		Bromine::node()
 			.position(Vec2f(rand() % 1280, rand() % 720))
 			.trait<EventTrait>()

@@ -8,8 +8,9 @@ namespace BromineEngine {
 
 class Scene {
 friend class Bromine;
+private:
+	const NodeID _rootNode;
 public:
-	const NodeID rootNode;
 
 	Scene(); // Will auto create empty node
 
@@ -21,9 +22,11 @@ public:
 
 	// TODO: This means that the node will have to be
 	// created before the scene is loaded...
-	Scene(NodeID rootNode);
-	Scene(Node& rootNref);
+	Scene(NodeID rootNodeID);
+	Scene(Node& rootNode);
 	~Scene();
+
+	Node& rootNode() const;
 
 	virtual void loadScene();
 };
