@@ -3,6 +3,7 @@
 
 #include <cstdio>
 #include <cstdarg>
+#include <string>
 #include <Config/LogConfig.h>
 
 namespace BromineEngine {
@@ -10,6 +11,8 @@ namespace BromineEngine {
 class Logger {
 private:
 	Logger();
+
+	FILE* _logFile;
 	
 public:
 	enum Priority {
@@ -28,10 +31,13 @@ public:
 	Logger(Logger const&) = delete;
 	void operator=(Logger const&) = delete;
 
+	~Logger();
+
 	void log(Priority priority, const char* fmt...) __attribute__ (( format(printf, 3, 4) ));
 	void vlog(Priority priority, const char* fmt, va_list args);
 
 	void setMinimumPriority(Priority priority);
+	void logFile(const char* logFileName);
 };
 
 }; // namespace

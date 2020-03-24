@@ -44,3 +44,5 @@
 		- Scenes could be a good place to keep track of node information and do scene behavior...
 			- It seems more intuitive than using some random node's logic trait
 			- More intuitive than having a node handle scene changes
+- Recompile when headers are changed
+- A lot of configs could be replaced with macro for better optimization

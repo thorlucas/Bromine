@@ -12,6 +12,7 @@ Bromine::Bromine() :
 	logicServer(getServer<LogicServer>()) {
 
 	Logger::instance().setMinimumPriority(LOGGER_MIN_PRIORITY);
+	Logger::instance().logFile(logFileName);
 
 	for (auto it : autoInitServers) {
 		getServer(it); // ensures servers are constructed

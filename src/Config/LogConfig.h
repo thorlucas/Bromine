@@ -13,6 +13,8 @@ static const char* logFormats[] = {
 	"\033[31;43;1m[ERROR] %s\033[0m\n"
 };
 
+static const char* logFileName = "TestLogFile.log";
+
 } // namespace
 
 #endif //_CONFIG_LOG_H_
