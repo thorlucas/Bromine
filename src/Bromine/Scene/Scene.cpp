@@ -4,7 +4,7 @@
 
 namespace BromineEngine {
 
-Scene::Scene() : Scene(Bromine::instance().nodeServer.createEmptyNode()) {}
+Scene::Scene() : Scene(Bromine::server<NodeServer>().createEmptyNode()) {}
 
 Scene::Scene(NodeID rootNodeID) : Scene(Bromine::node(rootNodeID)) {}
 

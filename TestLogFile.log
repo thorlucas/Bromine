@@ -1,25 +1,24 @@
-[DEBUG] Created node with ID 0: 0x7fdceed5b450
-[DEBUG] Created node with ID 1: 0x7fdceed5b4c0
-[DEBUG] Created EventTrait for Node 1: 0x7fdceed5b530
+[DEBUG] Created node with ID 0: 0x7fa473e64a50
+[DEBUG] Created node with ID 1: 0x7fa473e64ac0
+[DEBUG] Created EventTrait for Node 1: 0x7fa473e64b30
 [34;1m[INFO] Loaded texture with resource ID 0[0m
-[DEBUG] Created RenderTrait for Node 1: 0x7fdceee1f120
-[DEBUG] Created LogicTrait for Node 1: 0x7fdceee1d2e0
+[DEBUG] Created RenderTrait for Node 1: 0x7fa473e637f0
+[DEBUG] Created LogicTrait for Node 1: 0x7fa473e63870
 [DEBUG] Node 0 added child node 1
-[DEBUG] Creating new scene: 0x7fdceed43310
-[34;1m[INFO] Loading scene: 0x7fdceed43310[0m
+[DEBUG] Creating new scene: 0x7fa473e49940
+[34;1m[INFO] Loading scene: 0x7fa473e49940[0m
 [DEBUG] Node 0 is activating by bubbling...
 [DEBUG] Node 1 is activating by bubbling...
-[DEBUG] EventTrait 0x7fdceed5b530 for Node 1 has been activated in EventServer server.
-[DEBUG] RenderTrait 0x7fdceee1f120 for Node 1 has been activated in RenderServer.
-[DEBUG] Set EventTrait 0x7fdceed5b530 delegate EventDelegate 0x7fdceee1d2f8
-[DEBUG] LogicTrait 0x7fdceee1d2e0 for Node 1 has been activated in LogicServer server.
-[DEBUG] [FPS] 55
-[DEBUG] [FPS] 60
-[DEBUG] [FPS] 60
+[DEBUG] EventTrait 0x7fa473e64b30 for Node 1 has been activated in EventServer server.
+[DEBUG] RenderTrait 0x7fa473e637f0 for Node 1 has been activated in RenderServer.
+[DEBUG] Set EventTrait 0x7fa473e64b30 delegate EventDelegate 0x7fa473e63888
+[DEBUG] LogicTrait 0x7fa473e63870 for Node 1 has been activated in LogicServer server.
+[DEBUG] [FPS] 58
 [DEBUG] Node 1 is deactivating by bubbling...
-[DEBUG] EventTrait 0x7fdceed5b530 for Node 1 has been deactivated in EventServer server.
-[DEBUG] RenderTrait 0x7fdceee1f120 for Node 1 has been deactivated in RenderServer.
-[DEBUG] LogicTrait 0x7fdceee1d2e0 for Node 1 has been deactivated in LogicServer server.
-[DEBUG] Destroyed EventTrait for Node 1: 0x7fdceed5b530
-[DEBUG] Destroyed RenderTrait for Node 1: 0x7fdceee1f120
-[DEBUG] Destroyed LogicTrait for Node 1: 0x7fdceee1d2e0
+[DEBUG] EventTrait 0x7fa473e64b30 for Node 1 has been deactivated in EventServer server.
+[DEBUG] RenderTrait 0x7fa473e637f0 for Node 1 has been deactivated in RenderServer.
+[DEBUG] LogicTrait 0x7fa473e63870 for Node 1 has been deactivated in LogicServer server.
+[DEBUG] Destroyed EventTrait for Node 1: 0x7fa473e64b30
+[DEBUG] Destroyed RenderTrait for Node 1: 0x7fa473e637f0
+[DEBUG] Destroyed LogicTrait for Node 1: 0x7fa473e63870
+[DEBUG] [FPS] 60

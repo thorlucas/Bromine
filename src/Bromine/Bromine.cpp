@@ -1,55 +1,37 @@
 #include "Bromine.h"
+#include <SDL2/SDL.h>
 
-#include <Config/ServersConfig.h>
+#include <Bromine/Server/Server.h>
+#include <Bromine/Service/Service.h>
+
+#include <Bromine/Server/NodeServer.h>
 
 namespace BromineEngine {
 
-Bromine::Bromine() :
-	serverClosures(autoloadServerClosures),
-	nodeServer(getServer<NodeServer>()),
-	renderServer(getServer<RenderServer>()),
-	eventServer(getServer<EventServer>()),
-	logicServer(getServer<LogicServer>()) {
+Bromine* Bromine::globalInstance = nullptr;
+
+Bromine::Bromine() {
 
 	Logger::instance().setMinimumPriority(LOGGER_MIN_PRIORITY);
 	Logger::instance().logFile(logFileName);
-
-	for (auto it : autoInitServers) {
-		getServer(it); // ensures servers are constructed
-	}
 
 	running = true;
 	currentScene = nullptr;
 }
 
 Bromine::~Bromine() {
-	for (auto& it : serverMap) {
-		delete &(it.second);
+	for (auto& it : serverVector) {
+		delete it;
+	}
+
+	for (auto& it : serviceMap) {
+		delete it.second;
 	}
 
 	SDL_Quit();
 }
 
-Server& Bromine::getServer(std::type_index typeIndex) {
-	auto ret = serverMap.find(typeIndex);
-	if (ret != serverMap.end()) return ret->second;
-
-
-	Server* server = serverClosures.at(typeIndex)();
-	serverMap.insert(std::pair<std::type_index, Server&>(typeIndex, *server));
-	serverVector.push_back(server);
-
-	return *server;
-}
-
-bool Bromine::run() {
-	return run(makeInitialScene());
-}
-
 bool Bromine::run(Scene* rootScene) {
-	// lastFrame = std::chrono::high_resolution_clock::now();
-	// lastSecondFrame = lastFrame;
-
 	currentScene = rootScene;
 
 	currentScene->loadScene();
@@ -106,11 +88,11 @@ void Bromine::quit() {
 }
 
 Node& Bromine::node(NodeID node) {
-	return Bromine::instance().nodeServer.getNode(node);
+	return Bromine::server<NodeServer>().getNode(node);
 }
 
 NodeBuilder Bromine::node() {
-	return Bromine::instance().nodeServer.buildNode();
+	return Bromine::server<NodeServer>().buildNode();
 }
 
 Scene* Bromine::getCurrentScene() {
