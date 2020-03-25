@@ -1,5 +1,6 @@
 #ifndef _BROMINE_H_
 #define _BROMINE_H_
+#pragma once
 
 #include <unordered_map>
 #include <vector>
@@ -7,6 +8,9 @@
 #include <typeinfo>
 #include <typeindex>
 #include <chrono>
+
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/basic_file_sink.h>
 
 #include "Util/Logger.h"
 #include "Util/Vec.h"
@@ -56,6 +60,8 @@ private:
 	std::unordered_map<std::type_index, std::function<Server*()>> serverClosures;
 	std::unordered_map<std::type_index, Server&> serverMap;
 	std::vector<Server*> serverVector;
+
+	std::shared_ptr<spdlog::logger> logger;
 
 	// std::chrono::high_resolution_clock::time_point lastSecondFrame;
 	// std::chrono::high_resolution_clock::time_point lastFrame;

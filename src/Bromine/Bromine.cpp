@@ -18,6 +18,10 @@ Bromine::Bromine() :
 		getServer(it); // ensures servers are constructed
 	}
 
+	logger = spdlog::basic_logger_mt("bromine-logger", "SPDLog.log");
+
+	logger->info("Hello SPD Log! Test!");
+
 	running = true;
 	currentScene = nullptr;
 }
