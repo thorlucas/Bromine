@@ -8,8 +8,8 @@ using namespace BromineEngine;
 int main(int argc, char const *argv[]) {
 	Bromine bromine;
 	Bromine::setGlobalInstance(&bromine);
-	DEFAULT_SERVER_REGISTRATION(bromine);
 	DEFAULT_SERVICE_REGISTRATION(bromine);
+	DEFAULT_SERVER_REGISTRATION(bromine);
 
 	return bromine.run(DEFAULT_INITIAL_SCENE);
 }

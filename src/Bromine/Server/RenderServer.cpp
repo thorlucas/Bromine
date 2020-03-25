@@ -33,13 +33,13 @@ Texture::~Texture() {
 RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailableID(0), globalPos(0.0, 0.0) {
 	// Initialize SDL
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
-		Logger::error("Failed to initialize video: %s", SDL_GetError());
+		Logger::error("Failed to initialize video: {}", SDL_GetError());
 		throw BromineInitError(SDL_GetError()); 
 	}
 
 	// Initialze SDL_image
 	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
-		Logger::error("Failed to initialize image: %s", SDL_GetError());
+		Logger::error("Failed to initialize image: {}", SDL_GetError());
 		throw BromineInitError(SDL_GetError()); 
 	}
 
@@ -53,7 +53,7 @@ RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailabl
 	window = SDL_CreateWindow("Bromine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_OPENGL);
 
 	if (window == nullptr) {
-		Logger::error("Failed to create window: %s", SDL_GetError());
+		Logger::error("Failed to create window: {}", SDL_GetError());
 		throw BromineInitError(SDL_GetError()); 
 	}
 
@@ -61,20 +61,20 @@ RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailabl
 	glContext = SDL_GL_CreateContext(window);
 
 	if (glContext == nullptr) {
-		Logger::error("Failed to create GL context: %s", SDL_GetError());
+		Logger::error("Failed to create GL context: {}", SDL_GetError());
 		throw BromineInitError(SDL_GetError());
 	}
 
 	// Initialize Glew
 	GLenum glewInitError = glewInit();
 	if (glewInitError != GLEW_OK) {
-		Logger::error("Failed to initialize glew: %s", glewGetErrorString(glewInitError));
+		Logger::error("Failed to initialize glew: {}", glewGetErrorString(glewInitError));
 		throw BromineInitError("Failed to initialize glew.");
 	}
 
 	// Enable vsync
 	if (SDL_GL_SetSwapInterval(1) != 0) {
-		Logger::error("Failed to set vsync: %s", SDL_GetError());
+		Logger::error("Failed to set vsync: {}", SDL_GetError());
 		throw BromineInitError(SDL_GetError());
 	}
 
@@ -220,20 +220,26 @@ Shader RenderServer::loadShader(const char* path, ShaderType type) {
 	
 	glCompileShader(shader);
 
-	int32_t vertexShaderCompiled = false;
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &vertexShaderCompiled);
-	if (vertexShaderCompiled != true) {
-		char* errorBuffer = new char[256];
-		int32_t infoLength;
-		glGetShaderInfoLog(shader, 256, &infoLength, errorBuffer);
-		Logger::error("Failed to compile shader:\n%s", errorBuffer);
+	int32_t shaderCompiled = false;
+	int32_t shaderLogLength = 0;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &shaderCompiled);
+	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &shaderLogLength);
+
+	if (shaderCompiled != true) {
+		Logger::error("Failed to compile shader {}", path);
+
+		char infoBuffer[shaderLogLength];
+		glGetShaderInfoLog(shader, shaderLogLength, NULL, &infoBuffer[0]);
+		Logger::error("Shader log for shader {}:\n{}", path, &infoBuffer[0]);
+
 		glDeleteShader(shader);
-		// TODO: Throw
-		shader = 0;
+	} else if (shaderLogLength != 0) {
+		char infoBuffer[shaderLogLength];
+		glGetShaderInfoLog(shader, shaderLogLength, NULL, &infoBuffer[0]);
+		Logger::debug("Shader log for shader {}:\n{}", path, &infoBuffer[0]);
 	}
 
 	delete[] shaderSource;
-
 	return shader;
 }
 
@@ -253,13 +259,23 @@ ShaderProgram RenderServer::loadShaderProgram(const char* vertexShaderPath, cons
 	glLinkProgram(shaderProgram);
 
 	int32_t programLinked = false;
+	int32_t programLogLength = 0;
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &programLinked);
+	glGetProgramiv(shaderProgram, GL_INFO_LOG_LENGTH, &programLogLength);
+
 	if (programLinked != true) {
-		// TODO: Get info
 		Logger::error("Failed to link shader program.");
+
+		char infoBuffer[programLogLength];
+		glGetProgramInfoLog(shaderProgram, programLogLength, NULL, &infoBuffer[0]);
+		Logger::error("Program log for program {}, {}:\n{}", vertexShaderPath, fragmentShaderPath, &infoBuffer[0]);
+
 		// TODO: Throw
 		glDeleteProgram(shaderProgram);
-		shaderProgram = 0;
+	} else if (programLogLength != 0) {
+		char infoBuffer[programLogLength];
+		glGetProgramInfoLog(shaderProgram, programLogLength, NULL, &infoBuffer[0]);
+		Logger::debug("Program log for program {}, {}:\n{}", vertexShaderPath, fragmentShaderPath, &infoBuffer[0]);
 	}
 
 	freeShader(vertexShader);

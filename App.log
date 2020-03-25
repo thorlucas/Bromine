@@ -1,23 +1,312 @@
-[02:26:18.939] [  info  ] Constructed LoggerService
-[02:26:18.939] [  info  ] NodeServer created Node 0 (0x7fbb0ce209a0)
-[02:26:18.939] [  info  ] NodeServer created Node 1 (0x7fbb0ce20850)
-[02:26:18.939] [ debug  ] Created EventTrait for Node 1: 0x7fbb0ce20a10
-[02:26:18.967] [  info  ] Loaded texture with resource ID %d
-[02:26:18.967] [ debug  ] Created RenderTrait for Node 1: 0x7fbb0ce21750
-[02:26:18.967] [ debug  ] Created LogicTrait for Node 1: 0x7fbb0ce20530
-[02:26:18.967] [ debug  ] Node 0 (0x7fbb0ce209a0) added child Node 1 (0x7fbb0ce20850)
-[02:26:18.967] [ debug  ] Creating new scene: 0x7fbb0ce03880
-[02:26:18.967] [  info  ] Loading scene: 0x7fbb0ce03880
-[02:26:18.967] [ debug  ] Node 0 (0x7fbb0ce209a0) is activating by bubbling...
-[02:26:18.967] [ debug  ] Node 1 (0x7fbb0ce20850) is activating by bubbling...
-[02:26:18.967] [ debug  ] EventTrait 0x7fbb0ce20a10 for Node 1 has been activated in EventServer server.
-[02:26:18.967] [ debug  ] RenderTrait 0x7fbb0ce21750 for Node 1 has been activated in RenderServer.
-[02:26:18.967] [ debug  ] Set EventTrait 0x7fbb0ce20a10 delegate EventDelegate 0x7fbb0ce20548
-[02:26:18.967] [ debug  ] LogicTrait 0x7fbb0ce20530 for Node 1 has been activated in LogicServer server.
-[02:26:27.251] [ debug  ] Node 1 (0x7fbb0ce20850) is deactivating by bubbling...
-[02:26:27.251] [ debug  ] EventTrait 0x7fbb0ce20a10 for Node 1 has been deactivated in EventServer server.
-[02:26:27.251] [ debug  ] RenderTrait 0x7fbb0ce21750 for Node 1 has been deactivated in RenderServer.
-[02:26:27.251] [ debug  ] LogicTrait 0x7fbb0ce20530 for Node 1 has been deactivated in LogicServer server.
-[02:26:27.251] [ debug  ] Destroyed EventTrait for Node 1: 0x7fbb0ce20a10
-[02:26:27.251] [ debug  ] Destroyed RenderTrait for Node 1: 0x7fbb0ce21750
-[02:26:27.251] [ debug  ] Destroyed LogicTrait for Node 1: 0x7fbb0ce20530
+[03:11:49.255] [  info  ] Constructed LoggerService
+[03:11:49.835] [  info  ] Shader log length: 0
+[03:11:49.835] [ debug  ] Shader log for shader Shaders/Texture.vert:
+
+[03:11:49.836] [  info  ] Shader log length: 0
+[03:11:49.836] [ debug  ] Shader log for shader Shaders/Texture.frag:
+
+[03:11:49.837] [ error  ] Failed to compile shader Shaders/Point.vert
+[03:11:49.837] [  info  ] Shader log length: 0
+[03:11:49.837] [ debug  ] Shader log for shader Shaders/Point.vert:
+
+[03:11:49.838] [  info  ] Shader log length: 0
+[03:11:49.838] [ debug  ] Shader log for shader Shaders/Point.frag:
+
+[03:11:49.838] [ error  ] Failed to link shader program.
+[03:11:49.838] [  info  ] NodeServer created Node 0 (0x7f9009468ba0)
+[03:11:49.838] [  info  ] NodeServer created Node 1 (0x7f9009468bf0)
+[03:11:49.838] [ debug  ] Created EventTrait for Node 1: 0x7f90094427f0
+[03:11:49.863] [  info  ] Loaded texture with resource ID %d
+[03:11:49.863] [ debug  ] Created RenderTrait for Node 1: 0x7f9009468cc0
+[03:11:49.863] [ debug  ] Created LogicTrait for Node 1: 0x7f9009466830
+[03:11:49.863] [ debug  ] Node 0 (0x7f9009468ba0) added child Node 1 (0x7f9009468bf0)
+[03:11:49.863] [ debug  ] Creating new scene: 0x7f90094005f0
+[03:11:49.863] [  info  ] Loading scene: 0x7f90094005f0
+[03:11:49.863] [ debug  ] Node 0 (0x7f9009468ba0) is activating by bubbling...
+[03:11:49.863] [ debug  ] Node 1 (0x7f9009468bf0) is activating by bubbling...
+[03:11:49.863] [ debug  ] EventTrait 0x7f90094427f0 for Node 1 (0x7f9009468bf0) has been activated in EventServer server.
+[03:11:49.863] [ debug  ] RenderTrait 0x7f9009468cc0 for Node 1 has been activated in RenderServer.
+[03:11:49.863] [ debug  ] Set EventTrait 0x7f90094427f0 delegate EventDelegate 0x7f9009466848
+[03:11:49.863] [ debug  ] LogicTrait 0x7f9009466830 for Node 1 (0x7f9009468bf0) has been activated in LogicServer server.
+[03:11:51.061] [ debug  ] Node 1 (0x7f9009468bf0) is deactivating by bubbling...
+[03:11:51.061] [ debug  ] EventTrait 0x7f90094427f0 for Node 1 has been deactivated in EventServer server.
+[03:11:51.061] [ debug  ] RenderTrait 0x7f9009468cc0 for Node 1 has been deactivated in RenderServer.
+[03:11:51.061] [ debug  ] LogicTrait 0x7f9009466830 for Node 1 has been deactivated in LogicServer server.
+[03:11:51.061] [ debug  ] Destroyed EventTrait for Node 1: 0x7f90094427f0
+[03:11:51.061] [ debug  ] Destroyed RenderTrait for Node 1: 0x7f9009468cc0
+[03:11:51.061] [ debug  ] Destroyed LogicTrait for Node 1: 0x7f9009466830
+[03:13:37.205] [  info  ] Constructed LoggerService
+[03:13:38.169] [  info  ] Shader log length: 0
+[03:13:38.169] [ debug  ] Shader log for shader Shaders/Texture.vert:
+
+[03:13:38.172] [  info  ] Shader log length: 0
+[03:13:38.172] [ debug  ] Shader log for shader Shaders/Texture.frag:
+
+[03:13:38.177] [ error  ] Failed to compile shader Shaders/Point.vert
+[03:13:38.177] [  info  ] Shader log length: 49
+[03:13:38.177] [ debug  ] Shader log for shader Shaders/Point.vert:
+ERROR: 0:4: 'asdf' : syntax error: syntax error
+
+[03:13:38.180] [  info  ] Shader log length: 0
+[03:13:38.180] [ debug  ] Shader log for shader Shaders/Point.frag:
+
+[03:13:38.180] [ error  ] Failed to link shader program.
+[03:13:38.180] [  info  ] NodeServer created Node 0 (0x7fa98fc33c50)
+[03:13:38.180] [  info  ] NodeServer created Node 1 (0x7fa98fc33ca0)
+[03:13:38.180] [ debug  ] Created EventTrait for Node 1: 0x7fa98fc14360
+[03:13:38.231] [  info  ] Loaded texture with resource ID %d
+[03:13:38.231] [ debug  ] Created RenderTrait for Node 1: 0x7fa98ff31710
+[03:13:38.231] [ debug  ] Created LogicTrait for Node 1: 0x7fa98ff31790
+[03:13:38.231] [ debug  ] Node 0 (0x7fa98fc33c50) added child Node 1 (0x7fa98fc33ca0)
+[03:13:38.231] [ debug  ] Creating new scene: 0x7fa98fc2ef60
+[03:13:38.231] [  info  ] Loading scene: 0x7fa98fc2ef60
+[03:13:38.231] [ debug  ] Node 0 (0x7fa98fc33c50) is activating by bubbling...
+[03:13:38.231] [ debug  ] Node 1 (0x7fa98fc33ca0) is activating by bubbling...
+[03:13:38.231] [ debug  ] EventTrait 0x7fa98fc14360 for Node 1 (0x7fa98fc33ca0) has been activated in EventServer server.
+[03:13:38.231] [ debug  ] RenderTrait 0x7fa98ff31710 for Node 1 has been activated in RenderServer.
+[03:13:38.231] [ debug  ] Set EventTrait 0x7fa98fc14360 delegate EventDelegate 0x7fa98ff317a8
+[03:13:38.231] [ debug  ] LogicTrait 0x7fa98ff31790 for Node 1 (0x7fa98fc33ca0) has been activated in LogicServer server.
+[03:13:39.612] [ debug  ] Node 1 (0x7fa98fc33ca0) is deactivating by bubbling...
+[03:13:39.612] [ debug  ] EventTrait 0x7fa98fc14360 for Node 1 has been deactivated in EventServer server.
+[03:13:39.612] [ debug  ] RenderTrait 0x7fa98ff31710 for Node 1 has been deactivated in RenderServer.
+[03:13:39.612] [ debug  ] LogicTrait 0x7fa98ff31790 for Node 1 has been deactivated in LogicServer server.
+[03:13:39.612] [ debug  ] Destroyed EventTrait for Node 1: 0x7fa98fc14360
+[03:13:39.612] [ debug  ] Destroyed RenderTrait for Node 1: 0x7fa98ff31710
+[03:13:39.612] [ debug  ] Destroyed LogicTrait for Node 1: 0x7fa98ff31790
+[03:16:22.965] [  info  ] Constructed LoggerService
+[03:16:23.521] [ error  ] Failed to compile shader Shaders/Point.vert
+[03:16:23.521] [ error  ] Shader log for shader Shaders/Point.vert:
+ERROR: 0:4: 'asdf' : syntax error: syntax error
+
+[03:16:23.521] [ error  ] Failed to link shader program.
+[03:16:23.522] [  info  ] NodeServer created Node 0 (0x7fcadc57c810)
+[03:16:23.522] [  info  ] NodeServer created Node 1 (0x7fcadc57c860)
+[03:16:23.522] [ debug  ] Created EventTrait for Node 1: 0x7fcadc55f0b0
+[03:16:23.546] [  info  ] Loaded texture with resource ID %d
+[03:16:23.546] [ debug  ] Created RenderTrait for Node 1: 0x7fcadc57c530
+[03:16:23.546] [ debug  ] Created LogicTrait for Node 1: 0x7fcadc57c5b0
+[03:16:23.546] [ debug  ] Node 0 (0x7fcadc57c810) added child Node 1 (0x7fcadc57c860)
+[03:16:23.546] [ debug  ] Creating new scene: 0x7fcadc5007d0
+[03:16:23.546] [  info  ] Loading scene: 0x7fcadc5007d0
+[03:16:23.546] [ debug  ] Node 0 (0x7fcadc57c810) is activating by bubbling...
+[03:16:23.546] [ debug  ] Node 1 (0x7fcadc57c860) is activating by bubbling...
+[03:16:23.546] [ debug  ] EventTrait 0x7fcadc55f0b0 for Node 1 (0x7fcadc57c860) has been activated in EventServer server.
+[03:16:23.546] [ debug  ] RenderTrait 0x7fcadc57c530 for Node 1 has been activated in RenderServer.
+[03:16:23.546] [ debug  ] Set EventTrait 0x7fcadc55f0b0 delegate EventDelegate 0x7fcadc57c5c8
+[03:16:23.546] [ debug  ] LogicTrait 0x7fcadc57c5b0 for Node 1 (0x7fcadc57c860) has been activated in LogicServer server.
+[03:19:41.058] [  info  ] Constructed LoggerService
+[03:19:41.632] [ error  ] Failed to compile shader Shaders/Point.vert
+[03:19:41.632] [ error  ] Shader log for shader Shaders/Point.vert:
+ERROR: 0:4: 'asdf' : syntax error: syntax error
+
+[03:19:41.633] [ error  ] Failed to link shader program.
+[03:19:41.633] [ error  ] Program log for program Shaders/Point.vert, Shaders/Point.frag:
+ERROR: Input of fragment shader 'voColor' not written by previous stage
+
+[03:19:41.633] [  info  ] NodeServer created Node 0 (0x7ff934c56c60)
+[03:19:41.633] [  info  ] NodeServer created Node 1 (0x7ff934c56cb0)
+[03:19:41.633] [ debug  ] Created EventTrait for Node 1: 0x7ff934c56d00
+[03:19:41.656] [  info  ] Loaded texture with resource ID %d
+[03:19:41.656] [ debug  ] Created RenderTrait for Node 1: 0x7ff934f7efe0
+[03:19:41.656] [ debug  ] Created LogicTrait for Node 1: 0x7ff934f7f030
+[03:19:41.656] [ debug  ] Node 0 (0x7ff934c56c60) added child Node 1 (0x7ff934c56cb0)
+[03:19:41.656] [ debug  ] Creating new scene: 0x7ff934c074a0
+[03:19:41.656] [  info  ] Loading scene: 0x7ff934c074a0
+[03:19:41.656] [ debug  ] Node 0 (0x7ff934c56c60) is activating by bubbling...
+[03:19:41.656] [ debug  ] Node 1 (0x7ff934c56cb0) is activating by bubbling...
+[03:19:41.656] [ debug  ] EventTrait 0x7ff934c56d00 for Node 1 (0x7ff934c56cb0) has been activated in EventServer server.
+[03:19:41.656] [ debug  ] RenderTrait 0x7ff934f7efe0 for Node 1 has been activated in RenderServer.
+[03:19:41.656] [ debug  ] Set EventTrait 0x7ff934c56d00 delegate EventDelegate 0x7ff934f7f048
+[03:19:41.656] [ debug  ] LogicTrait 0x7ff934f7f030 for Node 1 (0x7ff934c56cb0) has been activated in LogicServer server.
+[03:19:43.030] [ debug  ] Node 1 (0x7ff934c56cb0) is deactivating by bubbling...
+[03:19:43.030] [ debug  ] EventTrait 0x7ff934c56d00 for Node 1 has been deactivated in EventServer server.
+[03:19:43.030] [ debug  ] RenderTrait 0x7ff934f7efe0 for Node 1 has been deactivated in RenderServer.
+[03:19:43.030] [ debug  ] LogicTrait 0x7ff934f7f030 for Node 1 has been deactivated in LogicServer server.
+[03:19:43.030] [ debug  ] Destroyed EventTrait for Node 1: 0x7ff934c56d00
+[03:19:43.030] [ debug  ] Destroyed RenderTrait for Node 1: 0x7ff934f7efe0
+[03:19:43.030] [ debug  ] Destroyed LogicTrait for Node 1: 0x7ff934f7f030
+[03:21:04.441] [  info  ] Constructed LoggerService
+[03:21:05.794] [ error  ] Failed to compile shader Shaders/Point.vert
+[03:21:05.794] [ error  ] Shader log for shader Shaders/Point.vert:
+ERROR: 0:4: 'asdf' : syntax error: syntax error
+
+[03:21:05.794] [ error  ] Failed to link shader program.
+[03:21:05.794] [ error  ] Program log for program Shaders/Point.vert, Shaders/Point.frag:
+ERROR: Input of fragment shader 'voColor' not written by previous stage
+
+[03:21:05.795] [  info  ] NodeServer created Node 0 (0x7f9d94e76630)
+[03:21:05.795] [  info  ] NodeServer created Node 1 (0x7f9d94d14b30)
+[03:21:05.795] [ debug  ] Created EventTrait for Node 1: 0x7f9d94d13f70
+[03:21:05.815] [  info  ] Loaded texture with resource ID %d
+[03:21:05.815] [ debug  ] Created RenderTrait for Node 1: 0x7f9d94d2b9b0
+[03:21:05.815] [ debug  ] Created LogicTrait for Node 1: 0x7f9d94d2ba30
+[03:21:05.815] [ debug  ] Node 0 (0x7f9d94e76630) added child Node 1 (0x7f9d94d14b30)
+[03:21:05.815] [ debug  ] Creating new scene: 0x7f9d94e03ca0
+[03:21:05.815] [  info  ] Loading scene: 0x7f9d94e03ca0
+[03:21:05.815] [ debug  ] Node 0 (0x7f9d94e76630) is activating by bubbling...
+[03:21:05.815] [ debug  ] Node 1 (0x7f9d94d14b30) is activating by bubbling...
+[03:21:05.815] [ debug  ] EventTrait 0x7f9d94d13f70 for Node 1 (0x7f9d94d14b30) has been activated in EventServer server.
+[03:21:05.815] [ debug  ] RenderTrait 0x7f9d94d2b9b0 for Node 1 has been activated in RenderServer.
+[03:21:05.815] [ debug  ] Set EventTrait 0x7f9d94d13f70 delegate EventDelegate 0x7f9d94d2ba48
+[03:21:05.815] [ debug  ] LogicTrait 0x7f9d94d2ba30 for Node 1 (0x7f9d94d14b30) has been activated in LogicServer server.
+[03:21:06.849] [ debug  ] Node 1 (0x7f9d94d14b30) is deactivating by bubbling...
+[03:21:06.849] [ debug  ] EventTrait 0x7f9d94d13f70 for Node 1 has been deactivated in EventServer server.
+[03:21:06.849] [ debug  ] RenderTrait 0x7f9d94d2b9b0 for Node 1 has been deactivated in RenderServer.
+[03:21:06.849] [ debug  ] LogicTrait 0x7f9d94d2ba30 for Node 1 has been deactivated in LogicServer server.
+[03:21:06.849] [ debug  ] Destroyed EventTrait for Node 1: 0x7f9d94d13f70
+[03:21:06.849] [ debug  ] Destroyed RenderTrait for Node 1: 0x7f9d94d2b9b0
+[03:21:06.849] [ debug  ] Destroyed LogicTrait for Node 1: 0x7f9d94d2ba30
+[03:21:45.018] [  info  ] Constructed LoggerService
+[03:21:45.984] [ error  ] Failed to compile shader Shaders/Point.vert
+[03:21:45.984] [ error  ] Shader log for shader Shaders/Point.vert:
+ERROR: 0:4: 'asdf' : syntax error: syntax error
+
+[03:21:45.985] [ error  ] Failed to link shader program.
+[03:21:45.985] [ error  ] Program log for program Shaders/Point.vert, Shaders/Point.frag:
+ERROR: Input of fragment shader 'voColor' not written by previous stage
+
+[03:21:45.985] [  info  ] NodeServer created Node 0 (0x7f94ccc522c0)
+[03:21:45.985] [  info  ] NodeServer created Node 1 (0x7f94ccc52350)
+[03:21:45.985] [ debug  ] Created EventTrait for Node 1: 0x7f94ccc523a0
+[03:21:46.013] [  info  ] Loaded texture with resource ID %d
+[03:21:46.013] [ debug  ] Created RenderTrait for Node 1: 0x7f94cce415b0
+[03:21:46.013] [ debug  ] Created LogicTrait for Node 1: 0x7f94cce41280
+[03:21:46.013] [ debug  ] Node 0 (0x7f94ccc522c0) added child Node 1 (0x7f94ccc52350)
+[03:21:46.013] [ debug  ] Creating new scene: 0x7f94ccc384b0
+[03:21:46.013] [  info  ] Loading scene: 0x7f94ccc384b0
+[03:21:46.013] [ debug  ] Node 0 (0x7f94ccc522c0) is activating by bubbling...
+[03:21:46.013] [ debug  ] Node 1 (0x7f94ccc52350) is activating by bubbling...
+[03:21:46.013] [ debug  ] EventTrait 0x7f94ccc523a0 for Node 1 (0x7f94ccc52350) has been activated in EventServer server.
+[03:21:46.013] [ debug  ] RenderTrait 0x7f94cce415b0 for Node 1 has been activated in RenderServer.
+[03:21:46.013] [ debug  ] Set EventTrait 0x7f94ccc523a0 delegate EventDelegate 0x7f94cce41298
+[03:21:46.013] [ debug  ] LogicTrait 0x7f94cce41280 for Node 1 (0x7f94ccc52350) has been activated in LogicServer server.
+[03:21:47.264] [ debug  ] Node 1 (0x7f94ccc52350) is deactivating by bubbling...
+[03:21:47.264] [ debug  ] EventTrait 0x7f94ccc523a0 for Node 1 has been deactivated in EventServer server.
+[03:21:47.264] [ debug  ] RenderTrait 0x7f94cce415b0 for Node 1 has been deactivated in RenderServer.
+[03:21:47.264] [ debug  ] LogicTrait 0x7f94cce41280 for Node 1 has been deactivated in LogicServer server.
+[03:21:47.264] [ debug  ] Destroyed EventTrait for Node 1: 0x7f94ccc523a0
+[03:21:47.264] [ debug  ] Destroyed RenderTrait for Node 1: 0x7f94cce415b0
+[03:21:47.264] [ debug  ] Destroyed LogicTrait for Node 1: 0x7f94cce41280
+[03:22:38.619] [  info  ] Constructed LoggerService
+[03:22:39.866] [ error  ] Failed to compile shader Shaders/Point.vert
+[03:22:39.866] [ error  ] Shader log for shader Shaders/Point.vert:
+ERROR: 0:4: 'asdf' : syntax error: syntax error
+
+[03:22:39.867] [ error  ] Failed to link shader program.
+[03:22:39.867] [ error  ] Program log for program Shaders/Point.vert, Shaders/Point.frag:
+ERROR: Input of fragment shader 'voColor' not written by previous stage
+
+[03:22:39.867] [  info  ] NodeServer created Node 0 (0x7ff16843fd60)
+[03:22:39.867] [  info  ] NodeServer created Node 1 (0x7ff16843fdf0)
+[03:22:39.867] [ debug  ] Created EventTrait for Node 1: 0x7ff16843fe40
+[03:22:39.896] [  info  ] Loaded texture with resource ID %d
+[03:22:39.896] [ debug  ] Created RenderTrait for Node 1: 0x7ff16844c210
+[03:22:39.896] [ debug  ] Created LogicTrait for Node 1: 0x7ff16844c290
+[03:22:39.896] [ debug  ] Node 0 (0x7ff16843fd60) added child Node 1 (0x7ff16843fdf0)
+[03:22:39.896] [ debug  ] Creating new scene: 0x7ff1684002f0
+[03:22:39.896] [  info  ] Loading scene: 0x7ff1684002f0
+[03:22:39.896] [ debug  ] Node 0 (0x7ff16843fd60) is activating by bubbling...
+[03:22:39.896] [ debug  ] Node 1 (0x7ff16843fdf0) is activating by bubbling...
+[03:22:39.896] [ debug  ] EventTrait 0x7ff16843fe40 for Node 1 (0x7ff16843fdf0) has been activated in EventServer server.
+[03:22:39.896] [ debug  ] RenderTrait 0x7ff16844c210 for Node 1 has been activated in RenderServer.
+[03:22:39.896] [ debug  ] Set EventTrait 0x7ff16843fe40 delegate EventDelegate 0x7ff16844c2a8
+[03:22:39.896] [ debug  ] LogicTrait 0x7ff16844c290 for Node 1 (0x7ff16843fdf0) has been activated in LogicServer server.
+[03:22:40.872] [ debug  ] Node 1 (0x7ff16843fdf0) is deactivating by bubbling...
+[03:22:40.872] [ debug  ] EventTrait 0x7ff16843fe40 for Node 1 has been deactivated in EventServer server.
+[03:22:40.872] [ debug  ] RenderTrait 0x7ff16844c210 for Node 1 has been deactivated in RenderServer.
+[03:22:40.872] [ debug  ] LogicTrait 0x7ff16844c290 for Node 1 has been deactivated in LogicServer server.
+[03:22:40.872] [ debug  ] Destroyed EventTrait for Node 1: 0x7ff16843fe40
+[03:22:40.872] [ debug  ] Destroyed RenderTrait for Node 1: 0x7ff16844c210
+[03:22:40.872] [ debug  ] Destroyed LogicTrait for Node 1: 0x7ff16844c290
+[03:22:54.158] [  info  ] Constructed LoggerService
+[03:22:54.766] [  info  ] NodeServer created Node 0 (0x7fd311581650)
+[03:22:54.766] [  info  ] NodeServer created Node 1 (0x7fd3115816a0)
+[03:22:54.766] [ debug  ] Created EventTrait for Node 1: 0x7fd3115525c0
+[03:22:54.790] [  info  ] Loaded texture with resource ID %d
+[03:22:54.790] [ debug  ] Created RenderTrait for Node 1: 0x7fd3115816f0
+[03:22:54.790] [ debug  ] Created LogicTrait for Node 1: 0x7fd311581770
+[03:22:54.790] [ debug  ] Node 0 (0x7fd311581650) added child Node 1 (0x7fd3115816a0)
+[03:22:54.790] [ debug  ] Creating new scene: 0x7fd3115002e0
+[03:22:54.790] [  info  ] Loading scene: 0x7fd3115002e0
+[03:22:54.790] [ debug  ] Node 0 (0x7fd311581650) is activating by bubbling...
+[03:22:54.790] [ debug  ] Node 1 (0x7fd3115816a0) is activating by bubbling...
+[03:22:54.790] [ debug  ] EventTrait 0x7fd3115525c0 for Node 1 (0x7fd3115816a0) has been activated in EventServer server.
+[03:22:54.790] [ debug  ] RenderTrait 0x7fd3115816f0 for Node 1 has been activated in RenderServer.
+[03:22:54.790] [ debug  ] Set EventTrait 0x7fd3115525c0 delegate EventDelegate 0x7fd311581788
+[03:22:54.790] [ debug  ] LogicTrait 0x7fd311581770 for Node 1 (0x7fd3115816a0) has been activated in LogicServer server.
+[03:22:56.620] [ debug  ] Node 1 (0x7fd3115816a0) is deactivating by bubbling...
+[03:22:56.620] [ debug  ] EventTrait 0x7fd3115525c0 for Node 1 has been deactivated in EventServer server.
+[03:22:56.620] [ debug  ] RenderTrait 0x7fd3115816f0 for Node 1 has been deactivated in RenderServer.
+[03:22:56.620] [ debug  ] LogicTrait 0x7fd311581770 for Node 1 has been deactivated in LogicServer server.
+[03:22:56.620] [ debug  ] Destroyed EventTrait for Node 1: 0x7fd3115525c0
+[03:22:56.620] [ debug  ] Destroyed RenderTrait for Node 1: 0x7fd3115816f0
+[03:22:56.620] [ debug  ] Destroyed LogicTrait for Node 1: 0x7fd311581770
+[03:22:58.678] [  info  ] Constructed LoggerService
+[03:22:59.253] [  info  ] NodeServer created Node 0 (0x7fdaafc41560)
+[03:22:59.253] [  info  ] NodeServer created Node 1 (0x7fdaafc04e30)
+[03:22:59.253] [ debug  ] Created EventTrait for Node 1: 0x7fdaafc04e80
+[03:22:59.270] [  info  ] Loaded texture with resource ID %d
+[03:22:59.270] [ debug  ] Created RenderTrait for Node 1: 0x7fdaafc3a2f0
+[03:22:59.270] [ debug  ] Created LogicTrait for Node 1: 0x7fdaafc3b4d0
+[03:22:59.270] [ debug  ] Node 0 (0x7fdaafc41560) added child Node 1 (0x7fdaafc04e30)
+[03:22:59.270] [ debug  ] Creating new scene: 0x7fdaafc03e80
+[03:22:59.270] [  info  ] Loading scene: 0x7fdaafc03e80
+[03:22:59.270] [ debug  ] Node 0 (0x7fdaafc41560) is activating by bubbling...
+[03:22:59.270] [ debug  ] Node 1 (0x7fdaafc04e30) is activating by bubbling...
+[03:22:59.270] [ debug  ] EventTrait 0x7fdaafc04e80 for Node 1 (0x7fdaafc04e30) has been activated in EventServer server.
+[03:22:59.270] [ debug  ] RenderTrait 0x7fdaafc3a2f0 for Node 1 has been activated in RenderServer.
+[03:22:59.270] [ debug  ] Set EventTrait 0x7fdaafc04e80 delegate EventDelegate 0x7fdaafc3b4e8
+[03:22:59.270] [ debug  ] LogicTrait 0x7fdaafc3b4d0 for Node 1 (0x7fdaafc04e30) has been activated in LogicServer server.
+[03:23:00.408] [ debug  ] Node 1 (0x7fdaafc04e30) is deactivating by bubbling...
+[03:23:00.408] [ debug  ] EventTrait 0x7fdaafc04e80 for Node 1 has been deactivated in EventServer server.
+[03:23:00.408] [ debug  ] RenderTrait 0x7fdaafc3a2f0 for Node 1 has been deactivated in RenderServer.
+[03:23:00.408] [ debug  ] LogicTrait 0x7fdaafc3b4d0 for Node 1 has been deactivated in LogicServer server.
+[03:23:00.408] [ debug  ] Destroyed EventTrait for Node 1: 0x7fdaafc04e80
+[03:23:00.408] [ debug  ] Destroyed RenderTrait for Node 1: 0x7fdaafc3a2f0
+[03:23:00.408] [ debug  ] Destroyed LogicTrait for Node 1: 0x7fdaafc3b4d0
+[03:23:01.008] [  info  ] Constructed LoggerService
+[03:23:01.729] [  info  ] NodeServer created Node 0 (0x7f982c55e8f0)
+[03:23:01.729] [  info  ] NodeServer created Node 1 (0x7f982c55e980)
+[03:23:01.729] [ debug  ] Created EventTrait for Node 1: 0x7f982c55e9d0
+[03:23:01.753] [  info  ] Loaded texture with resource ID %d
+[03:23:01.753] [ debug  ] Created RenderTrait for Node 1: 0x7f982c657330
+[03:23:01.753] [ debug  ] Created LogicTrait for Node 1: 0x7f982c658660
+[03:23:01.753] [ debug  ] Node 0 (0x7f982c55e8f0) added child Node 1 (0x7f982c55e980)
+[03:23:01.753] [ debug  ] Creating new scene: 0x7f982c53fe10
+[03:23:01.753] [  info  ] Loading scene: 0x7f982c53fe10
+[03:23:01.753] [ debug  ] Node 0 (0x7f982c55e8f0) is activating by bubbling...
+[03:23:01.753] [ debug  ] Node 1 (0x7f982c55e980) is activating by bubbling...
+[03:23:01.753] [ debug  ] EventTrait 0x7f982c55e9d0 for Node 1 (0x7f982c55e980) has been activated in EventServer server.
+[03:23:01.753] [ debug  ] RenderTrait 0x7f982c657330 for Node 1 has been activated in RenderServer.
+[03:23:01.753] [ debug  ] Set EventTrait 0x7f982c55e9d0 delegate EventDelegate 0x7f982c658678
+[03:23:01.753] [ debug  ] LogicTrait 0x7f982c658660 for Node 1 (0x7f982c55e980) has been activated in LogicServer server.
+[03:23:03.439] [ debug  ] Node 1 (0x7f982c55e980) is deactivating by bubbling...
+[03:23:03.439] [ debug  ] EventTrait 0x7f982c55e9d0 for Node 1 has been deactivated in EventServer server.
+[03:23:03.439] [ debug  ] RenderTrait 0x7f982c657330 for Node 1 has been deactivated in RenderServer.
+[03:23:03.439] [ debug  ] LogicTrait 0x7f982c658660 for Node 1 has been deactivated in LogicServer server.
+[03:23:03.439] [ debug  ] Destroyed EventTrait for Node 1: 0x7f982c55e9d0
+[03:23:03.439] [ debug  ] Destroyed RenderTrait for Node 1: 0x7f982c657330
+[03:23:03.439] [ debug  ] Destroyed LogicTrait for Node 1: 0x7f982c658660
+[03:23:06.013] [  info  ] Constructed LoggerService
+[03:23:06.612] [  info  ] NodeServer created Node 0 (0x7fc56f637010)
+[03:23:06.613] [  info  ] NodeServer created Node 1 (0x7fc56f6370a0)
+[03:23:06.613] [ debug  ] Created EventTrait for Node 1: 0x7fc56f6370f0
+[03:23:06.638] [  info  ] Loaded texture with resource ID %d
+[03:23:06.638] [ debug  ] Created RenderTrait for Node 1: 0x7fc56f43c220
+[03:23:06.638] [ debug  ] Created LogicTrait for Node 1: 0x7fc56f43bc40
+[03:23:06.638] [ debug  ] Node 0 (0x7fc56f637010) added child Node 1 (0x7fc56f6370a0)
+[03:23:06.638] [ debug  ] Creating new scene: 0x7fc56f605df0
+[03:23:06.638] [  info  ] Loading scene: 0x7fc56f605df0
+[03:23:06.638] [ debug  ] Node 0 (0x7fc56f637010) is activating by bubbling...
+[03:23:06.638] [ debug  ] Node 1 (0x7fc56f6370a0) is activating by bubbling...
+[03:23:06.638] [ debug  ] EventTrait 0x7fc56f6370f0 for Node 1 (0x7fc56f6370a0) has been activated in EventServer server.
+[03:23:06.638] [ debug  ] RenderTrait 0x7fc56f43c220 for Node 1 has been activated in RenderServer.
+[03:23:06.638] [ debug  ] Set EventTrait 0x7fc56f6370f0 delegate EventDelegate 0x7fc56f43bc58
+[03:23:06.638] [ debug  ] LogicTrait 0x7fc56f43bc40 for Node 1 (0x7fc56f6370a0) has been activated in LogicServer server.
+[03:23:09.901] [ debug  ] Node 1 (0x7fc56f6370a0) is deactivating by bubbling...
+[03:23:09.901] [ debug  ] EventTrait 0x7fc56f6370f0 for Node 1 has been deactivated in EventServer server.
+[03:23:09.901] [ debug  ] RenderTrait 0x7fc56f43c220 for Node 1 has been deactivated in RenderServer.
+[03:23:09.901] [ debug  ] LogicTrait 0x7fc56f43bc40 for Node 1 has been deactivated in LogicServer server.
+[03:23:09.901] [ debug  ] Destroyed EventTrait for Node 1: 0x7fc56f6370f0
+[03:23:09.901] [ debug  ] Destroyed RenderTrait for Node 1: 0x7fc56f43c220
+[03:23:09.901] [ debug  ] Destroyed LogicTrait for Node 1: 0x7fc56f43bc40
