@@ -153,7 +153,7 @@ void Node::destroy() {
 		trait->destroy();
 	}
 
-	Bromine::instance().nodeServer.destroyNode(id);
+	Bromine::server<NodeServer>().destroyNode(id);
 }
 
 } // namespace BromineEngine

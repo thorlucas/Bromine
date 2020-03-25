@@ -7,6 +7,7 @@
 #include <functional>
 #include <typeinfo>
 #include <typeindex>
+#include <stdexcept>
 #include <chrono>
 
 #include <spdlog/spdlog.h>
@@ -24,10 +25,7 @@ class Scene;
 class Node;
 
 class Server;
-class NodeServer;
-class RenderServer;
-class EventServer;
-class LogicServer;
+class Service;
 
 class NodeBuilder;
 
@@ -46,7 +44,7 @@ class NodeBuilder;
  */
 class Bromine {
 private:
-	Bromine();
+	static Bromine* globalInstance;
 
 	bool running; /**< Used to exit out of the main loop. */
 	
@@ -56,29 +54,31 @@ private:
 	 * When added to Bromine, the scene did enter is called.
 	 */
 	Scene* currentScene;
-	
-	std::unordered_map<std::type_index, std::function<Server*()>> serverClosures;
-	std::unordered_map<std::type_index, Server&> serverMap;
+
+	std::shared_ptr<spdlog::logger> logger
+
+	std::unordered_map<std::type_index, Server*> serverMap;
 	std::vector<Server*> serverVector;
-
-	std::shared_ptr<spdlog::logger> logger;
-
-	// std::chrono::high_resolution_clock::time_point lastSecondFrame;
-	// std::chrono::high_resolution_clock::time_point lastFrame;
-	// std::chrono::high_resolution_clock::time_point thisFrame;
-	// std::chrono::duration<double> delta;
-
-	// unsigned int framesInSecond;
+	
+	std::unordered_map<std::type_index, Service*> serviceMap;
 
 public:
-	// Singleton Setup
+	Bromine();
 
 	/**
 	 * Returns an instance of the Bromine engine singleton.
 	 */
 	static Bromine& instance() {
-		static Bromine instance;
-		return instance;
+		return *Bromine::globalInstance; // TODO: Does not check for nullptr
+	}
+
+	/**
+	 * Sets the global instance of Bromine that will be fetched
+	 * using Bromine::instance(). This may be changed prior
+	 * to any test suites that need mock servers or services.
+	 */
+	static void setGlobalInstance(Bromine* instance) {
+		globalInstance = instance;
 	}
 
 	Bromine(Bromine const&) = delete;
@@ -88,19 +88,67 @@ public:
 
 
 	// Server registration and fetching
+	// Bromine manages owners the server and so should be responsible for creating it. Args are passed in.
+	template <typename T, typename ...Ps>
+	T& registerServer(Ps... ps) {
+		if (serverMap.find(typeid(T)) != serverMap.end()) {
+			// TODO: Throw custom error
+			throw std::runtime_error("Server already exists");
+		}
 
-	template <typename T>
-	bool registerServer(std::function<T*()> closure) {
-		return serverClosures.insert(
-			std::pair<std::type_index, std::function<Server*()>>(typeid(T), closure)
-		).second;
+		T* server = new T(ps...);
+		Server* base = dynamic_cast<Server*>(server);
+
+		if (base == nullptr) {
+			// TODO: Throw custom error
+			throw std::runtime_error("Type passed is not of type server");
+		}
+
+		serverVector.push_back(base);
+		serverMap.insert(std::pair<std::type_index, Server*>(typeid(T), base));
+
+		return *server;
 	}
-
-	Server& getServer(std::type_index typeIndex);
 
 	template <typename T>
 	T& getServer() {
-		return dynamic_cast<T&>(getServer(typeid(T)));
+		return *(static_cast<T*>(serverMap.at(typeid(T))));
+	}
+
+	template <typename T>
+	static T& server() {
+		return Bromine::instance().getServer<T>();
+	}
+
+	// Service registration
+	template <typename T, typename ...Ps>
+	T& registerService(Ps... ps) {
+		if (serviceMap.find(typeid(T)) != serviceMap.end()) {
+			// TODO: Throw custom error
+			throw std::runtime_error("Service already exists");
+		}
+
+		T* service = new T(ps...);
+		Service* base = dynamic_cast<Service*>(service);
+
+		if (base == nullptr) {
+			// TODO: Throw custom error
+			throw std::runtime_error("Type passed is not of type service");
+		}
+
+		serviceMap.insert(std::pair<std::type_index, Service*>(typeid(T), base));
+
+		return *service;
+	}
+
+	template <typename T>
+	T& getService() {
+		return *(static_cast<T*>(serviceMap.at(typeid(T))));
+	}
+
+	template <typename T>
+	static T& service() {
+		return Bromine::instance().getService<T>();
 	}
 
 	// Aliases
@@ -108,21 +156,6 @@ public:
 	static Node& node(NodeID node);
 
 	static NodeBuilder node();
-
-	template <typename T>
-	static T& server() {
-		return Bromine::instance().getServer<T>();
-	} 
-
-	// Server aliases
-	// Commonly used servers have aliases here for quick access
-	
-	NodeServer& 	nodeServer;
-	RenderServer& 	renderServer;
-	EventServer& 	eventServer;
-	LogicServer& 	logicServer;
-
-
 	// Logging
 
 	// TODO: Make a v version that takes a v list 
@@ -137,8 +170,7 @@ public:
 	// Run and quit
 
 	bool run(Scene* rootScene);
-	bool run();
-
+	
 	void quit();
 
 	// Getters and setters

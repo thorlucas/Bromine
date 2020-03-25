@@ -1,7 +1,12 @@
 #include <Bromine/Bromine.h>
+#include <Config/Config.h>
+#include <Config/ServersConfig.h>
 
 using namespace BromineEngine;
 
 int main(int argc, char const *argv[]) {
-	return Bromine::instance().run();
+	Bromine bromine;
+	Bromine::setGlobalInstance(&bromine);
+	DEFAULT_SERVER_REGISTRATION(bromine)
+	return bromine.run(DEFAULT_INITIAL_SCENE);
 }
