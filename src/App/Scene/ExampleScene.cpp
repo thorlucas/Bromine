@@ -20,7 +20,7 @@ ExampleScene::ExampleScene() {
 		.create()
 	);
 
-	Bromine::log(Logger::DEBUG, "Creating new scene: %p", this);
+	Logger::debug("Creating new scene: {}", static_cast<void*>(this));
 }
 
 ExampleScene::~ExampleScene() {}

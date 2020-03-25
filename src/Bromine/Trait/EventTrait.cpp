@@ -8,12 +8,12 @@ EventTrait::EventTrait(const NodeID owner) : CONSTRUCT_BASE_TRAIT(EventTrait), d
 EventTrait::~EventTrait() {}
 
 void EventTrait::setDelegate(EventDelegate* delegate) {
-	Bromine::log(Logger::DEBUG, "Set EventTrait %p delegate EventDelegate %p", this, delegate);
+	Logger::debug("Set EventTrait {} delegate EventDelegate {}", static_cast<void*>(this), static_cast<void*>(delegate));
 	this->delegate = delegate;
 }
 
 void EventTrait::onKeyEvent(const KeyboardEvent& event) {
-	Bromine::log(Logger::VERBOSE, "EventTrait %p for Node %d got key press", this, owner().id);
+	Logger::trace("EventTrait {} for Node {} got key press", static_cast<void*>(this), owner().id);
 	if (delegate != nullptr) {
 		delegate->onKeyEvent(event);
 	}

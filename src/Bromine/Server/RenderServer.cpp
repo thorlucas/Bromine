@@ -33,13 +33,13 @@ Texture::~Texture() {
 RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailableID(0), globalPos(0.0, 0.0) {
 	// Initialize SDL
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
-		Bromine::log(Logger::ERROR, "Failed to initialize video: %s", SDL_GetError());
+		Logger::error("Failed to initialize video: %s", SDL_GetError());
 		throw BromineInitError(SDL_GetError()); 
 	}
 
 	// Initialze SDL_image
 	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
-		Bromine::log(Logger::ERROR, "Failed to initialize image: %s", SDL_GetError());
+		Logger::error("Failed to initialize image: %s", SDL_GetError());
 		throw BromineInitError(SDL_GetError()); 
 	}
 
@@ -53,7 +53,7 @@ RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailabl
 	window = SDL_CreateWindow("Bromine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_OPENGL);
 
 	if (window == nullptr) {
-		Bromine::log(Logger::ERROR, "Failed to create window: %s", SDL_GetError());
+		Logger::error("Failed to create window: %s", SDL_GetError());
 		throw BromineInitError(SDL_GetError()); 
 	}
 
@@ -61,20 +61,20 @@ RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailabl
 	glContext = SDL_GL_CreateContext(window);
 
 	if (glContext == nullptr) {
-		Bromine::log(Logger::ERROR, "Failed to create GL context: %s", SDL_GetError());
+		Logger::error("Failed to create GL context: %s", SDL_GetError());
 		throw BromineInitError(SDL_GetError());
 	}
 
 	// Initialize Glew
 	GLenum glewInitError = glewInit();
 	if (glewInitError != GLEW_OK) {
-		Bromine::log(Logger::ERROR, "Failed to initialize glew: %s", glewGetErrorString(glewInitError));
+		Logger::error("Failed to initialize glew: %s", glewGetErrorString(glewInitError));
 		throw BromineInitError("Failed to initialize glew.");
 	}
 
 	// Enable vsync
 	if (SDL_GL_SetSwapInterval(1) != 0) {
-		Bromine::log(Logger::ERROR, "Failed to set vsync: %s", SDL_GetError());
+		Logger::error("Failed to set vsync: %s", SDL_GetError());
 		throw BromineInitError(SDL_GetError());
 	}
 
@@ -183,13 +183,13 @@ RenderServer::~RenderServer() {
 
 void RenderServer::activateTrait(RenderTrait* trait) {
 	activeTraits.push_back(trait);
-	Bromine::log(Logger::DEBUG, "RenderTrait %p for Node %d has been activated in RenderServer.", trait, trait->owner().id);
+	Logger::debug("RenderTrait {} for Node {} has been activated in RenderServer.", static_cast<void*>(trait), trait->owner().id);
 	instructionsDirtyFlag = true;
 }
 
 void RenderServer::deactivateTrait(RenderTrait* trait) {
 	activeTraits.erase(std::find(activeTraits.begin(), activeTraits.end(), trait));
-	Bromine::log(Logger::DEBUG, "RenderTrait %p for Node %d has been deactivated in RenderServer.", trait, trait->owner().id);
+	Logger::debug("RenderTrait {} for Node {} has been deactivated in RenderServer.", static_cast<void*>(trait), trait->owner().id);
 	instructionsDirtyFlag = true;
 }
 
@@ -200,7 +200,7 @@ Shader RenderServer::loadShader(const char* path, ShaderType type) {
 	SDL_RWops* shaderFile = SDL_RWFromFile(buffer, "r");
 
 	if (shaderFile == NULL) {
-		Bromine::log(Logger::ERROR, "Failed to open shader file: %s", buffer);
+		Logger::error("Failed to open shader file: {}", buffer);
 		// TODO: Throw
 		return 0;
 	}
@@ -226,7 +226,7 @@ Shader RenderServer::loadShader(const char* path, ShaderType type) {
 		char* errorBuffer = new char[256];
 		int32_t infoLength;
 		glGetShaderInfoLog(shader, 256, &infoLength, errorBuffer);
-		Bromine::log(Logger::ERROR, "Failed to compile shader:\n%s", errorBuffer);
+		Logger::error("Failed to compile shader:\n%s", errorBuffer);
 		glDeleteShader(shader);
 		// TODO: Throw
 		shader = 0;
@@ -256,7 +256,7 @@ ShaderProgram RenderServer::loadShaderProgram(const char* vertexShaderPath, cons
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &programLinked);
 	if (programLinked != true) {
 		// TODO: Get info
-		Bromine::log(Logger::ERROR, "Failed to link shader program.");
+		Logger::error("Failed to link shader program.");
 		// TODO: Throw
 		glDeleteProgram(shaderProgram);
 		shaderProgram = 0;
@@ -277,7 +277,7 @@ ResourceID RenderServer::loadTexture(const char* path) {
 
 	SDL_Surface* image = IMG_Load(buffer);
 	if (!image) {
-		Bromine::log(Logger::ERROR, "Failed to load texture: %s", path);
+		Logger::error("Failed to load texture: %s", path);
 		return RESOURCE_NULL;
 	}
 
@@ -293,7 +293,7 @@ ResourceID RenderServer::loadTexture(const char* path) {
 
 	resourceMap.insert(std::pair<ResourceID, Resource&>(resource.id, resource));
 
-	Bromine::log(Logger::INFO, "Loaded texture with resource ID %d", resource.id);
+	Logger::info("Loaded texture with resource ID %d", resource.id);
 
 	return resource.id;
 }
@@ -445,7 +445,7 @@ void RenderServer::update(double delta) {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	if (!relPosStack.empty()) {
-		Bromine::log(Logger::WARNING, "Relative positition stack is not empty at the beginning of render loop.");
+		Logger::warn("Relative positition stack is not empty at the beginning of render loop.");
 	}
 
 	for (auto& instr : instructions) {

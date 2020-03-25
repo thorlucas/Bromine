@@ -1,0 +1,87 @@
+[01:10:39.570] [info] Constructed LoggerService
+[01:10:39.570] [debug] Created node with ID 0: 0x7fa914497da0
+[01:10:39.570] [debug] Created node with ID 1: 0x7fa914498af0
+[01:10:39.570] [debug] Created EventTrait for Node 1: 0x7fa914497e10
+[01:10:39.594] [info] Loaded texture with resource ID %d
+[01:10:39.594] [debug] Created RenderTrait for Node 1: 0x7fa914498b70
+[01:10:39.594] [debug] Created LogicTrait for Node 1: 0x7fa914497c70
+[01:10:39.594] [debug] Node %d added child node %d
+[01:10:39.594] [debug] Creating new scene: 0x7fa91447acd0
+[01:10:39.594] [info] Loading scene: 0x7fa91447acd0
+[01:10:39.594] [debug] Node %d is activating by bubbling...
+[01:10:39.594] [debug] Node %d is activating by bubbling...
+[01:10:39.594] [debug] EventTrait 0x7fa914497e10 for Node 1 has been activated in EventServer server.
+[01:10:39.594] [debug] RenderTrait 0x7fa914498b70 for Node 1 has been activated in RenderServer.
+[01:10:39.594] [debug] Set EventTrait 0x7fa914497e10 delegate EventDelegate 0x7fa914497c88
+[01:10:39.594] [debug] LogicTrait 0x7fa914497c70 for Node 1 has been activated in LogicServer server.
+[01:10:40.622] [trace] [FPS] 59
+[01:10:40.925] [debug] EventTrait 0x7fa914497e10 for Node 1 got key press
+[01:10:41.055] [debug] EventTrait 0x7fa914497e10 for Node 1 got key press
+[01:10:41.055] [debug] Node %d is deactivating by bubbling...
+[01:10:41.055] [debug] EventTrait 0x7fa914497e10 for Node 1 has been deactivated in EventServer server.
+[01:10:41.055] [debug] RenderTrait 0x7fa914498b70 for Node 1 has been deactivated in RenderServer.
+[01:10:41.055] [debug] LogicTrait 0x7fa914497c70 for Node 1 has been deactivated in LogicServer server.
+[01:10:41.055] [debug] Destroyed EventTrait for Node 1: 0x7fa914497e10
+[01:10:41.055] [debug] Destroyed RenderTrait for Node 1: 0x7fa914498b70
+[01:10:41.055] [debug] Destroyed LogicTrait for Node 1: 0x7fa914497c70
+[01:11:36.044] [info] Constructed LoggerService
+[01:11:36.044] [debug] Created node with ID 0: 0x7ff2a6d71f40
+[01:11:36.044] [debug] Created node with ID 1: 0x7ff2a6d71fb0
+[01:11:36.044] [debug] Created EventTrait for Node 1: 0x7ff2a6d72020
+[01:11:36.093] [info] Loaded texture with resource ID %d
+[01:11:36.093] [debug] Created RenderTrait for Node 1: 0x7ff2a6f239c0
+[01:11:36.093] [debug] Created LogicTrait for Node 1: 0x7ff2a6f23670
+[01:11:36.093] [debug] Node %d added child node %d
+[01:11:36.093] [debug] Creating new scene: 0x7ff2a6d740a0
+[01:11:36.093] [info] Loading scene: 0x7ff2a6d740a0
+[01:11:36.093] [debug] Node %d is activating by bubbling...
+[01:11:36.093] [debug] Node %d is activating by bubbling...
+[01:11:36.093] [debug] EventTrait 0x7ff2a6d72020 for Node 1 has been activated in EventServer server.
+[01:11:36.094] [debug] RenderTrait 0x7ff2a6f239c0 for Node 1 has been activated in RenderServer.
+[01:11:36.094] [debug] Set EventTrait 0x7ff2a6d72020 delegate EventDelegate 0x7ff2a6f23688
+[01:11:36.094] [debug] LogicTrait 0x7ff2a6f23670 for Node 1 has been activated in LogicServer server.
+[01:11:37.118] [trace] [FPS] 35
+[01:11:37.325] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:37.367] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:37.426] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:37.576] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:37.667] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:37.835] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:37.851] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:37.905] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:37.928] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:37.972] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:37.994] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:38.025] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:38.042] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:38.074] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:38.124] [trace] [FPS] 56
+[01:11:38.390] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:38.575] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:38.650] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:38.816] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:38.849] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:38.885] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:38.918] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:38.934] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:39.134] [trace] [FPS] 61
+[01:11:39.168] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:39.202] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:39.235] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:39.267] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:39.303] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:39.317] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:39.433] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:39.567] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:39.602] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:39.635] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:39.635] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:39.801] [debug] EventTrait 0x7ff2a6d72020 for Node 1 got key press
+[01:11:39.801] [debug] Node %d is deactivating by bubbling...
+[01:11:39.802] [debug] EventTrait 0x7ff2a6d72020 for Node 1 has been deactivated in EventServer server.
+[01:11:39.802] [debug] RenderTrait 0x7ff2a6f239c0 for Node 1 has been deactivated in RenderServer.
+[01:11:39.802] [debug] LogicTrait 0x7ff2a6f23670 for Node 1 has been deactivated in LogicServer server.
+[01:11:39.802] [debug] Destroyed EventTrait for Node 1: 0x7ff2a6d72020
+[01:11:39.802] [debug] Destroyed RenderTrait for Node 1: 0x7ff2a6f239c0
+[01:11:39.802] [debug] Destroyed LogicTrait for Node 1: 0x7ff2a6f23670
+[01:11:40.135] [trace] [FPS] 60

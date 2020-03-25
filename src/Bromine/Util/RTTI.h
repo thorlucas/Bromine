@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Bromine/Facade/Logger.h>
+
 // This must be included inside each trait's declaration
 // TODO: Activate permissions?
 #define DECLARE_TRAIT(serverName)											\
@@ -76,19 +78,19 @@ traitName& serverName::getTrait(NodeID node) {								\
 #define DEFINE_DEFAULT_SERVER_ACTIVATE_TRAIT_STANDARD(serverName, traitName)\
 void serverName::activateTrait(traitName* trait) {							\
 	activeTraits.push_back(trait);											\
-	Bromine::log(Logger::DEBUG, 											\
-		#traitName " %p for Node %d has been activated in "					\
+	Logger::debug(															\
+		#traitName " {} for Node {} has been activated in "					\
 		#serverName " server.",												\
-		trait, trait->owner().id);											\
+		static_cast<void*>(trait), trait->owner().id);						\
 }																			\
 void serverName::deactivateTrait(traitName* trait) {						\
 	activeTraits.erase(														\
 		std::find(activeTraits.begin(), activeTraits.end(), trait)			\
 	);																		\
-	Bromine::log(Logger::DEBUG, 											\
-		#traitName " %p for Node %d has been deactivated in "				\
+	Logger::debug(															\
+		#traitName " {} for Node {} has been deactivated in "				\
 		#serverName " server.",												\
-		trait, trait->owner().id);											\
+		static_cast<void*>(trait), trait->owner().id);						\
 }																			\
 
 #define DEFINE_TRAIT_SERVER_CREATE_TRAIT_STANDARD(traitName)				\
@@ -98,9 +100,8 @@ public:																		\
 		T& tref = *(new T(node, std::forward<Ps>(ps)...));					\
 		nodeMap.insert(std::pair<NodeID, traitName&>(node, 					\
 			static_cast<traitName&>(tref)));								\
-																			\
-		Bromine::log(Logger::DEBUG, "Created " #traitName					\
-			" for Node %d: %p", node, &tref);								\
+		Logger::debug("Created " #traitName									\
+			" for Node {}: {}", node, static_cast<void*>(&tref));			\
 		return tref;														\
 	}																		\
 
@@ -110,8 +111,8 @@ void serverName::destroyTrait(traitName* trait) {							\
 	auto t = std::find(activeTraits.begin(), activeTraits.end(), trait);	\
 	if (t != activeTraits.end())											\
 		activeTraits.erase(t);												\
-	Bromine::log(Logger::DEBUG, "Destroyed " #traitName						\
-		" for Node %d: %p", trait->ownerID, trait);							\
+	Logger::debug("Destroyed " #traitName									\
+		" for Node {}: {}", trait->ownerID, static_cast<void*>(trait));		\
 	delete trait;															\
 }																			\
 

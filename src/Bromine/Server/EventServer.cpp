@@ -30,11 +30,11 @@ void EventServer::update(double delta) {
 
 
 // void EventServer::activate(NodeID node) {
-// 	Bromine::log(Logger::DEBUG, "Node %d has been activated in event server.", node);
+// 	Logger::debug("Node %d has been activated in event server.", node);
 // 	if (nodeMap.find(node) != nodeMap.end()) {
 // 		activeNodes.insert(node);		
 // 	} else {
-// 		Bromine::log(Logger::WARNING, "Node %d is not in event server's node map", node);
+// 		Logger::warn("Node %d is not in event server's node map", node);
 // 	}
 // }
 

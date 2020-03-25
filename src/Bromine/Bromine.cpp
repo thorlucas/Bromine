@@ -5,23 +5,13 @@
 #include <Bromine/Service/Service.h>
 
 #include <Bromine/Server/NodeServer.h>
+#include <Bromine/Service/LoggerService.h>
 
 namespace BromineEngine {
 
 Bromine* Bromine::globalInstance = nullptr;
 
-Bromine::Bromine() {
-
-	Logger::instance().setMinimumPriority(LOGGER_MIN_PRIORITY);
-	Logger::instance().logFile(logFileName);
-
-	logger = spdlog::basic_logger_mt("bromine-logger", "SPDLog.log");
-
-	logger->info("Hello SPD Log! Test!");
-	
-	running = true;
-	currentScene = nullptr;
-}
+Bromine::Bromine() : running(true), currentScene(nullptr) {}
 
 Bromine::~Bromine() {
 	for (auto& it : serverVector) {
@@ -57,7 +47,7 @@ bool Bromine::run(Scene* rootScene) {
 
 		++frameCount;
 		if (acc >= 1000) {
-			Bromine::log(Logger::DEBUG, "[FPS] %d", frameCount);
+			Logger::trace("[FPS] {}", frameCount);
 			acc = 0;
 			frameCount = 0;
 		}
@@ -67,7 +57,7 @@ bool Bromine::run(Scene* rootScene) {
 
 		// ++framesInSecond;
 		// if (std::chrono::duration_cast<std::chrono::duration<double>>(thisFrame - lastSecondFrame).count() >= 1.0) {
-		// 	Bromine::log(Logger::DEBUG, "[FPS] %d", framesInSecond);
+		// 	Logger::debug("[FPS] %d", framesInSecond);
 		// 	lastSecondFrame = thisFrame;
 		// 	framesInSecond = 0;
 		// }

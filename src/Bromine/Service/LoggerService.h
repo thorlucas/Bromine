@@ -1,7 +1,22 @@
 #pragma once
 
-#include <spdlog/>
+#include <Bromine/Service/Service.h>
+#include <spdlog/spdlog.h>
 
-class LoggerService : public Service {
+namespace BromineEngine {
 
+namespace LogLevel = spdlog::level;
+
+class LoggerService : public Service, private spdlog::logger {
+public:
+	LoggerService();
+
+	using spdlog::logger::debug;
+	using spdlog::logger::info;
+	using spdlog::logger::warn;
+	using spdlog::logger::error;
+	using spdlog::logger::critical;
+	using spdlog::logger::trace;
 };
+
+}

@@ -69,7 +69,7 @@ Particle* ParticleRenderTrait::spawnParticle(Vec2f pos, unsigned int lifetime) {
 
 
 void ParticleRenderTrait::killParticle(Particle* p) {
-	Bromine::log(Logger::DEBUG, "Particle died");
+	Logger::debug("Particle died");
 
 	if (p->lastAlive != nullptr) {
 		p->lastAlive->nextAlive = p->nextAlive;

@@ -45,7 +45,7 @@ void Node::addChild(Node& child) {
 	_children.push_back(child.id);
 	child.setParent(id);
 
-	Bromine::log(Logger::DEBUG, "Node %d added child node %d", id, child.id);
+	Logger::debug("Node %d added child node %d", id, child.id);
 }
 
 void Node::removeChild(NodeID child) {
@@ -63,7 +63,7 @@ void Node::removeTrait(Trait* trait) {
 }
 
 void Node::enable() {
-	Bromine::log(Logger::DEBUG, "Node %d is being enabled...", id);
+	Logger::debug("Node %d is being enabled...", id);
 	_enabled = true;
 
 	if (_parentIsActive)
@@ -71,7 +71,7 @@ void Node::enable() {
 }
 
 void Node::disable() {
-	Bromine::log(Logger::DEBUG, "Node %d is being disabled...", id);
+	Logger::debug("Node %d is being disabled...", id);
 	_enabled = false;
 
 	if (_parentIsActive)
@@ -83,7 +83,7 @@ void Node::parentDidActivate() {
 
 	 // If we ourselves are not enabled, we shouldn't activate our traits and children
 	if (_enabled) {
-		Bromine::log(Logger::DEBUG, "Node %d is activating by bubbling...", id);
+		Logger::debug("Node %d is activating by bubbling...", id);
 		bubbleActivate();
 	}
 }
@@ -93,7 +93,7 @@ void Node::parentDidDeactivate() {
 
 	// If we are already not active, no need to call this again
 	if (_enabled) {
-		Bromine::log(Logger::DEBUG, "Node %d is deactivating by bubbling...", id);
+		Logger::debug("Node %d is deactivating by bubbling...", id);
 		bubbleDeactivate();
 	}
 }

@@ -10,13 +10,11 @@
 #include <stdexcept>
 #include <chrono>
 
-#include <spdlog/spdlog.h>
-#include <spdlog/sinks/basic_file_sink.h>
+#include <Bromine/Service/LoggerService.h>
 
-#include "Util/Logger.h"
-#include "Util/Vec.h"
-#include "Util/Typedefs.h"
-#include "Util/Errors.h"
+#include <Bromine/Util/Vec.h>
+#include <Bromine/Util/Typedefs.h>
+#include <Bromine/Util/Errors.h>
 
 namespace BromineEngine {
 
@@ -54,8 +52,6 @@ private:
 	 * When added to Bromine, the scene did enter is called.
 	 */
 	Scene* currentScene;
-
-	std::shared_ptr<spdlog::logger> logger
 
 	std::unordered_map<std::type_index, Server*> serverMap;
 	std::vector<Server*> serverVector;
@@ -147,7 +143,7 @@ public:
 	}
 
 	template <typename T>
-	static T& service() {
+	inline static T& service() {
 		return Bromine::instance().getService<T>();
 	}
 
@@ -157,15 +153,7 @@ public:
 
 	static NodeBuilder node();
 	// Logging
-
-	// TODO: Make a v version that takes a v list 
-	static void log(Logger::Priority priority, const char* fmt,  ...) __attribute__ (( format(printf, 2, 3) )) {
-		va_list args;
-		va_start(args, fmt);
-		Logger::instance().vlog(priority, fmt, args);
-		va_end(args);
-	}
-
+	
 
 	// Run and quit
 

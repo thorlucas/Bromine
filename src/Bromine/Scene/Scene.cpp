@@ -13,7 +13,7 @@ Scene::Scene(Node& rootNode) : _rootNode(rootNode.id) {}
 Scene::~Scene() {}
 
 void Scene::loadScene() {
-	Bromine::log(Logger::INFO, "Loading scene: %p", this);
+	Logger::info("Loading scene: {}", static_cast<void*>(this));
 	
 	rootNode().parentDidActivate();
 }
