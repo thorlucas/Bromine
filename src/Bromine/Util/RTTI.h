@@ -79,9 +79,9 @@ traitName& serverName::getTrait(NodeID node) {								\
 void serverName::activateTrait(traitName* trait) {							\
 	activeTraits.push_back(trait);											\
 	Logger::debug(															\
-		#traitName " {} for Node {} has been activated in "					\
+		#traitName " {} for {} has been activated in "					\
 		#serverName " server.",												\
-		static_cast<void*>(trait), trait->owner().id);						\
+		static_cast<void*>(trait), trait->owner());						\
 }																			\
 void serverName::deactivateTrait(traitName* trait) {						\
 	activeTraits.erase(														\

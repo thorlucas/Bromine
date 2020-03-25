@@ -45,7 +45,7 @@ void Node::addChild(Node& child) {
 	_children.push_back(child.id);
 	child.setParent(id);
 
-	Logger::debug("Node %d added child node %d", id, child.id);
+	Logger::debug("{} added child {}", *this, child);
 }
 
 void Node::removeChild(NodeID child) {
@@ -63,7 +63,7 @@ void Node::removeTrait(Trait* trait) {
 }
 
 void Node::enable() {
-	Logger::debug("Node %d is being enabled...", id);
+	Logger::debug("{} is being enabled...", *this);
 	_enabled = true;
 
 	if (_parentIsActive)
@@ -71,7 +71,7 @@ void Node::enable() {
 }
 
 void Node::disable() {
-	Logger::debug("Node %d is being disabled...", id);
+	Logger::debug("{} is being disabled...", *this);
 	_enabled = false;
 
 	if (_parentIsActive)
@@ -83,7 +83,7 @@ void Node::parentDidActivate() {
 
 	 // If we ourselves are not enabled, we shouldn't activate our traits and children
 	if (_enabled) {
-		Logger::debug("Node %d is activating by bubbling...", id);
+		Logger::debug("{} is activating by bubbling...", *this);
 		bubbleActivate();
 	}
 }
@@ -93,7 +93,7 @@ void Node::parentDidDeactivate() {
 
 	// If we are already not active, no need to call this again
 	if (_enabled) {
-		Logger::debug("Node %d is deactivating by bubbling...", id);
+		Logger::debug("{} is deactivating by bubbling...", *this);
 		bubbleDeactivate();
 	}
 }

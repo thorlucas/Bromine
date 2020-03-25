@@ -17,7 +17,7 @@ Node& NodeServer::createEmptyNode() {
 	Node& node = *(new Node(requestID()));
 	nodeMap.insert(std::pair<NodeID, Node&>(node.id, node));
 
-	Logger::debug("Created node with ID {}: {}", node.id, static_cast<void*>(&node));
+	Logger::info("NodeServer created {}", node);
 	return node;
 }
 

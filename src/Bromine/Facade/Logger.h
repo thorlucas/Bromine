@@ -6,30 +6,18 @@
 namespace BromineEngine {
 namespace Logger {
 
-template <typename... Args>
-inline void error(spdlog::string_view_t fmt, const Args &... args) {
-	Bromine::instance().getService<LoggerService>().error(fmt, args...);
-}
+#define LOG_FACADE(level)														\
+template <typename... Args>														\
+inline void level(spdlog::string_view_t fmt, const Args &... args) {			\
+	Bromine::instance().getService<LoggerService>().level(fmt, args...);		\
+}																				\
 
-template <typename... Args>
-inline void debug(spdlog::string_view_t fmt, const Args &... args) {
-	Bromine::instance().getService<LoggerService>().debug(fmt, args...);
-}
-
-template <typename... Args>
-inline void warn(spdlog::string_view_t fmt, const Args &... args) {
-	Bromine::instance().getService<LoggerService>().warn(fmt, args...);
-}
-
-template <typename... Args>
-inline void info(spdlog::string_view_t fmt, const Args &... args) {
-	Bromine::instance().getService<LoggerService>().info(fmt, args...);
-}
-
-template <typename... Args>
-inline void trace(spdlog::string_view_t fmt, const Args &... args) {
-	Bromine::instance().getService<LoggerService>().trace(fmt, args...);
-}
+LOG_FACADE(critical)
+LOG_FACADE(error)
+LOG_FACADE(warn)
+LOG_FACADE(info)
+LOG_FACADE(debug)
+LOG_FACADE(trace)
 
 }
 }
