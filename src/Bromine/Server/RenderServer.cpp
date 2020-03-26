@@ -8,6 +8,8 @@ DEFINE_TRAIT_SERVER(RenderServer, RenderTrait)
 DEFINE_TRAIT_SERVER_DESTROY_TRAIT_STANDARD(RenderServer, RenderTrait)
 
 Texture::Texture(uint32_t width, uint32_t height, void* pixels) : width(width), height(height), pixels(pixels) {
+	glGetError();
+
 	glGenTextures(1, &glTexture);
 	glBindTexture(GL_TEXTURE_2D, glTexture);
 
@@ -23,6 +25,11 @@ Texture::Texture(uint32_t width, uint32_t height, void* pixels) : width(width), 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	GLenum err = glGetError();
+	if (err != GL_NO_ERROR) {
+		Logger::error("Failed to load texture: {}", glewGetErrorString(err));
+	}
 }
 
 Texture::~Texture() {
@@ -31,6 +38,8 @@ Texture::~Texture() {
 }
 
 RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailableID(0), globalPos(0.0, 0.0) {
+	GLenum err;
+
 	// Initialize SDL
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
 		Logger::error("Failed to initialize video: {}", SDL_GetError());
@@ -59,6 +68,7 @@ RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailabl
 
 	// Create OpenGL context
 	glContext = SDL_GL_CreateContext(window);
+	glGetError();
 
 	if (glContext == nullptr) {
 		Logger::error("Failed to create GL context: {}", SDL_GetError());
@@ -72,6 +82,11 @@ RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailabl
 		throw BromineInitError("Failed to initialize glew.");
 	}
 
+	err = glGetError();
+	if (err != GL_NO_ERROR) {
+		Logger::error("Failed to properly init glew: {} ({})", glewGetErrorString(err), static_cast<int>(err));
+	}
+
 	// Enable vsync
 	if (SDL_GL_SetSwapInterval(1) != 0) {
 		Logger::error("Failed to set vsync: {}", SDL_GetError());
@@ -82,13 +97,22 @@ RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailabl
 	textureShaderProgram = loadShaderProgram("Shaders/Texture.vert", "Shaders/Texture.frag");
 	pointShaderProgram = loadShaderProgram("Shaders/Point.vert", "Shaders/Point.frag");
 
+	err = glGetError();
+	if (err != GL_NO_ERROR) {
+		Logger::error("Failed to properly load shader programs: {} ({})", glewGetErrorString(err), static_cast<int>(err));
+	}
+
 	// Set OpenGL render settings
 	glClearColor(1.0f, 1.0f, 1.0f, 1.f);
 	glPointSize(10.0f);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
 
+	err = glGetError();
+	if (err != GL_NO_ERROR) {
+		Logger::error("Failed to set opengl render settings: {} ({})", glewGetErrorString(err), static_cast<int>(err));
+	}
+	
 	// Set up sprite unit quads
 	glGenVertexArrays(1, &spriteVAO);
 	glBindVertexArray(spriteVAO);
@@ -117,6 +141,11 @@ RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailabl
 
 	glBindVertexArray(0);
 
+	err = glGetError();
+	if (err != GL_NO_ERROR) {
+		Logger::error("Failed to set sprite vbo and vao: {} ({})", glewGetErrorString(err), static_cast<int>(err));
+	}
+
 
 	// Set up point VAOs and VBOs
 	glGenVertexArrays(1, &pointVAO);
@@ -134,11 +163,25 @@ RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailabl
 
 	glBindVertexArray(0);
 
+	err = glGetError();
+	if (err != GL_NO_ERROR) {
+		Logger::error("Failed to properly set up point vbo and vao: {} ({})", glewGetErrorString(err), static_cast<int>(err));
+	}
+
 
 	// Get uniform locations
 	textureVUModel = glGetUniformLocation(textureShaderProgram, "vuModel");
 	textureVUProjection = glGetUniformLocation(textureShaderProgram, "vuProjection");
 	pointVUProjection = glGetUniformLocation(pointShaderProgram, "vuProjection");
+
+	while (true) {
+		err = glGetError();
+		if (err != GL_NO_ERROR) {
+			Logger::error("Failed to get gl uniform locations: {} ({})", glewGetErrorString(err), static_cast<int>(err));
+		} else {
+			break;
+		}
+	}
 
 	// Print OpenGL version
 	// int32_t maj;
@@ -154,14 +197,39 @@ RenderServer::RenderServer() : window(nullptr), glContext(nullptr), nextAvailabl
 	glUseProgram(pointShaderProgram);
 	glUniformMatrix4fv(pointVUProjection, 1, false, glm::value_ptr(orthoProjection));
 
+	while (true) {
+		err = glGetError();
+		if (err != GL_NO_ERROR) {
+			Logger::error("Failed to set gl uniform for point shader: {} ({})", glewGetErrorString(err), static_cast<int>(err));
+		} else {
+			break;
+		}
+	}
+
 	glUseProgram(textureShaderProgram);
 	glUniformMatrix4fv(textureVUProjection, 1, false, glm::value_ptr(orthoProjection));
 	instructionCurrentShaderProgram = textureShaderProgram;
+
+	while (true) {
+		err = glGetError();
+		if (err != GL_NO_ERROR) {
+			Logger::error("Failed to set gl uniform for texture shader: {} ({})", glewGetErrorString(err), static_cast<int>(err));
+		} else {
+			break;
+		}
+	}
 
 	// Set flags
 	instructionsDirtyFlag = true;
 	drawCustomFlag = false;
 	drawImmediateFlag = false;
+
+	err = glGetError();
+	if (err != GL_NO_ERROR) {
+		Logger::error("Failed to properly construct RenderServer: {} ({})", glewGetErrorString(err), static_cast<int>(err));
+	}
+
+	Logger::info("Constructed RenderServer");
 }
 
 RenderServer::~RenderServer() {
@@ -416,6 +484,7 @@ void RenderServer::drawTextureImmediate(Vec2f* relPos, Vec2f* scale, Resource* t
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void RenderServer::switchShaderProgramImmediate(ShaderProgram program) {

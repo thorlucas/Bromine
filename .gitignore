@@ -6,3 +6,5 @@ bin/*
 
 *.sublime-workspace
 *.sublime-project
+
+*.log

@@ -13,7 +13,7 @@
 ExampleScene::ExampleScene() {
 	rootNode().addChild(
 		Bromine::node()
-			.position(Vec2f(rand() % 1280, rand() % 720))
+			.position(Vec2f(windowWidth / 2, windowHeight / 2))
 			.trait<EventTrait>()
 			.trait<SpriteRenderTrait>(Bromine::server<RenderServer>().loadTexture("Bromine.png"), Vec2f(0.2, 0.2))
 			.trait<ExampleLogicTrait>()

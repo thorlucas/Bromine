@@ -17,6 +17,8 @@ private:
 	SDL_Event sdlEvent;
 
 public:
+	EventServer();
+
 	void update(double delta);
 	
 };

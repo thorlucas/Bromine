@@ -1,11 +1,16 @@
 #include "LogicServer.h"
 #include "../Trait/LogicTrait.h"
+#include <Bromine/Facade/Logger.h>
 
 namespace BromineEngine {
 
 DEFINE_TRAIT_SERVER(LogicServer, LogicTrait)
 DEFINE_DEFAULT_SERVER_ACTIVATE_TRAIT_STANDARD(LogicServer, LogicTrait)
 DEFINE_TRAIT_SERVER_DESTROY_TRAIT_STANDARD(LogicServer, LogicTrait)
+
+LogicServer::LogicServer() {
+	Logger::info("Constructed LogicServer");
+}
 
 void LogicServer::update(double delta) {
 	for (auto& it : activeTraits) {

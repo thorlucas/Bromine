@@ -1,8 +1,12 @@
 #include "NodeServer.h"
+#include <Bromine/Facade/Logger.h>
 
 namespace BromineEngine {
 
-NodeServer::NodeServer() : nextAvailableID(0) {}
+NodeServer::NodeServer() : nextAvailableID(0) {
+	Logger::info("Constructed NodeServer");
+}
+
 NodeServer::~NodeServer() {
 	for (auto& it : nodeMap) {
 		delete &(it.second);

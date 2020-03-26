@@ -12,6 +12,8 @@ class LogicServer : public Server {
 DECLARE_TRAIT_SERVER(LogicServer, LogicTrait)
 DEFINE_TRAIT_SERVER_CREATE_TRAIT_STANDARD(LogicTrait)
 public:
+	LogicServer();
+
 	void update(double delta);
 
 };

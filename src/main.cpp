@@ -5,6 +5,10 @@
 
 using namespace BromineEngine;
 
+const char *__asan_default_options() {
+  return "verbosity=1:malloc_context_size=20";
+}
+
 int main(int argc, char const *argv[]) {
 	Bromine bromine;
 	Bromine::setGlobalInstance(&bromine);

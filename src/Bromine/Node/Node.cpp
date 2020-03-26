@@ -147,6 +147,8 @@ Node& Node::parent() const {
 }
 
 void Node::destroy() {
+	Logger::info("Destorying {}", *this);
+
 	parent().removeChild(*this);
 
 	for (auto& trait : traits) {
